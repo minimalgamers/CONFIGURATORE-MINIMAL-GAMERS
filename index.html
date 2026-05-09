@@ -51,9 +51,9 @@ body{background:var(--bg);color:var(--ink);font-family:var(--body);font-size:14p
 .scalapay-dynamic .sp-amount{font-size:13px}
 
 /* LAYOUT */
-.main-wrap{display:grid;grid-template-columns:1fr 300px;min-height:calc(100vh - 140px)}
-@media(max-width:900px){.main-wrap{grid-template-columns:1fr}.sidebar{background:var(--bg2);border-left:1px solid var(--line2);display:flex;flex-direction:column;position:sticky;top:96px;height:calc(100vh - 96px);overflow-y:auto}}
-#mainContent,main.content{padding:40px 48px;max-width:100%;overflow-x:hidden}
+.main-wrap{display:grid;grid-template-columns:1fr 300px;min-height:calc(100vh - 140px);width:100%;overflow:hidden}
+@media(max-width:900px){.main-wrap{grid-template-columns:1fr}.sidebar{display:none}}}
+#mainContent,main.content{padding:40px 48px;max-width:100%;overflow-x:hidden;width:100%;min-width:0}
 
 /* SIDEBAR */
 .sidebar{background:var(--bg2);border-left:1px solid var(--line2);display:flex;flex-direction:column;position:sticky;top:96px;height:calc(100vh - 96px);overflow-y:auto}
@@ -149,7 +149,7 @@ body{background:var(--bg);color:var(--ink);font-family:var(--body);font-size:14p
 .products-count{font-family:var(--mono);font-size:10px;letter-spacing:.1em;text-transform:uppercase;color:var(--ink4);margin-bottom:12px}
 
 /* GRIGLIA PRODOTTI */
-.products-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(220px,1fr));gap:3px}
+.products-grid{display:grid !important;grid-template-columns:repeat(auto-fill,minmax(210px,1fr)) !important;gap:3px !important;width:100% !important}
 
 /* CARD PRODOTTO */
 .prod-card{background:var(--bg2);border:2px solid var(--line);cursor:pointer;transition:all .15s;display:flex;flex-direction:column;overflow:hidden;position:relative}
@@ -1096,7 +1096,7 @@ function renderCard(p, sid, sel, allProds, isIncompat) {
     <div class="prod-price"><small>IVA incl.</small>${fmt(p.p)}</div>
     <div class="prod-rata">Scalapay: ${fmtR(p.p)}</div>
     <div class="prod-stock ${sCls}">${sLbl}</div>
-  </div>`;
+  </div></div>`;
 }
 
 // ── RENDER RIEPILOGO ──────────────────────────────────────────

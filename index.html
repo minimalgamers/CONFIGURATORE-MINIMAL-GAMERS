@@ -149,7 +149,7 @@ body{background:var(--bg);color:var(--ink);font-family:var(--body);font-size:14p
 .products-count{font-family:var(--mono);font-size:10px;letter-spacing:.1em;text-transform:uppercase;color:var(--ink4);margin-bottom:12px}
 
 /* GRIGLIA PRODOTTI */
-.products-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(170px,1fr));gap:3px}
+.products-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(220px,1fr));gap:3px}
 
 /* CARD PRODOTTO */
 .prod-card{background:var(--bg2);border:2px solid var(--line);cursor:pointer;transition:all .15s;display:flex;flex-direction:column;overflow:hidden;position:relative}
@@ -1040,6 +1040,7 @@ function renderProds(el, sid) {
     </div>
     <div class="products-count">${subFil.length} prodotti compatibili${ab.length||q?' (filtrati)':''}</div>
     ${alertHtml}
+    ${sel ? `<button class="btn-next" onclick="nextStep()" style="margin-bottom:16px;margin-top:8px">Continua con ${trunc(sel.d,28)} <span class="arrow">→</span></button>` : ''}
     <div class="products-grid">${emptyHtml}${cards}${moreHtml}</div>
     ${sel ? `<button class="btn-next" onclick="nextStep()">Continua con ${trunc(sel.d,28)} <span class="arrow">→</span></button>` : ''}
     <button class="btn-skip" onclick="skipStep()">Salta questo componente →</button>

@@ -149,7 +149,7 @@ body{background:var(--bg);color:var(--ink);font-family:var(--body);font-size:14p
 .products-count{font-family:var(--mono);font-size:10px;letter-spacing:.1em;text-transform:uppercase;color:var(--ink4);margin-bottom:12px}
 
 /* GRIGLIA PRODOTTI */
-.products-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(195px,1fr));gap:3px}
+.products-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(170px,1fr));gap:3px}
 
 /* CARD PRODOTTO */
 .prod-card{background:var(--bg2);border:2px solid var(--line);cursor:pointer;transition:all .15s;display:flex;flex-direction:column;overflow:hidden;position:relative}
@@ -164,14 +164,14 @@ body{background:var(--bg);color:var(--ink);font-family:var(--body);font-size:14p
 @keyframes cardSel{0%{transform:scale(1)}50%{transform:scale(1.015)}100%{transform:scale(1)}}
 
 /* IMMAGINE PRODOTTO */
-.prod-img-wrap{width:100%;aspect-ratio:4/3;overflow:hidden;background:var(--bg3);display:flex;align-items:center;justify-content:center;border-bottom:1px solid var(--line)}
+.prod-img-wrap{width:100%;height:72px;overflow:hidden;background:var(--bg3);display:flex;align-items:center;justify-content:center;border-bottom:1px solid var(--line)}
 .prod-img{width:100%;height:100%;object-fit:contain;padding:8px;transition:transform .2s}
 .prod-card:hover .prod-img{transform:scale(1.05)}
-.prod-card.selected .prod-img-wrap{background:rgba(255,255,255,.06)}
+.prod-card.selected .prod-img-wrap{width:100%;height:72px;overflow:hidden;background:var(--bg3);display:flex;align-items:center;justify-content:center;border-bottom:1px solid var(--line)}
 .prod-img-placeholder{font-size:32px;opacity:.2}
 
 /* CORPO CARD */
-.prod-body{padding:12px;flex:1;display:flex;flex-direction:column;gap:4px}
+.prod-body{padding:10px;flex:1;display:flex;flex-direction:column;gap:3px}
 .prod-check{position:absolute;top:6px;right:6px;width:22px;height:22px;background:var(--punch);color:#fff;font-size:12px;display:flex;align-items:center;justify-content:center;font-weight:700;z-index:2}
 .prod-brand{font-family:var(--mono);font-size:9px;letter-spacing:.15em;text-transform:uppercase;color:var(--ink4)}
 .prod-card.selected .prod-brand{color:rgba(245,245,243,.35)}

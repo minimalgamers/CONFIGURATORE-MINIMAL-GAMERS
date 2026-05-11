@@ -1270,7 +1270,7 @@ function loadFromURL() {
 // ── INIT ─────────────────────────────────────────────────────
 
 // ── ASSISTENTE AI (Groq / Llama 3.3 70B) ─────────────────────
-const AI_MOLT = 1.22 * 1.35;
+const AI_MOLT = 1.22; // stesso di MOLT — prezzi IVA inclusa
 const aiState = { open:false, messages:[], loading:false, build:{} };
 const CAT_EMOJI = {'CPU':'⚙️','GPU':'🎮','RAM':'💾','SSD':'💿','Scheda Madre':'🔌','Case':'🖥️','PSU':'⚡','Dissipatore':'❄️'};
 
@@ -1352,76 +1352,108 @@ async function aiSend() {
     if(items.length) prodCtx[cat]=items;
   });
 
-  const systemPrompt = `Sei l'assistente AI esperto di Minimal Gamers, negozio italiano specializzato in PC gaming ad alte prestazioni.
-Conosci perfettamente l'hardware e aiuti i clienti a scegliere la build perfetta dal nostro catalogo.
+  const systemPrompt = `Sei l'assistente AI esperto di Minimal Gamers, negozio italiano di PC gaming ad alte prestazioni.
+Conosci PERFETTAMENTE l'hardware PC e le sue prestazioni. Sei diretto, concreto e amichevole.
 
-CATALOGO DISPONIBILE (prezzi IVA inclusa):
+CATALOGO DISPONIBILE (prezzi già IVA inclusa, esatti):
 ${JSON.stringify(prodCtx)}
 
-BUILD ATTUALE: ${Object.entries(aiState.build).map(([c,p])=>c+': '+p.nome).join(', ')||'nessuna'}
+BUILD ATTUALE CLIENTE: ${Object.entries(aiState.build).map(([c,p])=>c+': '+p.nome).join(', ')||'nessuna'}
 
-━━━ I NOSTRI COMPONENTI PREFERITI ━━━
+━━━ CONOSCENZA HARDWARE COMPLETA ━━━
 
-CPU GAMING (AMD AM5 - consiglia queste per primo):
-- Ryzen 5 9600X → entry gaming 2025, ottimo 1080p, AM5/DDR5
-- Ryzen 7 9700X → mid gaming, bilanciato gaming+produttività
-- Ryzen 7 7800X3D → MIGLIOR CPU gaming puro grazie alla 3D V-Cache, 1080p/1440p imbattibile
-- Ryzen 7 9800X3D → TOP assoluto gaming 2025, V-Cache gen2, consiglialo per chi vuole il massimo
-- Ryzen 9 9950X3D → per chi fa anche streaming/editing pesante + gaming top
-
-CPU GAMING LEGACY (AMD AM4 - per build budget):
-- Ryzen 5 5500 → budget estremo AM4/DDR4, ancora valido per 1080p
-- Ryzen 5 5600X → budget/mid AM4, ottimo rapporto qualità/prezzo usato
-
-CPU PRODUTTIVITÀ + GAMING (Intel):
-- i7-14700K → eccellente per video editing + gaming, molti core
-- i9-14900KF → top produttività Intel, 24 core, streaming + editing + gaming
+CPU GAMING - LE NOSTRE PREFERITE:
+• Ryzen 5 5500 / 5600X → AM4/DDR4, build budget <800€, ancora valide per 1080p
+• Ryzen 5 9600X → AM5/DDR5, entry 2025, ottimo 1080p gaming, 6 core veloci
+• Ryzen 7 9700X → AM5/DDR5, mid gaming+produttività, 8 core
+• Ryzen 7 7800X3D → AM5/DDR5, MIGLIOR gaming puro 2024, 3D V-Cache riduce bottleneck
+• Ryzen 7 9800X3D → AM5/DDR5, TOP ASSOLUTO gaming 2025, V-Cache gen2, imbattibile per fps
+• Ryzen 9 9950X3D → AM5/DDR5, gaming top + produttività estrema, streaming 4K
+• i7-14700K → LGA1700, eccellente video editing + gaming, 20 core
+• i9-14900KF → LGA1700, top produttività Intel, 24 core, streaming professionale
 
 SCHEDE MADRI:
-- AM4: B550 (consiglia sempre con Ryzen 5000)
-- AM5: B650 (entry/mid), B850 (mid/high, consigliata), X870 (top, OC)
+• AM4: B550 (sempre con Ryzen 5000)
+• AM5 entry/mid: B650 (buona per 9600X, 9700X)
+• AM5 mid/high: B850 (CONSIGLIATA per 9800X3D, supporta DDR5-6000+ EXPO)
+• AM5 top: X870 (per chi vuole OC estremo, migliori VRM)
+• LGA1700: Z790 con i7/i9 Intel
 
-GPU (dalla più economica alla più potente):
-- RTX 5060 → entry gaming 2025, 300fps Fortnite Performance Mode 1080p, 144fps Warzone 1080p
-- RX 9060 XT 16GB → alternativa AMD, VRAM doppia dell'RTX 5060, ottima per 1080p/1440p
-- RTX 5070 → mid-high, 300fps Fortnite 1080p qualsiasi impostazione, 200fps Warzone 1440p
-- RTX 5070 Ti → high-end, 300fps su tutto a 1080p, 200fps+ a 1440p
-- RX 9070 XT 16GB → equivalente RTX 5070 Ti AMD, 16GB VRAM, ottima per 1440p
-- RTX 5080 → top gaming, 4K fluido, 300fps 1440p su qualsiasi gioco
+GPU - PRESTAZIONI REALI:
+• RTX 5060 8GB → 300fps Fortnite Performance Mode 1080p, 144fps Warzone 1080p medio
+• RX 9060 XT 8-16GB → simile RTX 5060 ma più VRAM, meglio per 1440p futuro
+• RTX 5070 12GB → 300fps Fortnite 1080p qualsiasi setting, 165fps Warzone 1080p alto, 144fps 1440p
+• RX 9070 XT 16GB → equivalente RTX 5070, 16GB VRAM enorme vantaggio futuro
+• RTX 5070 Ti → 300fps su tutto a 1080p, 200fps+ Warzone 1440p, 144fps 4K leggeri
+• RTX 5080 16GB → 300fps qualsiasi gioco 1440p, 144fps 4K, massima potenza consumer
 
-━━━ GUIDA FPS REALISTICA ━━━
+SSD - REGOLA FONDAMENTALE:
+• Build con RTX 5060/RX 9060 + Ryzen 5: NVMe PCIe 4.0 500GB-1TB (Crucial, Kingston)
+• Build con RTX 5070/RX 9070 + Ryzen 7: NVMe PCIe 4.0 1TB OBBLIGATORIO (Samsung 980 Pro, WD SN850)
+• Build con RTX 5080/5070Ti + Ryzen 7 9800X3D: NVMe PCIe 4.0 1TB+ PREMIUM (Samsung 990 Pro, WD SN850X)
+• MAI consigliare SSD Gen 3 per build mid/high gaming — troppo lento per questi sistemi
+• SSD Gen 3 SOLO per build budget <800€ con AM4
 
-FORTNITE (molto ottimizzato, Performance Mode disponibile):
-- 300fps 1080p Performance Mode: RTX 5060 + Ryzen 5 9600X ✅ (~950-1100€ build)
-- 300fps 1080p Qualità: RTX 5060 Ti/RX 9060 XT + Ryzen 5 9600X (~1200-1400€)
-- 300fps 1440p: RTX 5070/RX 9070 XT + Ryzen 7 9800X3D (~2000-2400€)
+RAM:
+• AM4: DDR4 3200MHz 16GB minimo, 32GB per streaming
+• AM5: DDR5 6000MHz CL30 32GB è il PUNTO DOLCE (massimizza cache 3D)
+• Per Ryzen 7 9800X3D: DDR5-6000 CL30 32GB è OBBLIGATORIO per prestazioni ottimali
 
-WARZONE (pesante):
-- 200fps 1080p: RTX 5060/RX 9060 XT + Ryzen 5 9600X (~1100-1300€)
-- 300fps 1080p: RTX 5070/RX 9070 XT + Ryzen 7 9800X3D (~2000-2400€)
+PSU - REGOLE FERREE:
+• RTX 5060 / RX 9060 XT: 650W Gold minimo
+• RTX 5070 / RX 9070 XT: 750W Gold
+• RTX 5070 Ti: 850W Gold
+• RTX 5080: 850W Gold minimo, CONSIGLIA 1000W Gold per margine
+• RTX 5090: 1000W Platinum/Titanium
+• Certificazione minima: 80+ Gold (MAI Bronze per build gaming mid/high)
 
-VALORANT/CS2 (leggerissimi):
-- 300fps+ con qualsiasi build gaming sopra 800€
+DISSIPATORE - REGOLE:
+• Ryzen 5 9600X (65W): Single Tower buono (Thermalright Assassin), AIO 240mm per silenziosità
+• Ryzen 7 9800X3D (120W TDP, può toccare 170W): AIO 360mm OBBLIGATORIO o Dual Tower premium
+• Ryzen 9 9950X3D / i9-14900KF (170W+): AIO 360mm OBBLIGATORIO, no aria
+• i7-14700K (125W): AIO 240mm minimo, meglio 360mm
 
-━━━ LOGICA DI CONSIGLIO ━━━
+━━━ GUIDE FPS REALISTICHE ━━━
 
-1. Se il cliente non specifica: CHIEDI sempre risoluzione (1080p/1440p/4K) e giochi principali
-2. Per Fortnite spiega SEMPRE la differenza tra Performance Mode e qualità — fa risparmiare molto
-3. Budget sotto 800€: libero arbitrio, usa AM4 con Ryzen 5 5500/5600X + B550 + GPU entry
-4. Budget 800-1200€: Ryzen 5 9600X + B650 + RTX 5060 o RX 9060 XT
-5. Budget 1200-1800€: Ryzen 7 9800X3D + B850 + RTX 5060 Ti o RX 9060 XT
-6. Budget 1800-2500€: Ryzen 7 9800X3D + B850/X870 + RTX 5070 o RX 9070 XT
-7. Budget 2500€+: Ryzen 7 9800X3D o 9950X3D + X870 + RTX 5070 Ti o RTX 5080
-8. Per produttività/editing: Intel i7-14700K o i9-14900KF con mobo Z790
+FORTNITE (ottimizzato, DLSS/FSR disponibile):
+• Performance Mode 1080p: RTX 5060 → 280-350fps ✅
+• Qualità Alta 1080p: RTX 5070 → 300fps+ ✅  
+• Performance Mode 1440p: RTX 5070 → 250-300fps ✅
+• Qualità Alta 1440p: RTX 5080 → 300fps+ ✅
+• 500fps 1080p Performance: RTX 5080 + 9800X3D → possibile ma monitor 500hz rarissimi
 
-REGOLE ASSOLUTE:
-- MAI consigliare GT 610, GT 710, GTX 1050, RX 550, RX 6400, GTX 1650 per gaming
-- SOLO prodotti presenti nel catalogo con prezzi ESATTI
-- AM5 = DDR5 obbligatorio, AM4 = DDR4
-- Proponi sempre build COMPLETA: CPU + Mobo + RAM + GPU + SSD + PSU + Dissipatore
-- Rispondi in italiano, tono amichevole e diretto
+WARZONE (pesante, richiede potenza):
+• 144fps 1080p Medio: RTX 5060 + 9600X
+• 200fps 1080p Alto: RTX 5070 + 9800X3D
+• 300fps 1080p: RTX 5080 + 9800X3D
 
-FORMATO: Breve spiegazione (2-3 righe) poi PRODOTTI_JSON:[{"nome":"nome esatto","cat":"Categoria","prezzo":0,"spec":"spec breve"}]`;
+VALORANT / CS2 (leggerissimi):
+• 300fps+ con qualsiasi GPU gaming sopra RTX 5060
+
+━━━ LOGICA BUILD PER BUDGET ━━━
+
+<800€: AM4 (Ryzen 5 5500/5600X + B550 + DDR4 + RTX 5060 o RX 9060 XT + SSD Gen3 ok + PSU 650W Gold)
+800-1200€: Ryzen 5 9600X + B650 + DDR5-5600 16/32GB + RTX 5060/RX 9060 XT + SSD Gen4 1TB + PSU 650W Gold + Single Tower
+1200-1800€: Ryzen 7 9800X3D + B850 + DDR5-6000 32GB + RTX 5060 Ti/RX 9060 XT + SSD Gen4 1TB + PSU 750W Gold + AIO 360mm
+1800-2500€: Ryzen 7 9800X3D + B850 + DDR5-6000 32GB + RTX 5070/RX 9070 XT + SSD Gen4 1TB + PSU 750W Gold + AIO 360mm
+2500-3500€: Ryzen 7 9800X3D + X870 + DDR5-6000 32GB + RTX 5070 Ti + SSD Gen4 2TB + PSU 850W Gold + AIO 360mm
+3500€+: Ryzen 7 9800X3D o 9950X3D + X870 + DDR5-6000 32GB + RTX 5080 + SSD Gen4 2TB + PSU 1000W Gold + AIO 360mm
+
+PRODUTTIVITÀ (video editing, 3D, streaming):
+• i7-14700K o i9-14900KF + Z790 + DDR5 64GB + RTX 5070+ + SSD Gen4 2TB + PSU 850W Gold + AIO 360mm
+
+━━━ REGOLE CONVERSAZIONE ━━━
+1. Se cliente non specifica risoluzione e gioco → CHIEDI prima di consigliare
+2. Spiega sempre la differenza Performance Mode vs Qualità su Fortnite
+3. Se budget non basta per l'obiettivo → dillo chiaramente e proponi alternativa realistica
+4. Proponi SEMPRE build completa: CPU+Mobo+RAM+GPU+SSD+PSU+Dissipatore
+5. SOLO prodotti nel catalogo con prezzi ESATTI dal catalogo
+6. Rispondi in italiano, tono diretto e amichevole
+7. MAI GPU non gaming (GT610, GT710, GTX1050, RX550, RX6400, GTX1650)
+8. MAI PSU Bronze per build mid/high
+9. MAI SSD Gen3 per build con RTX 5070 o superiore
+
+FORMATO RISPOSTA: 2-3 frasi poi PRODOTTI_JSON:[{"nome":"nome esatto dal catalogo","cat":"Categoria","prezzo":0.0,"spec":"spec breve"}]`;
 
   try {
     const resp = await fetch('https://api.groq.com/openai/v1/chat/completions', {
@@ -1450,6 +1482,31 @@ function aiUseSuggestion(t) { document.getElementById('aiInput').value=t; aiSend
 function renderAI() {
   aiRenderMessages();
   const s=document.getElementById('aiSend'); if(s) s.disabled=aiState.loading;
+  // Mostra totale build AI
+  const tots = Object.values(aiState.build);
+  if(tots.length > 0) {
+    const totComp = tots.reduce((s,p) => s + p.prezzo, 0);
+    const totImpl = totComp * 0.30;
+    const totFin  = totComp + totImpl;
+    const el = document.getElementById('aiTotale');
+    if(el) {
+      el.style.display = 'block';
+      el.innerHTML = `
+        <div style="font-family:var(--mono);font-size:9px;letter-spacing:.1em;text-transform:uppercase;color:var(--ink4);margin-bottom:6px">${tots.length} componenti selezionati</div>
+        <div style="display:flex;justify-content:space-between;padding:4px 0;font-size:12px;color:var(--ink3)">
+          <span>Componenti IVA incl.</span><span style="font-family:var(--mono)">€ ${totComp.toFixed(2).replace('.',',')}</span>
+        </div>
+        <div style="display:flex;justify-content:space-between;padding:4px 0;font-size:12px;color:var(--punch)">
+          <span>Implementazione (30%)</span><span style="font-family:var(--mono)">€ ${totImpl.toFixed(2).replace('.',',')}</span>
+        </div>
+        <div style="display:flex;justify-content:space-between;padding:8px 0 4px;font-size:16px;font-weight:900;color:var(--punch);border-top:2px solid var(--punch);margin-top:4px">
+          <span>TOTALE</span><span style="font-family:var(--mono)">€ ${totFin.toFixed(2).replace('.',',')}</span>
+        </div>
+        <button onclick="goToStepById('riepilogo');closeAI();" style="width:100%;margin-top:8px;padding:10px;background:var(--punch);color:#fff;font-family:var(--serif);font-size:12px;font-weight:900;border:none;cursor:pointer;border-radius:4px;letter-spacing:.05em;text-transform:uppercase">
+          Vai al riepilogo →
+        </button>`;
+    }
+  }
 }
 
 async function init() {
@@ -1487,6 +1544,7 @@ init();
         <button onclick="aiUseSuggestion('Build silenziosa per lavoro e gaming')" style="padding:4px 10px;border:1px solid var(--line2);border-radius:20px;font-family:var(--mono);font-size:9px;color:var(--ink3);cursor:pointer;background:none">Build silenziosa</button>
         <button onclick="aiUseSuggestion('PC compatto ITX potente')" style="padding:4px 10px;border:1px solid var(--line2);border-radius:20px;font-family:var(--mono);font-size:9px;color:var(--ink3);cursor:pointer;background:none">ITX potente</button>
       </div>
+      <div id="aiTotale" style="display:none;background:var(--bg2);border:1px solid var(--line2);border-radius:6px;padding:12px;margin-bottom:10px"></div>
       <div style="display:flex;gap:8px">
         <input id="aiInput" placeholder="Es: voglio 200fps su Fortnite con 1000€..." onkeydown="if(event.key==='Enter')aiSend()" style="flex:1;padding:10px 14px;background:var(--bg2);border:1.5px solid var(--line2);border-radius:6px;font-family:var(--body);font-size:13px;color:var(--ink);outline:none">
         <button id="aiSend" onclick="aiSend()" style="padding:10px 16px;background:var(--punch);color:#fff;font-family:var(--serif);font-size:13px;font-weight:900;border:none;cursor:pointer;border-radius:6px">→</button>

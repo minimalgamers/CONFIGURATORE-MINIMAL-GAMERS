@@ -10,538 +10,253 @@
 <style>
 
 /* ═══════════════════════════════════════════════════════════
-   MINIMAL GAMERS CONFIGURATORE — Design B
-   E-commerce moderno, sidebar sinistra, card ricche
+   MINIMAL GAMERS — Configuratore PC Gaming v3.0
+   Design System: #f5f5f3 bg · #d946a8 accent
    ═══════════════════════════════════════════════════════════ */
-
 *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
 :root{
-  --bg:#f8f8f6;
-  --bg2:#f0f0ee;
-  --bg3:#e8e8e6;
-  --bg4:#d8d8d6;
-  --ink:#0a0a0a;
-  --ink2:#2a2a28;
-  --ink3:#6a6a68;
-  --ink4:#a8a8a6;
-  --line:rgba(10,10,10,.07);
-  --line2:rgba(10,10,10,.13);
-  --punch:#d946a8;
-  --punch-soft:rgba(217,70,168,.08);
-  --punch-mid:rgba(217,70,168,.18);
-  --punch-dark:#b8308e;
-  --white:#ffffff;
-  --serif:'Archivo Black',sans-serif;
-  --body:'DM Sans',sans-serif;
-  --mono:'JetBrains Mono',monospace;
-  --radius:8px;
-  --radius-sm:4px;
-  --shadow:0 1px 4px rgba(0,0,0,.06),0 4px 16px rgba(0,0,0,.06);
-  --shadow-lg:0 4px 24px rgba(0,0,0,.1);
+  --bg:#f5f5f3;--bg2:#ececea;--bg3:#e2e2df;--bg4:#d5d5d2;
+  --ink:#0a0a0a;--ink2:#2a2a28;--ink3:#6a6a68;--ink4:#a8a8a6;
+  --line:rgba(10,10,10,.08);--line2:rgba(10,10,10,.15);
+  --punch:#d946a8;--punch-soft:rgba(217,70,168,.08);--punch-mid:rgba(217,70,168,.2);--punch-dark:#b0328e;
+  --lime:#c8ff00;
+  --serif:'Archivo Black',sans-serif;--body:'DM Sans',sans-serif;--mono:'JetBrains Mono',monospace;
+  --shadow:0 2px 12px -2px rgba(0,0,0,.1);--shadow-lg:0 8px 32px -4px rgba(0,0,0,.15);
 }
-
 html{font-size:16px}
-body{background:var(--bg);color:var(--ink);font-family:var(--body);font-size:14px;
-  line-height:1.5;-webkit-font-smoothing:antialiased}
+body{background:var(--bg);color:var(--ink);font-family:var(--body);font-size:14px;line-height:1.5;-webkit-font-smoothing:antialiased;overflow-x:hidden}
 
-/* ── TOPBAR ── */
-.topbar{
-  position:sticky;top:0;z-index:100;
-  display:flex;align-items:center;justify-content:space-between;
-  padding:0 28px;height:54px;
-  background:var(--ink);
-  border-bottom:2px solid var(--punch);
-}
-.topbar-brand{display:flex;align-items:center;gap:10px;
-  font-family:var(--serif);font-size:13px;letter-spacing:.04em;color:#fff;text-transform:uppercase}
-.brand-dot{width:8px;height:8px;border-radius:50%;background:var(--punch);
-  animation:pulse-dot 2s infinite;flex-shrink:0}
-@keyframes pulse-dot{0%,100%{opacity:1;transform:scale(1)}50%{opacity:.6;transform:scale(1.4)}}
-#top-count{font-family:var(--mono);font-size:10px;letter-spacing:.12em;
-  color:rgba(255,255,255,.3);text-transform:uppercase}
-.ai-btn{display:flex;align-items:center;gap:6px;padding:6px 14px;
-  border:1px solid rgba(217,70,168,.4);border-radius:20px;
-  font-family:var(--mono);font-size:9px;letter-spacing:.1em;text-transform:uppercase;
-  color:#fff;cursor:pointer;background:rgba(217,70,168,.12);transition:all .15s}
-.ai-btn:hover{background:rgba(217,70,168,.25);border-color:var(--punch)}
-.ai-btn-dot{width:6px;height:6px;border-radius:50%;background:var(--punch);
-  animation:pulse-dot 2s infinite}
+/* TOPBAR */
+.topbar{position:sticky;top:0;z-index:100;display:flex;align-items:center;justify-content:space-between;padding:0 32px;height:52px;background:var(--ink);border-bottom:2px solid var(--punch)}
+.topbar-brand{display:flex;align-items:center;gap:10px;font-family:var(--serif);font-size:13px;letter-spacing:.05em;color:#fff;text-transform:uppercase}
+.brand-dot{width:8px;height:8px;border-radius:50%;background:var(--punch);animation:pulse-dot 2s infinite}
+@keyframes pulse-dot{0%,100%{opacity:1;transform:scale(1)}50%{opacity:.6;transform:scale(1.3)}}
+#top-count{font-family:var(--mono);font-size:10px;letter-spacing:.15em;color:rgba(255,255,255,.35);text-transform:uppercase}
 
-/* ── SCALAPAY BAR ── */
-.scalapay-dynamic{
-  display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:8px;
-  padding:7px 28px;background:var(--punch-soft);border-bottom:1px solid var(--punch-mid);
-  font-family:var(--mono);font-size:10px;letter-spacing:.07em;text-transform:uppercase;color:var(--ink3);
-}
+/* PROGRESS */
+.progress-strip{display:flex;align-items:center;padding:0 32px;height:44px;background:var(--bg2);border-bottom:1px solid var(--line);overflow-x:auto;gap:0;scrollbar-width:none}
+.progress-strip::-webkit-scrollbar{display:none}
+.prog-step{display:flex;align-items:center;gap:6px;padding:0 14px;height:100%;font-family:var(--mono);font-size:10px;letter-spacing:.1em;text-transform:uppercase;color:var(--ink4);cursor:pointer;white-space:nowrap;border-right:1px solid var(--line);transition:all .15s;flex-shrink:0}
+.prog-step:hover{color:var(--ink);background:var(--bg3)}
+.prog-step.active{color:var(--punch);background:var(--punch-soft)}
+.prog-step.done{color:var(--ink3)}
+.prog-step.done .prog-dot,.prog-step.active .prog-dot{background:var(--punch)}
+.prog-step.active .prog-dot{box-shadow:0 0 0 3px var(--punch-soft)}
+.prog-dot{width:6px;height:6px;border-radius:50%;background:var(--bg4);flex-shrink:0;transition:all .15s}
+
+/* SCALAPAY BAR */
+.scalapay-dynamic{display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:8px;padding:8px 32px;background:var(--punch-soft);border-bottom:1px solid var(--punch-mid);font-family:var(--mono);font-size:10px;letter-spacing:.08em;text-transform:uppercase;color:var(--ink3)}
 .scalapay-dynamic.hidden{display:none!important}
 .scalapay-dynamic .sp-amount,.scalapay-dynamic .sp-rate{color:var(--punch);font-weight:700}
 .scalapay-dynamic .sp-amount{font-size:13px}
 
-/* ── PROGRESS STRIP ── */
-.progress-strip{
-  display:flex;align-items:center;padding:0 28px;height:42px;
-  background:var(--white);border-bottom:1px solid var(--line);
-  overflow-x:auto;gap:0;scrollbar-width:none;
-}
-.progress-strip::-webkit-scrollbar{display:none}
-.prog-step{
-  display:flex;align-items:center;gap:6px;padding:0 14px;height:100%;
-  font-family:var(--mono);font-size:9px;letter-spacing:.1em;text-transform:uppercase;
-  color:var(--ink4);cursor:pointer;white-space:nowrap;
-  border-right:1px solid var(--line);transition:all .15s;flex-shrink:0;
-}
-.prog-step:hover{color:var(--ink);background:var(--bg2)}
-.prog-step.active{color:var(--punch);background:var(--punch-soft)}
-.prog-step.done{color:var(--ink3)}
-.prog-step.done .prog-dot,.prog-step.active .prog-dot{background:var(--punch)}
-.prog-dot{width:6px;height:6px;border-radius:50%;background:var(--bg4);flex-shrink:0;transition:all .15s}
+/* LAYOUT */
+.main-wrap{display:grid;grid-template-columns:1fr 300px;min-height:calc(100vh - 140px);width:100%;overflow:hidden}
+@media(max-width:900px){.main-wrap{grid-template-columns:1fr}.sidebar{display:none}}}
+#mainContent,main.content{padding:40px 48px;max-width:100%;overflow-x:hidden;width:100%;min-width:0}
 
-/* ── LAYOUT ── */
-.main-wrap{display:grid;grid-template-columns:280px 1fr;min-height:calc(100vh - 140px)}
-@media(max-width:900px){.main-wrap{grid-template-columns:1fr}.sidebar{display:none}}
-#mainContent,main.content{padding:28px 32px;max-width:100%;overflow-x:hidden}
-
-/* ── SIDEBAR SINISTRA ── */
-.sidebar{
-  background:var(--white);border-right:1px solid var(--line2);
-  display:flex;flex-direction:column;
-  position:sticky;top:96px;height:calc(100vh - 96px);overflow-y:auto;
-}
-.sidebar-title{
-  display:flex;align-items:center;justify-content:space-between;
-  padding:16px 18px 12px;
-  font-family:var(--serif);font-size:11px;letter-spacing:.06em;text-transform:uppercase;
-  border-bottom:1px solid var(--line);
-}
-.live-pill{display:flex;align-items:center;gap:5px;
-  font-family:var(--mono);font-size:9px;letter-spacing:.1em;text-transform:uppercase;color:var(--punch)}
+/* SIDEBAR */
+.sidebar{background:var(--bg2);border-left:1px solid var(--line2);display:flex;flex-direction:column;position:sticky;top:96px;height:calc(100vh - 96px);overflow-y:auto}
+.sidebar-title{display:flex;align-items:center;justify-content:space-between;padding:16px 20px 12px;font-family:var(--serif);font-size:11px;letter-spacing:.08em;text-transform:uppercase;border-bottom:1px solid var(--line)}
+.live-pill{display:flex;align-items:center;gap:5px;font-family:var(--mono);font-size:9px;letter-spacing:.12em;text-transform:uppercase;color:var(--punch)}
 .live-dot{width:5px;height:5px;border-radius:50%;background:var(--punch);animation:pulse-dot 2s infinite}
-#sidebarBody{flex:1;overflow-y:auto;padding:8px 0}
-.sidebar-row{
-  padding:8px 18px;border-bottom:1px solid var(--line);
-  cursor:pointer;transition:background .12s;
-}
-.sidebar-row:hover{background:var(--bg2)}
+#sidebarBody{flex:1;overflow-y:auto}
+.sidebar-row{padding:10px 20px;border-bottom:1px solid var(--line);cursor:pointer;transition:background .12s}
+.sidebar-row:hover{background:var(--bg3)}
 .sidebar-row.empty{opacity:.35;pointer-events:none}
-.sr-cat{display:block;font-family:var(--mono);font-size:8px;letter-spacing:.15em;
-  text-transform:uppercase;color:var(--ink4);margin-bottom:2px}
+.sr-cat{display:block;font-family:var(--mono);font-size:9px;letter-spacing:.15em;text-transform:uppercase;color:var(--ink4);margin-bottom:2px}
 .sr-name{display:block;font-size:12px;font-weight:600;color:var(--ink2);line-height:1.3}
-.sr-price{display:block;font-family:var(--mono);font-size:11px;font-weight:700;
-  color:var(--punch);margin-top:2px}
-.pieces-progress{padding:10px 18px;border-bottom:1px solid var(--line)}
-.pieces-progress-label{display:flex;justify-content:space-between;
-  font-family:var(--mono);font-size:9px;letter-spacing:.1em;text-transform:uppercase;
-  color:var(--ink4);margin-bottom:5px}
+.sr-price{display:block;font-family:var(--mono);font-size:11px;font-weight:700;color:var(--punch);margin-top:2px}
+.pieces-progress{padding:12px 20px;border-bottom:1px solid var(--line)}
+.pieces-progress-label{display:flex;justify-content:space-between;font-family:var(--mono);font-size:9px;letter-spacing:.12em;text-transform:uppercase;color:var(--ink4);margin-bottom:6px}
 #piecesCount{color:var(--punch)}
 .pieces-bar{height:3px;background:var(--bg4);border-radius:2px;overflow:hidden}
 .piecesFill{height:100%;background:var(--punch);transition:width .3s ease}
-.total-block{padding:14px 18px;border-bottom:1px solid var(--line)}
-.total-label{font-family:var(--mono);font-size:8px;letter-spacing:.15em;
-  text-transform:uppercase;color:var(--ink4);margin-bottom:3px}
-#sidebarTotal{font-family:var(--serif);font-size:24px;letter-spacing:-.02em;
-  color:var(--punch);line-height:1}
-#sidebarRata{font-family:var(--mono);font-size:9px;color:var(--punch);opacity:.65;margin-top:2px}
-.total-note{font-size:10px;color:var(--ink4);margin-top:3px;line-height:1.4}
-.sp-sidebar{padding:10px 18px;border-bottom:1px solid var(--line);
-  display:flex;align-items:center;gap:8px}
-.sp-logo2{font-family:var(--serif);font-size:11px;color:var(--punch);font-weight:900;letter-spacing:.04em}
+.total-block{padding:16px 20px;border-bottom:1px solid var(--line)}
+.total-label{font-family:var(--mono);font-size:9px;letter-spacing:.15em;text-transform:uppercase;color:var(--ink4);margin-bottom:4px}
+#sidebarTotal{font-family:var(--serif);font-size:26px;letter-spacing:-.02em;color:var(--punch);line-height:1}
+#sidebarRata{font-family:var(--mono);font-size:10px;color:var(--punch);opacity:.7;margin-top:3px}
+.total-note{font-size:11px;color:var(--ink4);margin-top:4px;line-height:1.4}
+.sp-sidebar{padding:10px 20px;border-bottom:1px solid var(--line);display:flex;align-items:center;gap:8px}
+.sp-logo2{font-family:var(--serif);font-size:11px;color:var(--punch);font-weight:900;letter-spacing:.05em}
 .sp-txt{font-size:11px;color:var(--ink3);line-height:1.3}
 .sp-rate{color:var(--punch);font-weight:600}
-.cta-group{padding:14px 18px;display:flex;flex-direction:column;gap:7px}
-#btnCheckout{
-  padding:13px 18px;background:var(--punch);color:#fff;
-  font-family:var(--serif);font-size:13px;font-weight:900;letter-spacing:.03em;
-  border:none;cursor:pointer;transition:all .15s;text-transform:uppercase;
-  border-radius:var(--radius-sm);
-}
+.cta-group{padding:16px 20px;display:flex;flex-direction:column;gap:8px}
+#btnCheckout{padding:14px 20px;background:var(--punch);color:#fff;font-family:var(--serif);font-size:13px;font-weight:900;letter-spacing:.03em;border:none;cursor:pointer;transition:all .15s;text-transform:uppercase}
 #btnCheckout:hover:not(:disabled){background:var(--punch-dark);transform:translateY(-1px);box-shadow:var(--shadow)}
-#btnCheckout:disabled{opacity:.3;cursor:not-allowed}
-#stepCounter{font-family:var(--mono);font-size:9px;letter-spacing:.12em;color:var(--ink4)}
+#btnCheckout:disabled{opacity:.35;cursor:not-allowed}
+#stepCounter{font-family:var(--mono);font-size:9px;letter-spacing:.15em;color:var(--ink4)}
 
-/* ── STEP HEADER ── */
-.step-eyebrow{font-family:var(--mono);font-size:9px;letter-spacing:.2em;
-  text-transform:uppercase;color:var(--ink4);margin-bottom:8px}
-.step-title{font-family:var(--serif);font-size:clamp(32px,4vw,52px);
-  letter-spacing:-.03em;line-height:.95;color:var(--ink);margin-bottom:12px}
+/* STEP HEADER */
+.step-eyebrow{font-family:var(--mono);font-size:10px;letter-spacing:.2em;text-transform:uppercase;color:var(--ink4);margin-bottom:10px}
+.step-title{font-family:var(--serif);font-size:clamp(36px,5vw,60px);letter-spacing:-.03em;line-height:.95;color:var(--ink);margin-bottom:14px}
 .step-title em{color:var(--punch);font-style:normal}
 .acc{color:var(--punch)}
-.step-desc{font-size:13px;color:var(--ink3);line-height:1.6;max-width:560px;margin-bottom:24px}
+.step-desc{font-size:14px;color:var(--ink3);line-height:1.6;max-width:560px;margin-bottom:28px}
 
-/* ── PIATTAFORMA ── */
-.pf-brand-row{display:flex;gap:8px;margin-bottom:20px}
-.pf-brand{
-  flex:1;padding:24px 20px;border:2px solid var(--line2);background:var(--white);
-  cursor:pointer;transition:all .18s;text-align:center;border-radius:var(--radius);
-  box-shadow:var(--shadow);
-}
-.pf-brand:hover{border-color:var(--punch-mid);box-shadow:var(--shadow-lg);transform:translateY(-2px)}
-.pf-brand.active{background:var(--ink);border-color:var(--ink);color:var(--bg);
-  border-bottom:3px solid var(--punch)}
-.pf-brand-name{display:block;font-family:var(--serif);font-size:40px;letter-spacing:-.03em;line-height:1}
-.pf-brand-sub{display:block;font-family:var(--mono);font-size:9px;letter-spacing:.2em;
-  text-transform:uppercase;color:var(--ink3);margin-top:5px}
+/* PIATTAFORMA */
+.pf-brand-row{display:flex;gap:3px;margin-bottom:24px}
+.pf-brand{flex:1;padding:28px 24px;border:2px solid var(--line2);background:var(--bg2);cursor:pointer;transition:all .18s;text-align:center}
+.pf-brand:hover{background:var(--bg3);border-color:var(--ink)}
+.pf-brand.active{background:var(--ink);border-color:var(--ink);color:var(--bg);border-left:3px solid var(--punch)}
+.pf-brand-name{display:block;font-family:var(--serif);font-size:44px;letter-spacing:-.03em;line-height:1}
+.pf-brand-sub{display:block;font-family:var(--mono);font-size:10px;letter-spacing:.2em;text-transform:uppercase;color:var(--ink3);margin-top:6px}
 .pf-brand.active .pf-brand-sub{color:rgba(245,245,243,.4)}
 .pf-socket-section{margin-bottom:8px}
-.pf-socket-label{font-family:var(--mono);font-size:9px;letter-spacing:.2em;
-  text-transform:uppercase;color:var(--ink4);margin-bottom:10px}
-.pf-socket-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(190px,1fr));gap:8px}
-.pf-socket-card{
-  padding:16px;border:2px solid var(--line2);background:var(--white);
-  cursor:pointer;transition:all .18s;text-align:left;border-radius:var(--radius);
-  box-shadow:var(--shadow);
-}
-.pf-socket-card:hover{border-color:var(--punch-mid);box-shadow:var(--shadow-lg);transform:translateY(-2px)}
-.pf-socket-card.active{background:var(--ink);border-color:var(--ink);color:var(--bg);
-  border-bottom:3px solid var(--punch)}
-.pf-socket-badge-label{font-family:var(--mono);font-size:8px;letter-spacing:.12em;
-  text-transform:uppercase;color:var(--ink3);margin-bottom:5px}
+.pf-socket-label{font-family:var(--mono);font-size:10px;letter-spacing:.2em;text-transform:uppercase;color:var(--ink4);margin-bottom:12px}
+.pf-socket-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(200px,1fr));gap:3px}
+.pf-socket-card{padding:18px;border:2px solid var(--line2);background:var(--bg2);cursor:pointer;transition:all .18s;text-align:left}
+.pf-socket-card:hover{background:var(--bg3);border-color:var(--ink)}
+.pf-socket-card.active{background:var(--ink);border-color:var(--ink);color:var(--bg);border-left:3px solid var(--punch)}
+.pf-socket-badge-label{font-family:var(--mono);font-size:9px;letter-spacing:.12em;text-transform:uppercase;color:var(--ink3);margin-bottom:6px}
 .pf-socket-card.active .pf-socket-badge-label{color:var(--punch)}
-.pf-socket-name{font-family:var(--serif);font-size:24px;letter-spacing:-.01em;line-height:1;margin-bottom:4px}
-.pf-socket-cpu{font-family:var(--mono);font-size:9px;letter-spacing:.06em;color:var(--ink3);margin-bottom:5px}
+.pf-socket-name{font-family:var(--serif);font-size:26px;letter-spacing:-.01em;line-height:1;margin-bottom:4px}
+.pf-socket-cpu{font-family:var(--mono);font-size:10px;letter-spacing:.06em;color:var(--ink3);margin-bottom:6px}
 .pf-socket-card.active .pf-socket-cpu,.pf-socket-card.active .pf-socket-note{color:rgba(245,245,243,.45)}
-.pf-socket-ddr{display:inline-block;font-family:var(--mono);font-size:9px;font-weight:700;
-  letter-spacing:.1em;padding:2px 8px;background:var(--bg2);color:var(--ink2);
-  border:1px solid var(--line);margin-bottom:5px;border-radius:3px}
+.pf-socket-ddr{display:inline-block;font-family:var(--mono);font-size:10px;font-weight:700;letter-spacing:.1em;padding:2px 8px;background:var(--bg3);color:var(--ink2);border:1px solid var(--line);margin-bottom:6px}
 .pf-socket-card.active .pf-socket-ddr{background:var(--punch-soft);color:var(--punch);border-color:var(--punch-mid)}
 .pf-socket-note{font-size:11px;color:var(--ink3);line-height:1.4}
-.pf-socket-hint{font-family:var(--mono);font-size:10px;letter-spacing:.15em;
-  text-transform:uppercase;color:var(--ink4);padding:16px 0}
+.pf-socket-hint{font-family:var(--mono);font-size:11px;letter-spacing:.15em;text-transform:uppercase;color:var(--ink4);padding:20px 0}
 
-/* ── SOTTOCATEGORIE ── */
-.subcat-grid{display:flex;flex-direction:column;gap:8px;margin-top:4px}
-.subcat-group-label{font-family:var(--mono);font-size:8px;letter-spacing:.2em;
-  text-transform:uppercase;color:var(--ink4);padding:14px 0 6px;
-  border-top:1px solid var(--line);margin-top:6px}
-.subcat-group-label:first-child{border-top:none;margin-top:0;padding-top:2px}
-.subcat-row{display:grid;grid-template-columns:repeat(auto-fill,minmax(220px,1fr));gap:8px}
-.subcat-card{
-  display:grid;grid-template-areas:"icon name tag" "icon note count";
-  grid-template-columns:40px 1fr auto;align-items:start;gap:2px 10px;
-  padding:16px;border:2px solid var(--line2);background:var(--white);
-  cursor:pointer;transition:all .18s;text-align:left;border-radius:var(--radius);
-  box-shadow:var(--shadow);
-}
-.subcat-card:hover{border-color:var(--punch-mid);box-shadow:var(--shadow-lg);transform:translateY(-2px)}
-.subcat-icon{grid-area:icon;font-size:22px;line-height:1;align-self:center;text-align:center}
-.subcat-name{grid-area:name;font-family:var(--serif);font-size:18px;
-  letter-spacing:-.01em;line-height:1;color:var(--ink)}
-.subcat-tag{grid-area:tag;font-family:var(--mono);font-size:8px;letter-spacing:.1em;
-  text-transform:uppercase;padding:3px 8px;background:var(--punch-soft);color:var(--punch);
-  border:1px solid var(--punch-mid);align-self:start;white-space:nowrap;border-radius:20px}
-.subcat-count{grid-area:count;font-family:var(--mono);font-size:9px;color:var(--punch);
-  text-align:right;align-self:end}
-.subcat-note{grid-area:note;font-size:11px;color:var(--ink3);line-height:1.4;margin-top:2px}
-.subcat-skip{margin-top:12px;opacity:.5;font-size:11px;padding:8px 14px;border-radius:20px}
-.subcat-back{
-  display:inline-flex;align-items:center;gap:6px;
-  font-family:var(--mono);font-size:9px;letter-spacing:.1em;text-transform:uppercase;
-  color:var(--punch);cursor:pointer;padding:6px 12px;margin-bottom:16px;
-  border:1px solid var(--punch-mid);border-radius:20px;background:var(--punch-soft);
-  transition:all .15s;
-}
-.subcat-back:hover{background:var(--punch);color:#fff}
-.subcat-back strong{font-style:normal}
+/* SOTTOCATEGORIE */
+.subcat-grid{display:flex;flex-direction:column;gap:2px;margin-top:4px}
+.subcat-group-label{font-family:var(--mono);font-size:9px;letter-spacing:.2em;text-transform:uppercase;color:var(--ink4);padding:16px 0 8px;border-top:1px solid var(--line);margin-top:8px}
+.subcat-group-label:first-child{border-top:none;margin-top:0;padding-top:4px}
+.subcat-row{display:grid;grid-template-columns:repeat(auto-fill,minmax(240px,1fr));gap:3px}
+.subcat-card{display:grid;grid-template-areas:"icon name tag" "icon note count";grid-template-columns:40px 1fr auto;align-items:start;gap:2px 10px;padding:18px 16px;border:2px solid var(--line2);background:var(--bg2);cursor:pointer;transition:all .18s;text-align:left}
+.subcat-card:hover{background:var(--bg3);border-color:var(--ink);transform:translateY(-2px);box-shadow:var(--shadow)}
+.subcat-icon{grid-area:icon;font-size:24px;line-height:1;align-self:center;text-align:center}
+.subcat-name{grid-area:name;font-family:var(--serif);font-size:20px;letter-spacing:-.01em;line-height:1;color:var(--ink)}
+.subcat-tag{grid-area:tag;font-family:var(--mono);font-size:9px;letter-spacing:.1em;text-transform:uppercase;padding:2px 7px;background:var(--bg3);color:var(--ink3);border:1px solid var(--line);align-self:start;white-space:nowrap}
+.subcat-count{grid-area:count;font-family:var(--mono);font-size:9px;color:var(--punch);text-align:right;align-self:end}
+.subcat-note{grid-area:note;font-size:12px;color:var(--ink3);line-height:1.4;margin-top:3px}
+.subcat-skip{margin-top:16px;opacity:.5;font-size:12px;padding:8px 16px}
+.subcat-back{display:inline-flex;align-items:center;gap:6px;font-family:var(--mono);font-size:10px;letter-spacing:.1em;text-transform:uppercase;color:var(--ink3);cursor:pointer;padding:8px 0;margin-bottom:20px;border-bottom:1px solid var(--line);width:100%;transition:color .15s}
+.subcat-back:hover{color:var(--ink)}
+.subcat-back strong{color:var(--punch);font-style:normal}
+.subcat-back span{opacity:.6}
 
-/* ── FILTRI ── */
-.filter-row{display:flex;flex-wrap:wrap;gap:6px;margin-bottom:12px}
-.filter-chip{
-  padding:5px 14px;font-family:var(--mono);font-size:9px;letter-spacing:.08em;
-  text-transform:uppercase;border:1.5px solid var(--line2);background:var(--white);
-  color:var(--ink3);cursor:pointer;transition:all .12s;border-radius:20px;
-}
-.filter-chip:hover{border-color:var(--punch);color:var(--punch);background:var(--punch-soft)}
-.filter-chip.active{background:var(--ink);border-color:var(--ink);color:#fff}
-.search-row{
-  display:flex;align-items:center;gap:10px;padding:10px 16px;
-  background:var(--white);border:1.5px solid var(--line2);
-  margin-bottom:14px;border-radius:var(--radius);box-shadow:var(--shadow);
-  transition:border-color .15s;
-}
-.search-row:focus-within{border-color:var(--punch);box-shadow:0 0 0 3px var(--punch-soft)}
-.search-icon{font-size:15px;color:var(--ink4)}
-.search-row input{flex:1;background:none;border:none;outline:none;
-  font-family:var(--body);font-size:14px;color:var(--ink)}
+/* FILTRI RICERCA */
+.filter-row{display:flex;flex-wrap:wrap;gap:4px;margin-bottom:12px}
+.filter-chip{padding:5px 12px;font-family:var(--mono);font-size:10px;letter-spacing:.08em;text-transform:uppercase;border:1px solid var(--line2);background:var(--bg2);color:var(--ink3);cursor:pointer;transition:all .12s}
+.filter-chip:hover{background:var(--bg3);border-color:var(--ink);color:var(--ink)}
+.filter-chip.active{background:var(--ink);border-color:var(--ink);color:var(--bg)}
+.search-row{display:flex;align-items:center;gap:10px;padding:10px 14px;background:var(--bg2);border:1px solid var(--line2);margin-bottom:16px;transition:border-color .15s}
+.search-row:focus-within{border-color:var(--punch)}
+.search-icon{font-size:16px;color:var(--ink4)}
+.search-row input{flex:1;background:none;border:none;outline:none;font-family:var(--body);font-size:14px;color:var(--ink)}
 .search-row input::placeholder{color:var(--ink4)}
-.products-count{font-family:var(--mono);font-size:9px;letter-spacing:.1em;
-  text-transform:uppercase;color:var(--ink4);margin-bottom:10px}
+.products-count{font-family:var(--mono);font-size:10px;letter-spacing:.1em;text-transform:uppercase;color:var(--ink4);margin-bottom:12px}
 
-/* ── GRIGLIA PRODOTTI ── */
-.products-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(200px,1fr));gap:10px}
+/* GRIGLIA PRODOTTI */
+.products-grid{display:grid !important;grid-template-columns:repeat(auto-fill,minmax(210px,1fr)) !important;gap:3px !important;width:100% !important}
 
-/* ── CARD PRODOTTO ── */
-.prod-card{
-  background:var(--white);border:2px solid var(--line2);
-  cursor:pointer;transition:all .15s;display:flex;flex-direction:column;
-  overflow:hidden;position:relative;border-radius:var(--radius);box-shadow:var(--shadow);
-}
-.prod-card:hover{border-color:var(--punch-mid);box-shadow:var(--shadow-lg);transform:translateY(-2px)}
-.prod-card.selected{
-  background:var(--ink);border-color:var(--punch);
-  border-bottom:3px solid var(--punch);color:var(--bg);
-  animation:cardSel .25s ease;
-}
-.prod-card.selected:hover{transform:none}
+/* CARD PRODOTTO */
+.prod-card{background:var(--bg2);border:2px solid var(--line);cursor:pointer;transition:all .15s;display:flex;flex-direction:column;overflow:hidden;position:relative}
+.prod-card:hover{border-color:var(--punch-mid);background:var(--bg);transform:translateY(-1px);box-shadow:var(--shadow)}
+.prod-card.selected{background:var(--ink);border-color:var(--punch);border-left:3px solid var(--punch);color:var(--bg);animation:cardSel .25s ease}
 .prod-card.unavailable{opacity:.4;cursor:not-allowed}
-.prod-card.unavailable:hover{transform:none;box-shadow:var(--shadow);border-color:var(--line2)}
+.prod-card.unavailable:hover{transform:none;box-shadow:none;border-color:var(--line)}
 .prod-card.incompatible{opacity:.35;cursor:not-allowed;position:relative}
 .prod-card.incompatible:hover{opacity:.55;transform:none}
-.prod-card.incompatible::after{
-  content:attr(data-why);position:absolute;bottom:calc(100% + 6px);left:50%;
-  transform:translateX(-50%);background:var(--ink);color:var(--bg);
-  font-family:var(--mono);font-size:9px;letter-spacing:.06em;
-  padding:6px 12px;white-space:nowrap;z-index:20;pointer-events:none;
-  opacity:0;transition:opacity .15s;border-radius:var(--radius-sm);
-  border-bottom:2px solid var(--punch);
-}
+.prod-card.incompatible::after{content:attr(data-why);position:absolute;bottom:calc(100% + 6px);left:50%;transform:translateX(-50%);background:var(--ink);color:var(--bg);font-family:var(--mono);font-size:10px;letter-spacing:.06em;padding:6px 12px;white-space:nowrap;z-index:20;pointer-events:none;opacity:0;transition:opacity .15s;border-bottom:2px solid var(--punch)}
 .prod-card.incompatible:hover::after{opacity:1}
-@keyframes cardSel{0%{transform:scale(1)}50%{transform:scale(1.02)}100%{transform:scale(1)}}
+@keyframes cardSel{0%{transform:scale(1)}50%{transform:scale(1.015)}100%{transform:scale(1)}}
 
-/* ── IMMAGINE CARD ── */
-.prod-img-wrap{
-  width:100%;height:72px;overflow:hidden;
-  background:var(--bg2);display:flex;align-items:center;justify-content:center;
-  border-bottom:1px solid var(--line);
-}
-.prod-card.selected .prod-img-wrap{background:rgba(255,255,255,.06)}
-.prod-img-placeholder{font-size:28px;opacity:.2}
+/* IMMAGINE PRODOTTO */
+.prod-img-wrap{width:100%;height:72px;overflow:hidden;background:var(--bg3);display:flex;align-items:center;justify-content:center;border-bottom:1px solid var(--line)}
+.prod-img{width:100%;height:100%;object-fit:contain;padding:8px;transition:transform .2s}
+.prod-card:hover .prod-img{transform:scale(1.05)}
+.prod-card.selected .prod-img-wrap{width:100%;height:72px;overflow:hidden;background:var(--bg3);display:flex;align-items:center;justify-content:center;border-bottom:1px solid var(--line)}
+.prod-img-placeholder{font-size:32px;opacity:.2}
 
-/* ── CORPO CARD ── */
-.prod-body{padding:12px;flex:1;display:flex;flex-direction:column;gap:4px}
-.prod-check{
-  position:absolute;top:8px;right:8px;width:22px;height:22px;
-  background:var(--punch);color:#fff;font-size:11px;
-  display:flex;align-items:center;justify-content:center;
-  font-weight:700;z-index:2;border-radius:50%;
-}
-.prod-brand{font-family:var(--mono);font-size:8px;letter-spacing:.15em;
-  text-transform:uppercase;color:var(--ink4)}
+/* CORPO CARD */
+.prod-body{padding:10px;flex:1;display:flex;flex-direction:column;gap:3px}
+.prod-check{position:absolute;top:6px;right:6px;width:22px;height:22px;background:var(--punch);color:#fff;font-size:12px;display:flex;align-items:center;justify-content:center;font-weight:700;z-index:2}
+.prod-brand{font-family:var(--mono);font-size:9px;letter-spacing:.15em;text-transform:uppercase;color:var(--ink4)}
 .prod-card.selected .prod-brand{color:rgba(245,245,243,.35)}
 .prod-name{font-size:12px;font-weight:700;color:var(--ink);line-height:1.35;flex:1}
 .prod-card.selected .prod-name{color:var(--bg)}
-.prod-socket-badge{
-  display:inline-flex;align-items:center;font-family:var(--mono);font-size:8px;
-  letter-spacing:.1em;text-transform:uppercase;padding:2px 7px;
-  background:var(--bg2);color:var(--ink3);border:1px solid var(--line);border-radius:3px;
-}
-.prod-card.selected .prod-socket-badge{
-  background:var(--punch-soft);color:var(--punch);border-color:var(--punch-mid)}
+.prod-socket-badge{display:inline-flex;align-items:center;font-family:var(--mono);font-size:9px;letter-spacing:.12em;text-transform:uppercase;padding:2px 7px;background:var(--bg3);color:var(--ink3);border:1px solid var(--line)}
+.prod-card.selected .prod-socket-badge{background:var(--punch-soft);color:var(--punch);border-color:var(--punch-mid)}
 .prod-badges{display:flex;gap:4px;flex-wrap:wrap}
-.prod-badge{font-family:var(--mono);font-size:8px;letter-spacing:.08em;
-  text-transform:uppercase;padding:2px 7px;border:1px solid;border-radius:20px}
-.prod-badge.best-price{background:rgba(0,180,80,.08);color:#00a050;border-color:rgba(0,180,80,.2)}
-.prod-badge.popular{background:rgba(255,160,0,.08);color:#b07000;border-color:rgba(255,160,0,.2)}
-.prod-badge.recommended,.prod-badge.new-gen{
-  background:var(--punch-soft);color:var(--punch);border-color:var(--punch-mid)}
-.prod-price{font-family:var(--serif);font-size:17px;font-weight:900;
-  color:var(--punch);letter-spacing:-.01em}
-.prod-price small{font-family:var(--mono);font-size:8px;font-weight:400;
-  letter-spacing:.1em;color:var(--ink4);margin-right:3px}
-.prod-rata{font-family:var(--mono);font-size:9px;color:var(--punch);opacity:.6}
-.prod-stock{font-family:var(--mono);font-size:8px;letter-spacing:.1em;
-  text-transform:uppercase;color:var(--ink4)}
+.prod-badge{font-family:var(--mono);font-size:8px;letter-spacing:.1em;text-transform:uppercase;padding:2px 6px;border:1px solid}
+.prod-badge.best-price{background:rgba(0,180,80,.08);color:#00a050;border-color:rgba(0,180,80,.25)}
+.prod-badge.popular{background:rgba(255,160,0,.08);color:#b07000;border-color:rgba(255,160,0,.25)}
+.prod-badge.recommended,.prod-badge.new-gen{background:var(--punch-soft);color:var(--punch);border-color:var(--punch-mid)}
+.prod-price{font-family:var(--serif);font-size:17px;font-weight:900;color:var(--punch);letter-spacing:-.01em}
+.prod-price small{font-family:var(--mono);font-size:8px;font-weight:400;letter-spacing:.1em;color:var(--ink4);margin-right:3px}
+.prod-rata{font-family:var(--mono);font-size:9px;color:var(--punch);opacity:.65}
+.prod-stock{font-family:var(--mono);font-size:9px;letter-spacing:.1em;text-transform:uppercase;color:var(--ink4)}
 .prod-stock.ok{color:var(--punch)}
 .prod-stock.low{color:#d06000}
 .prod-stock.inc{color:var(--ink3);font-style:italic}
 
-/* ── SMART TIP ── */
-.smart-tip{
-  display:flex;align-items:flex-start;gap:10px;padding:12px 16px;margin-bottom:14px;
-  border:1px solid var(--punch-mid);background:var(--punch-soft);
-  border-radius:var(--radius);
-}
+/* SMART TIP */
+.smart-tip{display:flex;align-items:flex-start;gap:10px;padding:12px 16px;margin-bottom:16px;border:1px solid var(--punch-mid);background:var(--punch-soft)}
 .smart-tip .tip-icon{font-size:16px;flex-shrink:0;margin-top:2px}
 .smart-tip .tip-text{font-size:13px;color:var(--ink2);line-height:1.5}
 .smart-tip .tip-text strong{color:var(--punch);font-weight:700}
-.compat-alert{
-  padding:10px 14px;margin-bottom:12px;
-  border-left:3px solid var(--punch);background:var(--punch-soft);
-  font-family:var(--mono);font-size:9px;letter-spacing:.1em;text-transform:uppercase;
-  color:var(--ink2);border-radius:0 var(--radius-sm) var(--radius-sm) 0;
-}
+.compat-alert{padding:10px 14px;margin-bottom:14px;border-left:3px solid var(--punch);background:var(--punch-soft);font-family:var(--mono);font-size:10px;letter-spacing:.1em;text-transform:uppercase;color:var(--ink2)}
 .compat-alert strong{color:var(--punch)}
 
-/* ── BOTTONI ── */
-.btn-next{
-  display:inline-flex;align-items:center;gap:10px;padding:14px 24px;margin-top:20px;
-  background:var(--punch);color:#fff;
-  font-family:var(--serif);font-size:15px;font-weight:900;letter-spacing:.02em;
-  text-transform:uppercase;border:none;cursor:pointer;transition:all .15s;
-  border-radius:var(--radius-sm);
-}
+/* BTN */
+.btn-next{display:inline-flex;align-items:center;gap:10px;padding:16px 28px;margin-top:24px;background:var(--punch);color:#fff;font-family:var(--serif);font-size:16px;font-weight:900;letter-spacing:.02em;text-transform:uppercase;border:none;cursor:pointer;transition:all .15s}
 .btn-next:hover:not(:disabled){background:var(--punch-dark);transform:translateY(-2px);box-shadow:var(--shadow-lg)}
 .btn-next:disabled{opacity:.3;cursor:not-allowed;transform:none!important}
 .btn-next:not(:disabled){animation:btnAppear .3s ease}
 @keyframes btnAppear{from{opacity:0;transform:translateY(6px)}to{opacity:1;transform:translateY(0)}}
-.btn-skip{
-  display:inline-block;padding:8px 16px;margin-top:8px;
-  font-family:var(--mono);font-size:9px;letter-spacing:.12em;text-transform:uppercase;
-  color:var(--ink4);border:1.5px solid var(--line2);background:none;
-  cursor:pointer;transition:all .12s;border-radius:20px;
-}
+.btn-skip{display:inline-block;padding:8px 16px;margin-top:10px;font-family:var(--mono);font-size:10px;letter-spacing:.12em;text-transform:uppercase;color:var(--ink4);border:1px solid var(--line2);background:none;cursor:pointer;transition:all .12s}
 .btn-skip:hover{color:var(--ink);border-color:var(--ink)}
-.arrow{font-size:16px}
+.arrow{font-size:18px}
 
-/* ── RIEPILOGO ── */
-.recap-list{display:flex;flex-direction:column;gap:6px;margin-top:8px}
-.recap-row{
-  display:grid;grid-template-columns:90px 1fr auto;align-items:center;gap:10px;
-  padding:12px 14px;background:var(--white);border:1.5px solid var(--line2);
-  cursor:pointer;transition:all .12s;border-radius:var(--radius);box-shadow:var(--shadow);
-}
-.recap-row:hover{border-color:var(--punch-mid);box-shadow:var(--shadow-lg)}
-.recap-cat{font-family:var(--mono);font-size:8px;letter-spacing:.15em;
-  text-transform:uppercase;color:var(--ink4)}
-.recap-name{font-size:12px;font-weight:600;color:var(--ink2);line-height:1.3}
-.recap-price{font-family:var(--serif);font-size:14px;font-weight:900;
-  color:var(--ink);white-space:nowrap;text-align:right}
-.recap-edit{font-size:10px;opacity:.4;margin-left:3px}
-.recap-row:hover .recap-edit{opacity:1;color:var(--punch)}
-.recap-subtotal-row{
-  display:flex;justify-content:space-between;align-items:baseline;
-  padding:10px 0;border-bottom:1px solid var(--line);
-}
-.recap-subtotal-lbl{font-size:13px;color:var(--ink3)}
-.recap-subtotal-lbl small{font-size:10px;color:var(--ink4);display:block;margin-top:2px}
-.recap-subtotal-val{font-size:15px;font-weight:700;color:var(--ink);font-family:var(--mono)}
-.recap-impl .recap-subtotal-lbl{color:var(--ink2)}
-.recap-impl .recap-subtotal-val{color:var(--punch);font-size:17px}
-.recap-total-divider{height:2px;background:var(--punch);margin:14px 0 10px;border-radius:2px}
-.recap-total{padding:20px 0;margin-top:12px}
-.recap-total-label{font-family:var(--mono);font-size:9px;letter-spacing:.2em;
-  text-transform:uppercase;color:var(--ink4);margin-bottom:5px}
-.recap-total-price{font-family:var(--serif);font-size:40px;letter-spacing:-.03em;
-  color:var(--punch)!important;line-height:1}
-.recap-total-rata{font-family:var(--mono);font-size:10px;color:var(--punch);opacity:.75;margin-top:5px}
-.recap-actions{display:flex;gap:8px;margin-top:18px;flex-wrap:wrap}
-.btn-share{
-  padding:12px 18px;background:transparent;border:2px solid var(--line2);
-  font-family:var(--body);font-size:13px;font-weight:600;cursor:pointer;
-  transition:all .15s;color:var(--ink2);border-radius:var(--radius-sm);
-}
-.btn-share:hover{border-color:var(--ink);background:var(--bg2)}
-.recap-note{font-family:var(--mono);font-size:9px;letter-spacing:.07em;
-  color:var(--ink4);margin-top:14px;line-height:1.8}
+/* RIEPILOGO */
+.recap-list{display:flex;flex-direction:column;gap:2px;margin-top:8px}
+.recap-row{display:grid;grid-template-columns:100px 1fr auto;align-items:center;gap:12px;padding:12px 16px;background:var(--bg2);border:1px solid var(--line);cursor:pointer;transition:background .12s}
+.recap-row:hover{background:var(--bg3)}
+.recap-cat{font-family:var(--mono);font-size:9px;letter-spacing:.15em;text-transform:uppercase;color:var(--ink4)}
+.recap-name{font-size:13px;font-weight:600;color:var(--ink2);line-height:1.3}
+.recap-price{font-family:var(--serif);font-size:14px;font-weight:900;color:var(--punch);white-space:nowrap;text-align:right}
+.recap-edit{font-size:10px;opacity:.5;margin-left:4px}
+.recap-row:hover .recap-edit{opacity:1}
+.recap-total{padding:20px 16px;margin-top:16px;border-top:3px solid var(--punch)}
+.recap-total-label{font-family:var(--mono);font-size:10px;letter-spacing:.2em;text-transform:uppercase;color:var(--ink4);margin-bottom:6px}
+.recap-total-price{font-family:var(--serif);font-size:42px;letter-spacing:-.03em;color:var(--punch)!important;line-height:1}
+.recap-total-rata{font-family:var(--mono);font-size:11px;color:var(--punch);opacity:.8;margin-top:6px}
+.recap-actions{display:flex;gap:8px;margin-top:20px;flex-wrap:wrap}
+.btn-share{padding:12px 20px;background:transparent;border:2px solid var(--line2);font-family:var(--body);font-size:13px;font-weight:600;cursor:pointer;transition:all .15s;color:var(--ink2)}
+.btn-share:hover{border-color:var(--ink);background:var(--bg3)}
+.recap-note{font-family:var(--mono);font-size:10px;letter-spacing:.08em;color:var(--ink4);margin-top:16px;line-height:1.8}
+.more-hint{grid-column:1/-1;padding:16px;font-family:var(--mono);font-size:10px;letter-spacing:.12em;text-transform:uppercase;color:var(--ink4);text-align:center;border-top:1px solid var(--line);margin-top:8px}
+.empty-state{text-align:center;padding:60px 40px;color:var(--ink3);grid-column:1/-1}
+.empty-state h3{font-family:var(--serif);font-size:24px;margin-bottom:8px}
 
-/* ── MODAL CHECKOUT ── */
-.modal-overlay{position:fixed;inset:0;z-index:1000;background:rgba(10,10,10,.6);
-  display:none;align-items:center;justify-content:center}
+/* MODAL */
+.modal-overlay{position:fixed;inset:0;z-index:1000;background:rgba(10,10,10,.7);display:none;align-items:center;justify-content:center}
 .modal-overlay.open{display:flex}
-.modal{background:var(--white);width:100%;max-width:480px;max-height:90vh;overflow-y:auto;
-  border-radius:var(--radius);box-shadow:var(--shadow-lg);border-top:3px solid var(--punch)}
-.modal-header{display:flex;align-items:center;justify-content:space-between;
-  padding:18px 22px 14px;border-bottom:1px solid var(--line)}
-.modal-title{font-family:var(--serif);font-size:18px}
-.modal-close{width:30px;height:30px;border:1.5px solid var(--line2);background:none;
-  font-size:16px;cursor:pointer;display:flex;align-items:center;justify-content:center;
-  color:var(--ink3);transition:all .12s;border-radius:50%}
+.modal{background:var(--bg);width:100%;max-width:480px;max-height:90vh;overflow-y:auto;border-top:3px solid var(--punch);box-shadow:var(--shadow-lg)}
+.modal-header{display:flex;align-items:center;justify-content:space-between;padding:20px 24px 16px;border-bottom:1px solid var(--line)}
+.modal-title{font-family:var(--serif);font-size:20px}
+.modal-close{width:32px;height:32px;border:1px solid var(--line2);background:none;font-size:18px;cursor:pointer;display:flex;align-items:center;justify-content:center;color:var(--ink3);transition:all .12s}
 .modal-close:hover{background:var(--bg2);color:var(--ink)}
-.modal-body{padding:18px 22px}
-.form-group{margin-bottom:14px}
-.form-label{display:block;font-family:var(--mono);font-size:9px;letter-spacing:.15em;
-  text-transform:uppercase;color:var(--ink3);margin-bottom:5px}
-.form-input{width:100%;padding:10px 12px;background:var(--bg2);border:1.5px solid var(--line2);
-  font-family:var(--body);font-size:14px;color:var(--ink);outline:none;
-  transition:border-color .15s;border-radius:var(--radius-sm)}
-.form-input:focus{border-color:var(--punch);box-shadow:0 0 0 3px var(--punch-soft)}
+.modal-body{padding:20px 24px}
+.form-group{margin-bottom:16px}
+.form-label{display:block;font-family:var(--mono);font-size:10px;letter-spacing:.15em;text-transform:uppercase;color:var(--ink3);margin-bottom:6px}
+.form-input{width:100%;padding:10px 12px;background:var(--bg2);border:1px solid var(--line2);font-family:var(--body);font-size:14px;color:var(--ink);outline:none;transition:border-color .15s}
+.form-input:focus{border-color:var(--punch)}
 .form-input::placeholder{color:var(--ink4)}
-.modal-footer{padding:0 22px 22px}
-.btn-order{width:100%;padding:14px;background:var(--punch);color:#fff;
-  font-family:var(--serif);font-size:15px;font-weight:900;letter-spacing:.03em;
-  text-transform:uppercase;border:none;cursor:pointer;transition:all .15s;
-  border-radius:var(--radius-sm)}
+.modal-footer{padding:0 24px 24px}
+.btn-order{width:100%;padding:16px;background:var(--punch);color:#fff;font-family:var(--serif);font-size:16px;font-weight:900;letter-spacing:.03em;text-transform:uppercase;border:none;cursor:pointer;transition:all .15s}
 .btn-order:hover{background:var(--punch-dark)}
-.order-note{font-family:var(--mono);font-size:9px;color:var(--ink4);
-  text-align:center;margin-top:8px;line-height:1.6;letter-spacing:.06em}
+.order-note{font-family:var(--mono);font-size:10px;color:var(--ink4);text-align:center;margin-top:10px;line-height:1.6;letter-spacing:.06em}
 
-/* ── TOAST ── */
-#toast{position:fixed;bottom:24px;left:50%;transform:translateX(-50%) translateY(80px);
-  background:var(--ink);color:var(--bg);padding:12px 22px;
-  font-family:var(--mono);font-size:10px;letter-spacing:.1em;z-index:9999;
-  transition:transform .25s ease;border-left:3px solid var(--punch);
-  box-shadow:var(--shadow-lg);white-space:nowrap;border-radius:var(--radius-sm)}
+/* TOAST */
+#toast{position:fixed;bottom:24px;left:50%;transform:translateX(-50%) translateY(80px);background:var(--ink);color:var(--bg);padding:12px 24px;font-family:var(--mono);font-size:11px;letter-spacing:.1em;z-index:9999;transition:transform .25s ease;border-left:3px solid var(--punch);box-shadow:var(--shadow-lg);white-space:nowrap}
 #toast.show{transform:translateX(-50%) translateY(0)}
 
-/* ── MORE HINT ── */
-.more-hint{grid-column:1/-1;padding:14px;font-family:var(--mono);font-size:9px;
-  letter-spacing:.12em;text-transform:uppercase;color:var(--ink4);
-  text-align:center;border-top:1px solid var(--line);margin-top:6px}
-.empty-state{text-align:center;padding:60px 40px;color:var(--ink3);grid-column:1/-1}
-.empty-state h3{font-family:var(--serif);font-size:22px;margin-bottom:6px}
 
-/* ── AI MODAL ── */
-.ai-modal{position:fixed;inset:0;z-index:2000;background:rgba(10,10,10,.7);
-  display:none;align-items:flex-end;justify-content:flex-end}
-.ai-modal.open{display:flex}
-.ai-panel{width:420px;height:100vh;background:var(--bg);
-  display:flex;flex-direction:column;border-left:1px solid var(--line2);
-  box-shadow:var(--shadow-lg)}
-.ai-panel-top{background:var(--ink);padding:14px 20px;
-  display:flex;align-items:center;justify-content:space-between;
-  border-bottom:2px solid var(--punch);flex-shrink:0}
-.ai-panel-title{display:flex;align-items:center;gap:8px;
-  font-family:var(--serif);font-size:14px;font-weight:900;color:#fff;letter-spacing:.02em}
-.ai-panel-subtitle{font-family:var(--mono);font-size:9px;letter-spacing:.1em;
-  color:rgba(255,255,255,.35);text-transform:uppercase;margin-top:1px}
-.ai-close{width:28px;height:28px;border:1px solid rgba(255,255,255,.2);background:none;
-  color:rgba(255,255,255,.5);font-size:16px;display:flex;align-items:center;
-  justify-content:center;cursor:pointer;border-radius:50%}
-.ai-close:hover{background:rgba(255,255,255,.1);color:#fff}
-.ai-messages{flex:1;overflow-y:auto;padding:16px;display:flex;flex-direction:column;gap:12px}
-.ai-msg{display:flex;flex-direction:column;gap:3px;max-width:92%}
-.ai-msg.user{align-self:flex-end}
-.ai-msg.bot{align-self:flex-start}
-.ai-msg-label{font-family:var(--mono);font-size:8px;letter-spacing:.12em;
-  text-transform:uppercase;color:var(--ink4);padding:0 4px}
-.ai-msg.user .ai-msg-label{text-align:right}
-.ai-bubble{padding:10px 14px;font-size:13px;line-height:1.55}
-.ai-msg.bot .ai-bubble{background:var(--white);border:1px solid var(--line2);
-  border-radius:2px 10px 10px 10px;color:var(--ink);box-shadow:var(--shadow)}
-.ai-msg.user .ai-bubble{background:var(--ink);color:#fff;
-  border-radius:10px 2px 10px 10px}
-.ai-bubble strong{color:var(--punch);font-weight:700}
-.ai-prod-cards{display:flex;flex-direction:column;gap:6px;margin-top:8px}
-.ai-prod-card{display:flex;align-items:center;gap:10px;padding:10px 12px;
-  background:var(--bg2);border:1.5px solid var(--line2);cursor:pointer;
-  transition:all .15s;border-radius:var(--radius-sm)}
-.ai-prod-card:hover{border-color:var(--punch);background:var(--bg)}
-.ai-prod-card.added{border-color:var(--punch);border-left-width:3px;background:var(--punch-soft)}
-.ai-prod-card-emoji{font-size:20px;flex-shrink:0}
-.ai-prod-card-body{flex:1;min-width:0}
-.ai-prod-card-name{font-size:12px;font-weight:700;color:var(--ink);line-height:1.3;
-  white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
-.ai-prod-card-sub{font-size:10px;font-family:var(--mono);color:var(--ink3);margin-top:2px}
-.ai-prod-card-price{font-size:14px;font-weight:900;color:var(--punch);flex-shrink:0}
-.ai-prod-card-action{font-size:9px;font-family:var(--mono);letter-spacing:.1em;
-  text-transform:uppercase;padding:4px 8px;border:1px solid var(--line2);
-  color:var(--ink3);cursor:pointer;white-space:nowrap;border-radius:3px}
-.ai-prod-card.added .ai-prod-card-action{
-  background:var(--punch);border-color:var(--punch);color:#fff}
-.ai-input-area{padding:12px 16px;border-top:1px solid var(--line);
-  background:var(--white);flex-shrink:0}
-.ai-suggestions{display:flex;gap:5px;flex-wrap:wrap;margin-bottom:8px}
-.ai-suggestion{padding:4px 10px;border:1px solid var(--line2);
-  font-family:var(--mono);font-size:9px;letter-spacing:.06em;
-  color:var(--ink3);cursor:pointer;transition:all .12s;border-radius:20px}
-.ai-suggestion:hover{border-color:var(--punch);color:var(--punch);background:var(--punch-soft)}
-.ai-input-row{display:flex;gap:8px}
-.ai-input{flex:1;padding:10px 14px;background:var(--bg2);border:1.5px solid var(--line2);
-  font-family:var(--body);font-size:13px;color:var(--ink);outline:none;
-  transition:border-color .15s;border-radius:var(--radius-sm)}
-.ai-input:focus{border-color:var(--punch);box-shadow:0 0 0 3px var(--punch-soft)}
-.ai-input::placeholder{color:var(--ink4)}
-.ai-send{padding:10px 16px;background:var(--punch);color:#fff;
-  font-family:var(--serif);font-size:13px;font-weight:900;
-  border:none;cursor:pointer;transition:background .15s;border-radius:var(--radius-sm)}
-.ai-send:hover{background:var(--punch-dark)}
-.ai-send:disabled{opacity:.4;cursor:not-allowed}
-.ai-typing{display:flex;align-items:center;gap:4px;padding:8px 14px}
-.ai-typing span{width:6px;height:6px;border-radius:50%;background:var(--ink4);
-  animation:typing-bounce 1.2s infinite}
-.ai-typing span:nth-child(2){animation-delay:.2s}
-.ai-typing span:nth-child(3){animation-delay:.4s}
-@keyframes typing-bounce{0%,60%,100%{transform:translateY(0)}30%{transform:translateY(-6px)}}
-.ai-panel-top-left{flex:1}
-
+#aiModal.open { display:flex !important; }
+.recap-subtotal-row { display:flex; justify-content:space-between; align-items:baseline; padding:8px 0; border-bottom:1px solid var(--line); }
 </style>
 
 </head>
@@ -554,7 +269,7 @@ body{background:var(--bg);color:var(--ink);font-family:var(--body);font-size:14p
     MINIMAL GAMERS / CONFIGURATORE
   </div>
   <span class="top-count" id="top-count">caricamento...</span>
-    <button class="ai-btn" onclick="openAI()"><span class="ai-btn-dot"></span>Assistente AI</button>
+    <button onclick="openAI()" style="display:flex;align-items:center;gap:6px;padding:6px 14px;border:1px solid rgba(217,70,168,.4);border-radius:20px;background:rgba(217,70,168,.12);color:#fff;font-family:monospace;font-size:9px;letter-spacing:.1em;text-transform:uppercase;cursor:pointer"><span style="width:6px;height:6px;border-radius:50%;background:#d946a8;display:inline-block"></span>Assistente AI</button>
 </header>
 
 <!-- PROGRESS -->
@@ -629,38 +344,1088 @@ body{background:var(--bg);color:var(--ink);font-family:var(--body);font-size:14p
     <label>Telefono *</label><input type="tel" id="ord-phone" placeholder="+39 333 123 4567">
     <label>Note (opzionale)</label><textarea id="ord-note" placeholder="Preferenze colore, periodo consegna..."></textarea>
     <div class="modal-sp-note">💳 Scalapay disponibile · 36 rate a interessi zero</div>
-    <butt
+    <button class="modal-submit" onclick="submitOrder()">Invia richiesta →</button>
+  </div>
+</div>
+
+<script>
+
 
 // ═══════════════════════════════════════════════════════════════
 // CONFIGURATORE PC GAMING — Minimal Gamers
-<script src="app.js?v=2"></script>
+// JS unico, pulito, senza duplicati
+// ═══════════════════════════════════════════════════════════════
+
+const MOLT = 1.22; // IVA 22%
+const IMPL = 0.30; // Costo implementazione 30%
+const calcImpl = tot => tot * IMPL;
+const calcTotale = tot => tot + tot * IMPL;
+const IVA  = 1.22;
+
+// ── STEPS ────────────────────────────────────────────────────
+const STEPS = [
+  {id:'piattaforma', name:'Piattaforma',  sub:'Brand e socket'},
+  {id:'cpu',         name:'CPU',          sub:'Processore'},
+  {id:'mobo',        name:'Scheda Madre', sub:'Socket compatibile'},
+  {id:'case',        name:'Case',         sub:'Chassis compatibile'},
+  {id:'ram',         name:'RAM',          sub:'DDR4 o DDR5'},
+  {id:'gpu',         name:'GPU',          sub:'Scheda video'},
+  {id:'ssd',         name:'SSD',          sub:'Storage NVMe'},
+  {id:'psu',         name:'PSU',          sub:'Alimentatore'},
+  {id:'cooler',      name:'Dissipatore',  sub:'Cooling CPU'},
+  {id:'ventole',     name:'Extra',        sub:'Kit ventole'},
+  {id:'riepilogo',   name:'Riepilogo',    sub:'Ordina'},
+];
+
+const CAT = {
+  case:'Case', cpu:'CPU', mobo:'Scheda Madre', ram:'RAM',
+  gpu:'GPU', ssd:'SSD', psu:'PSU', cooler:'Dissipatore', ventole:'Extra',
+};
+
+const BLD_LBL = {
+  cpu:'CPU', mobo:'Scheda Madre', case:'Case', ram:'RAM',
+  gpu:'GPU', ssd:'SSD', psu:'Alimentatore', cooler:'Dissipatore', ventole:'Kit Ventole',
+};
+
+const DESCS = {
+  cpu:   'Filtrata per socket scelto. X3D = massimo gaming. No-fan = devi comprare il dissipatore.',
+  mobo:  'Filtrata per socket CPU. Cerca WiFi integrato se non hai ethernet. DDR mostrato è quello compatibile.',
+  case:  'Filtrato per form factor della tua scheda madre. ATX→ATX/mATX/ITX · mATX→mATX/ITX · ITX→solo ITX.',
+  ram:   'DDR filtrata automaticamente per la tua mobo. AM5/LGA1851→DDR5 · AM4→DDR4 · 32GB DDR5-6000 è il punto dolce.',
+  gpu:   'La scheda video determina le prestazioni gaming più di ogni altro componente.',
+  ssd:   'NVMe PCIe 4.0 da 1TB è il minimo consigliato. PCIe 5.0 per i più esigenti.',
+  psu:   'L\'alimentatore deve avere margine sul consumo stimato. Consigliamo almeno 100W in più del necessario.',
+  cooler:'AIO 360mm per CPU ad alto TDP (>125W). Torre Noctua/be quiet! per build silenziose.',
+  ventole:'Opzionale — migliora il flusso d\'aria e l\'estetica con ventole ARGB aggiuntive.',
+};
+
+// ── STATE ─────────────────────────────────────────────────────
+let state = {
+  step: 0,
+  piattaforma: null,
+  socket: null,
+  build: {
+    case: null, cpu: null, mobo: null, ram: null,
+    gpu: null, ssd: null, psu: null, cooler: null, ventole: null,
+  },
+  filters: {},
+  search: {},
+};
+
+let PRODS = [];
+
+// ── PRODOTTI ──────────────────────────────────────────────────
+// (funzione separata per non bloccare il parsing del JS)
+function loadProdotti() {
+  // Prodotti caricati via fetch da prodotti.json
+}
+
+async function fetchProdotti() {
+  try {
+    const r = await fetch('prodotti.json?v=' + Date.now());
+    if (!r.ok) throw new Error('HTTP ' + r.status);
+    PRODS = await r.json();
+    // Post-processing form factor
+    PRODS.forEach(p => {
+      if(p.c==='Scheda Madre'&&!p._ff){const n=p.d.toUpperCase();if(/E-ATX|EATX/.test(n))p._ff='E-ATX';else if(/MATX|MICRO.ATX|UATX/.test(n))p._ff='mATX';else if(/MINI.ITX|\bITX\b/.test(n))p._ff='ITX';else p._ff='ATX';}
+      if(p.c==='Case'&&!p._maxff){const n=p.d.toUpperCase();if(/FULL TOWER|BIG TOWER/.test(n))p._maxff='E-ATX';else if(/MINI.ITX TOWER|A4.SFX|MESHROOM/.test(n))p._maxff='ITX';else if(/MICRO.ATX|MATX|MINI TOWER|MINI-TOWER/.test(n))p._maxff='mATX';else p._maxff='ATX';}
+    });
+  } catch(e) {
+    const c=document.getElementById('mainContent');
+    if(c) c.innerHTML='<div style="padding:60px;text-align:center;font-family:monospace;color:#d946a8">⚠️ Errore caricamento prodotti. Ricaricare la pagina.</div>';
+  }
+}
 
 
-<!-- ── MODAL ASSISTENTE AI ── -->
-<div class="ai-modal" id="aiModal" onclick="if(event.target===this)closeAI()">
-  <div class="ai-panel">
-    <div class="ai-panel-top">
-      <div class="ai-panel-top-left">
-        <div class="ai-panel-title">
-          <span style="color:var(--punch)">✦</span> Assistente AI
-        </div>
-        <div class="ai-panel-subtitle">Powered by Claude · Minimal Gamers</div>
+// ── UTILITY ───────────────────────────────────────────────────
+const fmt  = p => '€ ' + (p * MOLT).toFixed(2).replace('.',',');
+const fmtR = p => '€ ' + (p * MOLT / 36).toFixed(2).replace('.',',');
+const calcP = p => p * MOLT;
+const trunc = (s, n) => s.length > n ? s.slice(0, n) + '…' : s;
+
+function scrollToNext() {
+  requestAnimationFrame(() => {
+    const btn = document.querySelector('.btn-next:not(:disabled)');
+    if (btn) btn.scrollIntoView({behavior:'smooth', block:'center'});
+  });
+}
+function scrollToTop() {
+  window.scrollTo({top:0, behavior:'smooth'});
+}
+
+function showToast(msg) {
+  const t = document.getElementById('toast');
+  t.textContent = msg;
+  t.classList.add('show');
+  setTimeout(() => t.classList.remove('show'), 2800);
+}
+
+// ── COMPATIBILITÀ ─────────────────────────────────────────────
+function isCompat(stepId, p) {
+  const b  = state.build;
+  const pi = state.piattaforma;
+  const sk = state.socket;
+
+  if (stepId === 'cpu') {
+    if (sk && p.socket !== sk) return false;
+    if (!sk) {
+      if (pi === 'amd'   && p.platform !== 'AMD')   return false;
+      if (pi === 'intel' && p.platform !== 'INTEL') return false;
+    }
+    return true;
+  }
+
+  if (stepId === 'mobo') {
+    if (b.cpu && b.cpu.socket) return p.socket === b.cpu.socket;
+    if (sk) return p.socket === sk;
+    if (pi === 'amd'   && p.platform !== 'AMD')   return false;
+    if (pi === 'intel' && p.platform !== 'INTEL') return false;
+    return true;
+  }
+
+  if (stepId === 'case') {
+    if (b.mobo && b.mobo._ff) {
+      const ORDER = ['ITX','mATX','ATX','E-ATX'];
+      const cff = p._maxff || 'ATX';
+      return ORDER.indexOf(cff) >= ORDER.indexOf(b.mobo._ff);
+    }
+    return true;
+  }
+
+  if (stepId === 'ram') {
+    if (b.mobo && b.mobo.ddr && p.ddr) return p.ddr === b.mobo.ddr;
+    if (b.mobo && b.mobo.socket) {
+      const ddr5 = ['AM5','LGA1851'];
+      const ddr4 = ['AM4','LGA1200'];
+      if (ddr5.includes(b.mobo.socket) && p.ddr === 'DDR4') return false;
+      if (ddr4.includes(b.mobo.socket) && p.ddr === 'DDR5') return false;
+    }
+    return true;
+  }
+
+  return true;
+}
+
+function getIncompatReason(stepId, p) {
+  const b = state.build;
+  if (stepId === 'mobo' && b.cpu?.socket && p.socket !== b.cpu.socket)
+    return `Socket ${p.socket} — CPU richiede ${b.cpu.socket}`;
+  if (stepId === 'ram' && b.mobo?.ddr && p.ddr && p.ddr !== b.mobo.ddr)
+    return `${p.ddr} — Mobo richiede ${b.mobo.ddr}`;
+  if (stepId === 'case' && b.mobo?._ff) {
+    const ORDER = ['ITX','mATX','ATX','E-ATX'];
+    const cff = p._maxff || 'ATX';
+    if (ORDER.indexOf(cff) < ORDER.indexOf(b.mobo._ff))
+      return `Case ${cff} — Mobo è ${b.mobo._ff}`;
+  }
+  return null;
+}
+
+// ── PRODOTTI FILTRATI ─────────────────────────────────────────
+function getProds(sid) {
+  const cat  = CAT[sid];
+  const ab   = state.filters[sid] || [];
+  const q    = (state.search[sid] || '').toLowerCase().trim();
+  return PRODS.filter(p => {
+    if (p.c !== cat) return false;
+    if (!isCompat(sid, p)) return false;
+    if (ab.length && !ab.includes(p.b)) return false;
+    if (q && !p.d.toLowerCase().includes(q) && !(p.b||'').toLowerCase().includes(q)) return false;
+    return true;
+  });
+}
+
+function getBrands(sid) {
+  const cat = CAT[sid];
+  const brands = [...new Set(
+    PRODS.filter(p => p.c === cat && isCompat(sid, p)).map(p => p.b).filter(Boolean)
+  )].sort();
+  return brands;
+}
+
+// ── BADGE INTELLIGENTI ────────────────────────────────────────
+function getBadges(p, sid, allProds) {
+  const badges = [];
+  const cat    = CAT[sid];
+  if (!cat) return badges;
+
+  const avail = allProds.filter(x => x.c === cat && x.stock > 0);
+
+  // Miglior prezzo
+  if (avail.length) {
+    const minP = Math.min(...avail.map(x => x.p));
+    if (p.p === minP && p.stock > 0) badges.push({cls:'best-price', label:'💰 Miglior prezzo'});
+  }
+
+  // Più richiesto (stock alto = rotazione alta)
+  const stocks = avail.filter(x => x.stock < 99).map(x => x.stock);
+  if (stocks.length) {
+    const maxS = Math.max(...stocks);
+    if (maxS > 5 && p.stock === maxS) badges.push({cls:'popular', label:'⭐ Più richiesto'});
+  }
+
+  // Nuova generazione
+  if (cat === 'GPU') {
+    const n = p.d.toUpperCase();
+    if (/RTX\s*50|RX\s*90/.test(n)) badges.push({cls:'new-gen', label:'🆕 Nuova gen'});
+  }
+
+  // Top gaming (X3D)
+  if (cat === 'CPU' && /X3D/.test(p.d.toUpperCase()))
+    badges.push({cls:'recommended', label:'🎮 Top gaming'});
+
+  return badges;
+}
+
+// ── SUGGERIMENTI INTELLIGENTI ─────────────────────────────────
+function getSmartTip(sid) {
+  const b = state.build;
+  const tips = [];
+
+  if (sid === 'psu' && b.cpu && b.gpu) {
+    const tot  = (b.cpu._tdp||65) + (b.gpu._tdp||150) + 50;
+    const rec  = tot < 400 ? 650 : tot < 550 ? 750 : tot < 700 ? 850 : 1000;
+    tips.push(`💡 Consumo stimato ~${tot}W → consigliamo almeno <strong>${rec}W</strong>`);
+  }
+
+  if (sid === 'cooler' && b.cpu) {
+    const tdp = b.cpu._tdp || 65;
+    if (tdp >= 170)      tips.push('🌡️ CPU ad alto TDP: consigliamo <strong>AIO 360mm</strong>');
+    else if (tdp >= 105) tips.push('🌡️ Consigliamo <strong>AIO 240mm</strong> o tower premium (Noctua, be quiet!)');
+  }
+
+  if (sid === 'ram' && b.mobo?.socket === 'AM5')
+    tips.push('💡 Su AM5 usa <strong>DDR5-6000 CL30</strong> per il massimo gaming');
+
+  if (sid === 'gpu' && b.cpu) {
+    const n = b.cpu.d.toUpperCase();
+    if (/I5-1[234]|RYZEN 5/.test(n))
+      tips.push('⚖️ Con questa CPU evita RTX 5080/5090 — rischi <strong>CPU bottleneck</strong> a 1080p');
+  }
+
+  if (sid === 'mobo')
+    tips.push('📡 Consigliamo mobo con <strong>WiFi integrato</strong> se non hai ethernet vicino al PC');
+
+  return tips;
+}
+
+// ── SCALAPAY DINAMICO ─────────────────────────────────────────
+function updateScalapayBar() {
+  const tot = Object.values(state.build)
+    .filter(Boolean)
+    .reduce((s, p) => s + calcP(p.p), 0);
+  const bar = document.getElementById('scalaPayBar');
+  if (!bar) return;
+  if (tot > 0) {
+    bar.classList.remove('hidden');
+    const totFinale = calcTotale(tot);
+    document.getElementById('spTotal').textContent = '€ ' + totFinale.toFixed(2).replace('.',',');
+    document.getElementById('spRate').textContent  = '€ ' + (totFinale/36).toFixed(2).replace('.',',');
+  } else {
+    bar.classList.add('hidden');
+  }
+}
+
+// ── RENDER PRINCIPALE ─────────────────────────────────────────
+
+// ════════════════════════════════════════════════════════════
+// SISTEMA SOTTOCATEGORIE — card di selezione per ogni step
+// ════════════════════════════════════════════════════════════
+const SUBCATS = {
+  cpu: {label:'Linea processore',desc:'Scegli la famiglia di processori. Puoi tornare indietro in qualsiasi momento.',field:'_linea',groups:[
+    {group:'AMD Ryzen',items:[
+      {val:'Ryzen 9',icon:'🔴',note:'Massime prestazioni gaming e produttività',tag:'High-End'},
+      {val:'Ryzen 7',icon:'🔴',note:'Ottimo bilanciamento prestazioni/prezzo',tag:'Mid-High'},
+      {val:'Ryzen 5',icon:'🔴',note:'Gaming ottimale al miglior prezzo',tag:'Mid'},
+      {val:'Ryzen 3',icon:'🔴',note:'Entry level, build budget',tag:'Entry'},
+    ]},
+    {group:'Intel Core Ultra — LGA1851',items:[
+      {val:'Core Ultra 9',icon:'🔵',note:'Flagship Intel 2025, AI NPU integrata',tag:'Flagship'},
+      {val:'Core Ultra 7',icon:'🔵',note:'High-end con architettura ibrida moderna',tag:'High-End'},
+      {val:'Core Ultra 5',icon:'🔵',note:'Mid-range performante, ottimo per gaming',tag:'Mid'},
+    ]},
+    {group:'Intel Core i — LGA1700',items:[
+      {val:'Core i9',icon:'🔵',note:'Massimo overclock Intel, top gaming e produttività',tag:'High-End'},
+      {val:'Core i7',icon:'🔵',note:'Potente per gaming e content creation',tag:'Mid-High'},
+      {val:'Core i5',icon:'🔵',note:'Il sweet spot Intel per il gaming',tag:'Mid'},
+      {val:'Core i3',icon:'🔵',note:'Budget Intel, buon gaming 1080p',tag:'Budget'},
+    ]},
+  ]},
+  mobo: {label:'Chipset',desc:'Il chipset determina le funzionalità della tua scheda madre. Solo chipset compatibili con la CPU scelta.',field:'_chipset',dynamic:true,
+    all_groups:{
+      'AM5':[
+        {val:'X870E',tag:'Flagship',note:'PCIe 5.0 completo, USB4, Wi-Fi 7. Massimo OC'},
+        {val:'X870', tag:'High-End',note:'PCIe 5.0, USB4, Wi-Fi 7 obbligatorio'},
+        {val:'B850', tag:'Consigliato',note:'PCIe 5.0 M.2, buon OC. Sweet spot AM5 2025'},
+        {val:'B650E',tag:'Mid',note:'PCIe 5.0 GPU slot, feature bilanciate'},
+        {val:'B650', tag:'Mid',note:'Entry AM5 con buone funzionalità'},
+        {val:'B840', tag:'Entry',note:'Budget AM5, no OC CPU'},
+        {val:'A620', tag:'Budget',note:'Minimo AM5, no overclocking'},
+      ],
+      'AM4':[
+        {val:'X570',tag:'High-End',note:'Top AM4: PCIe 4.0, VRM premium'},
+        {val:'B550',tag:'Mid',note:'Sweet spot AM4: PCIe 4.0, ottimo Ryzen 5000'},
+        {val:'B450',tag:'Budget',note:'Budget AM4 con supporto Ryzen 5000'},
+        {val:'A520',tag:'Entry',note:'Entry AM4, no OC'},
+      ],
+      'LGA1851':[
+        {val:'Z890',tag:'High-End',note:'Top Arrow Lake: OC completo, DDR5-8000+'},
+        {val:'B860',tag:'Mid',note:'Mid LGA1851, no CPU OC, ottimo valore'},
+        {val:'H810',tag:'Budget',note:'Entry LGA1851, funzioni base'},
+      ],
+      'LGA1700':[
+        {val:'Z790',tag:'High-End',note:'Overclocking completo, PCIe 5.0'},
+        {val:'B760',tag:'Consigliato',note:'Sweet spot Intel: buone feature, no CPU OC'},
+        {val:'Z690',tag:'Mid',note:'Generazione Z precedente, ancora valida'},
+        {val:'H770',tag:'Mid',note:'Più feature del B760 senza OC'},
+        {val:'H610',tag:'Budget',note:'Entry Intel LGA1700'},
+      ],
+      'LGA1200':[
+        {val:'Z590',tag:'Mid',note:'Top LGA1200: OC completo'},
+        {val:'B560',tag:'Entry',note:'Mid LGA1200, RAM OC'},
+        {val:'H510',tag:'Budget',note:'Entry LGA1200'},
+      ],
+    }
+  },
+  ssd: {label:'Tipo di storage',desc:'NVMe è consigliato per OS e giochi. SATA per storage secondario economico.',field:'_tipo',groups:[
+    {group:'NVMe PCIe (M.2) — Veloce',items:[
+      {val:'NVMe Gen 5',icon:'⚡',note:'7.000–14.000 MB/s. Richiede PCIe 5.0. Massime prestazioni 2025',tag:'Ultra'},
+      {val:'NVMe Gen 4',icon:'🔥',note:'3.500–7.400 MB/s. Standard attuale. Consigliato per OS e giochi',tag:'Consigliato'},
+      {val:'NVMe Gen 3',icon:'✅',note:'1.800–3.500 MB/s. Veloce, economico, compatibile con tutto',tag:'Budget'},
+      {val:'NVMe',      icon:'📦',note:'NVMe senza generazione dichiarata. Velocità variabile',tag:'Vario'},
+    ]},
+    {group:'SATA — Storage secondario',items:[
+      {val:'M.2 SATA',  icon:'💾',note:'Fino a 550 MB/s, form factor M.2. Economico per storage extra',tag:'Legacy'},
+      {val:'SATA 2.5"', icon:'💾',note:'Fino a 550 MB/s, slot 2.5". Massima capacità al miglior prezzo',tag:'Legacy'},
+    ]},
+  ]},
+  gpu: {label:'Famiglia GPU',desc:'Scegli la generazione. Potrai poi filtrare per serie specifica.',field:'_fascia_gpu',groups:[
+    {group:'NVIDIA GeForce RTX',items:[
+      {val:'RTX 50xx',icon:'🟢',note:'Architettura Blackwell 2025. DLSS 4, frame gen multi-frame, massima efficienza',tag:'Nuova gen'},
+      {val:'RTX 40xx',icon:'🟢',note:'Architettura Ada Lovelace. Ancora ottima, prezzi scesi significativamente',tag:'Prev gen'},
+      {val:'RTX 30xx',icon:'🟢',note:'Architettura Ampere. Budget competitivo per 1080p/1440p',tag:'Legacy'},
+    ]},
+    {group:'AMD Radeon RX',items:[
+      {val:'RX 9xxx',icon:'🔴',note:'Architettura RDNA 4 2025. Ottimo rapporto prezzo/prestazioni vs NVIDIA',tag:'Nuova gen'},
+      {val:'RX 7xxx',icon:'🔴',note:'Architettura RDNA 3. Competitivo, prezzi ridotti',tag:'Prev gen'},
+    ]},
+    {group:'Intel Arc',items:[
+      {val:'Arc Bxxx',icon:'🔵',note:'Battlemage 2024. Sorprendente per il prezzo a 1080p/1440p',tag:'Budget'},
+      {val:'Arc Axxx',icon:'🔵',note:'Alchemist. Entry level con driver maturi',tag:'Entry'},
+    ]},
+  ]},
+  psu: {label:'Potenza e formato',desc:'Scegli il wattaggio in base alla build. Consigliamo almeno 100W di margine sul consumo stimato.',field:'_fascia_w',groups:[
+    {group:'ATX Standard',items:[
+      {val:'450–550W',icon:'🔋',note:'Build entry: CPU 65W + GPU ≤ RTX 5060. Ideale per build silenziose',tag:'Budget'},
+      {val:'600–650W',icon:'🔋',note:'Build mid: CPU 105W + GPU ≤ RTX 5060 Ti. Buon valore',tag:'Mid'},
+      {val:'700–750W',icon:'⚡',note:'Build gaming: CPU 105-125W + GPU ≤ RTX 5070. Sweet spot',tag:'Consigliato'},
+      {val:'800–850W',icon:'⚡',note:'Build high-end: CPU 170W + GPU ≤ RTX 5080 / RX 9070 XT',tag:'High-End'},
+      {val:'1000W',   icon:'🔥',note:'Build top: RTX 5090, sistema ad altissimo TDP',tag:'Top Build'},
+      {val:'1200W+',  icon:'🔥',note:'Workstation / extreme OC / future-proof',tag:'Extreme'},
+    ]},
+    {group:'Compact (per case ITX/Slim)',items:[
+      {val:'SFX',  icon:'📦',note:'SFX standard: fino a 850W. Per case Mini-ITX',tag:'ITX'},
+      {val:'SFX-L',icon:'📦',note:'SFX Large: fino a 1000W. Compatibile slot SFX-L',tag:'ITX+'},
+      {val:'TFX',  icon:'📦',note:'Tiny Form Factor: case slim e HTPC',tag:'Slim'},
+    ]},
+  ]},
+  cooler: {label:'Tipo di raffreddamento',desc:'AIO per CPU ad alto TDP o build silenziose. Aria per ottimo rapporto qualità/prezzo.',field:'_tipo_cool',groups:[
+    {group:'Raffreddamento a liquido AIO',items:[
+      {val:'AIO 420mm',icon:'💧',note:'Massimo: CPU >170W TDP (9950X, i9-14900K). Richiede case 420mm',tag:'Extreme'},
+      {val:'AIO 360mm',icon:'💧',note:'Ottimo per CPU 105-170W. Standard high-end, silenzioso',tag:'Consigliato'},
+      {val:'AIO 280mm',icon:'💧',note:'Buon compromesso tra silenziosità e dimensioni',tag:'Mid'},
+      {val:'AIO 240mm',icon:'💧',note:'Entry AIO: silenzioso per CPU ≤105W TDP. Compatibile quasi tutti i case',tag:'Entry'},
+      {val:'AIO 120mm',icon:'💧',note:'AIO compatto per build ITX o CPU a basso TDP',tag:'ITX'},
+    ]},
+    {group:'Raffreddamento ad aria',items:[
+      {val:'Dual Tower',  icon:'🌬️',note:'Prestazioni top (Noctua NH-D15): rivaleggiano AIO 280mm, silenziosissimi',tag:'Premium'},
+      {val:'Single Tower',icon:'🌬️',note:'Standard: ottimo prezzo/prestazioni per CPU fino a 125W TDP',tag:'Popolare'},
+      {val:'Low-Profile', icon:'🌬️',note:'Per case ITX/SFF con altezza limitata (≤92mm)',tag:'ITX'},
+    ]},
+  ]},
+  ram: {label:'Generazione RAM',desc:'DDR5 per piattaforme AM5 e LGA1851. DDR4 per AM4. LGA1700 dipende dalla scheda madre.',field:'ddr',groups:[
+    {group:'Tipo memoria',items:[
+      {val:'DDR5',icon:'🆕',note:'Standard attuale 2025. Fino a 8000 MHz. Richiesto su AM5 e LGA1851',tag:'Attuale'},
+      {val:'DDR4',icon:'✅',note:'Piattaforma AM4: matura, economica, efficiente. Ottimo per build budget',tag:'Budget'},
+    ]},
+  ]},
+};
+
+if(!state.subcat) state.subcat = {};
+
+function setSubcat(sid,val){state.subcat[sid]=val;render();}
+function clearSubcat(sid){state.subcat[sid]=null;render();}
+
+function getSubcatProds(sid,allProds){
+  const active=state.subcat[sid];
+  if(!active||active==='__all__') return allProds;
+  const sc=SUBCATS[sid];
+  if(!sc) return allProds;
+  const W={
+    '450–550W':[400,550],'600–650W':[600,650],'700–750W':[700,750],
+    '800–850W':[800,850],'1000W':[950,1100],'1200W+':[1100,9999]
+  };
+  if(sc.field==='_fascia_w'){
+    if(['SFX','SFX-L','TFX'].includes(active)) return allProds.filter(p=>p._tipo_psu===active);
+    const[wmin,wmax]=W[active]||[0,9999];
+    return allProds.filter(p=>p._tipo_psu==='ATX'&&(p._w||0)>=wmin&&(p._w||0)<=wmax);
+  }
+  return allProds.filter(p=>p[sc.field]===active);
+}
+
+function renderSubcatSelector(sid,allProds){
+  const sc=SUBCATS[sid];
+  if(!sc) return null;
+  const active=state.subcat[sid];
+  if(active) return `<div class="subcat-back" onclick="clearSubcat('${sid}')">← ${sc.label}: <strong>${active}</strong> <span>— cambia</span></div>`;
+
+  let groups=sc.groups||[];
+  if(sc.dynamic){
+    const sock=state.build.cpu?.socket||state.socket;
+    const chips=(sc.all_groups||{})[sock]||[];
+    const avail=chips.filter(cs=>allProds.some(p=>p._chipset===cs.val));
+    if(avail.length<=1) return null;
+    groups=[{group:`Socket ${sock}`,items:avail}];
+  }
+
+  const W={'450–550W':[400,550],'600–650W':[600,650],'700–750W':[700,750],
+            '800–850W':[800,850],'1000W':[950,1100],'1200W+':[1100,9999]};
+
+  function cnt(item){
+    const v=item.val;
+    if(sc.field==='_fascia_gpu') return allProds.filter(p=>p._fascia_gpu===v).length;
+    if(sc.field==='_fascia_w'){
+      if(['SFX','SFX-L','TFX'].includes(v)) return allProds.filter(p=>p._tipo_psu===v).length;
+      const[wmin,wmax]=W[v]||[0,9999];
+      return allProds.filter(p=>p._tipo_psu==='ATX'&&(p._w||0)>=wmin&&(p._w||0)<=wmax).length;
+    }
+    if(sc.dynamic) return allProds.filter(p=>p._chipset===v).length;
+    return allProds.filter(p=>p[sc.field]===v).length;
+  }
+
+  let h=`<div class="step-header">
+    <div class="step-eyebrow">step ${String(state.step+1).padStart(2,'0')} — ${STEPS[state.step].name.toLowerCase()}</div>
+    <h1 class="step-title">${sc.label.toUpperCase()}<span class="acc">.</span></h1>
+    <p class="step-desc">${sc.desc}</p>
+  </div><div class="subcat-grid">`;
+
+  for(const grp of groups){
+    h+=`<div class="subcat-group-label">${grp.group}</div><div class="subcat-row">`;
+    for(const item of grp.items){
+      const c=cnt(item);
+      if(!c && allProds.length > 0) continue; // nascondi solo se prodotti caricati
+      const sv=item.val.replace(/'/g,"\\'");
+      h+=`<button class="subcat-card" onclick="setSubcat('${sid}','${sv}')">
+        <span class="subcat-icon">${item.icon||'▸'}</span>
+        <span class="subcat-name">${item.val}</span>
+        <span class="subcat-tag">${item.tag}</span>
+        <span class="subcat-count">${c} prodotti</span>
+        <span class="subcat-note">${item.note}</span>
+      </button>`;
+    }
+    h+=`</div>`;
+  }
+  h+=`</div><button class="btn-skip subcat-skip" onclick="setSubcat('${sid}','__all__')">Mostra tutti i ${allProds.length} prodotti →</button>`;
+  return h;
+}
+
+
+// ── IMMAGINI PRODOTTI ─────────────────────────────────────
+// Cache immagini per non rifetchare
+const IMG_CACHE = {};
+
+// Mappa brand → URL immagine di fallback
+const BRAND_IMG = {
+  'nzxt':    'https://www.nzxt.com/favicon.ico',
+};
+
+// Ottieni placeholder emoji per categoria
+function getCatEmoji(cat) {
+  const e = {
+    'CPU':'🔲', 'GPU':'🖥️', 'RAM':'💾', 'SSD':'💿',
+    'Scheda Madre':'🔌', 'Case':'🖥️', 'PSU':'⚡',
+    'Dissipatore':'❄️', 'Extra':'🎮'
+  };
+  return e[cat] || '📦';
+}
+
+function renderCardImg(p) {
+  const emoji = getCatEmoji(p.c);
+  // Usa img con onerror fallback a placeholder emoji
+  return `<div class="prod-img-wrap">
+    <span class="prod-img-placeholder">${emoji}</span>
+  </div>`;
+}
+
+function render() {
+  renderProg();
+  renderSidebar();
+  const s = STEPS[state.step];
+  const c = document.getElementById('mainContent');
+  if (!c) return;
+  if (s.id === 'piattaforma') renderPf(c);
+  else if (s.id === 'riepilogo') renderRiep(c);
+  else renderProds(c, s.id);
+}
+
+function renderProg() {
+  const el = document.getElementById('progressStrip');
+  if (!el) return;
+  el.innerHTML = STEPS.map((s,i) => {
+    const cls = i < state.step ? 'done' : i === state.step ? 'active' : '';
+    return `<div class="prog-step ${cls}" onclick="goToStep(${i})" title="${s.name}">
+      <span class="prog-dot"></span>
+      <span class="prog-label">${s.name}</span>
+    </div>`;
+  }).join('');
+}
+
+function renderSidebar() {
+  const totalForn = Object.values(state.build)
+    .filter(Boolean).reduce((s,p) => s + p.p, 0);
+  const total = calcP(totalForn);
+  const pieces = Object.values(state.build).filter(Boolean).length;
+
+  const rows = Object.entries(BLD_LBL).map(([k,l]) => {
+    const s = state.build[k];
+    if (!s) return `<div class="sidebar-row empty"><span class="sr-cat">${l}</span><span class="sr-name">—</span></div>`;
+    return `<div class="sidebar-row" onclick="goToStepById('${k}')" title="Modifica ${l}">
+      <span class="sr-cat">${l}</span>
+      <span class="sr-name">${trunc(s.d, 32)}</span>
+      <span class="sr-price">${fmt(s.p)}</span>
+    </div>`;
+  }).join('');
+
+  const sc = document.getElementById('stepCounter');
+  if (sc) sc.textContent = `Step ${state.step+1} di ${STEPS.length}`;
+
+  const sidebarBody = document.getElementById('sidebarBody');
+  if (sidebarBody) sidebarBody.innerHTML = rows;
+
+  const totalEl = document.getElementById('sidebarTotal');
+  if (totalEl) totalEl.textContent = total > 0 ? fmt(totalForn) : '—';
+
+  const rataEl = document.getElementById('sidebarRata');
+  if (rataEl) rataEl.textContent = total > 0 ? `${fmtR(totalForn)}/mese × 36` : '';
+
+  const piecesEl = document.getElementById('piecesCount');
+  if (piecesEl) piecesEl.textContent = `${pieces}/9`;
+
+  const btnCheckout = document.getElementById('btnCheckout');
+  if (btnCheckout) btnCheckout.disabled = !(state.build.case && state.build.cpu && state.build.gpu);
+
+  updateScalapayBar();
+}
+
+// ── RENDER PIATTAFORMA ────────────────────────────────────────
+function renderPf(el) {
+  const SOCKETS = {
+    amd: {
+      AM5:  {label:'AM5',  cpu:'Ryzen 7000 / 8000 / 9000', ddr:'DDR5 only',   note:'Piattaforma attuale — supportata fino al 2027', badge:'🔥 Consigliato'},
+      AM4:  {label:'AM4',  cpu:'Ryzen 3000 / 5000',        ddr:'DDR4 only',   note:'Piattaforma matura, ottimo rapporto qualità/prezzo', badge:'💰 Budget'},
+    },
+    intel: {
+      LGA1851: {label:'LGA1851', cpu:'Core Ultra 200 (15ᵃ gen)', ddr:'DDR5 only',   note:'Nuova piattaforma Intel, Arrow Lake', badge:'🔥 Consigliato'},
+      LGA1700: {label:'LGA1700', cpu:'Core 12ᵃ / 13ᵃ / 14ᵃ gen', ddr:'DDR4 o DDR5', note:'Piattaforma collaudata, ampia scelta mobo', badge:'⚡ Popolare'},
+      LGA1200: {label:'LGA1200', cpu:'Core 10ᵃ / 11ᵃ gen',        ddr:'DDR4 only',   note:'Piattaforma legacy, disponibilità limitata', badge:'📦 Legacy'},
+    },
+  };
+
+  const pi = state.piattaforma;
+  const sk = state.socket;
+
+  const socketSection = pi ? `
+    <div class="pf-socket-section">
+      <div class="pf-socket-label">Scegli il socket:</div>
+      <div class="pf-socket-grid">
+        ${Object.entries(SOCKETS[pi]).map(([sock,info]) => `
+          <button class="pf-socket-card ${sk===sock?'active':''}" onclick="selSocket('${sock}')">
+            <div class="pf-socket-badge-label">${info.badge}</div>
+            <div class="pf-socket-name">${info.label}</div>
+            <div class="pf-socket-cpu">${info.cpu}</div>
+            <div class="pf-socket-ddr">${info.ddr}</div>
+            <div class="pf-socket-note">${info.note}</div>
+          </button>
+        `).join('')}
       </div>
-      <button class="ai-close" onclick="closeAI()">✕</button>
     </div>
-    <div class="ai-messages" id="aiMessages"></div>
-    <div class="ai-input-area">
-      <div class="ai-suggestions" id="aiSuggestions">
-        <div class="ai-suggestion" onclick="aiUseSuggestion('300fps su Warzone con budget 1500€')">300fps su Warzone</div>
-        <div class="ai-suggestion" onclick="aiUseSuggestion('PC gaming 4K under 3000€')">PC gaming 4K</div>
-        <div class="ai-suggestion" onclick="aiUseSuggestion('Build silenziosa per lavoro e gaming')">Build silenziosa</div>
-        <div class="ai-suggestion" onclick="aiUseSuggestion('PC compatto ITX potente')">ITX potente</div>
+  ` : '<div class="pf-socket-hint">← Scegli prima AMD o Intel</div>';
+
+  el.innerHTML = `
+    <div class="step-header">
+      <div class="step-eyebrow">step 01 — piattaforma e socket</div>
+      <h1 class="step-title">SCEGLI LA<br><em>TUA</em> PIATTAFORMA<span class="acc">.</span></h1>
+      <p class="step-desc">La piattaforma determina processore, scheda madre e tipo di RAM. Scegli brand e socket.</p>
+    </div>
+    <div class="pf-brand-row">
+      <button class="pf-brand ${pi==='amd'?'active':''}"   onclick="selPf('amd')">
+        <span class="pf-brand-name">AMD</span><span class="pf-brand-sub">Ryzen</span>
+      </button>
+      <button class="pf-brand ${pi==='intel'?'active':''}" onclick="selPf('intel')">
+        <span class="pf-brand-name">INTEL</span><span class="pf-brand-sub">Core</span>
+      </button>
+    </div>
+    ${socketSection}
+    <button class="btn-next" ${!sk?'disabled':''} onclick="nextStep()">
+      Continua con ${sk||'...'} <span class="arrow">→</span>
+    </button>
+  `;
+}
+
+// ── RENDER PRODOTTI ───────────────────────────────────────────
+function renderProds(el, sid) {
+  const allProds = getProds(sid);
+  // SOTTOCATEGORIE: mostra selector solo se non c'è già una scelta attiva
+  const active = state.subcat && state.subcat[sid];
+  if (!active) {
+    const scSel = SUBCATS && SUBCATS[sid] ? renderSubcatSelector(sid, allProds) : null;
+    if (scSel) { el.innerHTML = scSel; return; }
+  }
+  if (active === '__all__' && state.subcat) state.subcat[sid] = null;
+
+  const subFil = getSubcatProds ? getSubcatProds(sid, allProds) : allProds;
+  const sc = SUBCATS && SUBCATS[sid];
+  const backBtn = (sc && active && active !== '__all__')
+    ? `<div class="subcat-back" onclick="clearSubcat('${sid}')">← ${sc.label}: <strong>${active}</strong> <span>— cambia</span></div>`
+    : '';
+
+  const step     = STEPS[state.step];
+  const brands   = getBrands(sid);
+  const ab       = state.filters[sid] || [];
+  const sel      = state.build[sid];
+  const q        = state.search[sid] || '';
+  const tips     = getSmartTip(sid);
+
+  // Prodotti incompatibili visibili ma grigi (max 30)
+  const incompat = PRODS.filter(p => {
+    if (p.c !== CAT[sid]) return false;
+    if (allProds.find(x => x.k === p.k)) return false;
+    return getIncompatReason(sid, p) !== null;
+  }).slice(0, 30);
+
+  const tipsHtml = tips.map(t =>
+    `<div class="smart-tip"><span class="tip-icon">💡</span><span class="tip-text">${t}</span></div>`
+  ).join('');
+
+  const alertHtml = incompat.length > 0
+    ? `<div class="compat-alert">⚠️ <strong>${incompat.length} prodotti non compatibili</strong> mostrati in grigio</div>`
+    : '';
+
+  const filterHtml = brands.length > 1 ? `
+    <div class="filter-row">
+      <button class="filter-chip ${ab.length===0?'active':''}" onclick="clearF('${sid}')">Tutti</button>
+      ${brands.map(b => `<button class="filter-chip ${ab.includes(b)?'active':''}" onclick="togF('${sid}','${b}')">${b}</button>`).join('')}
+    </div>` : '';
+
+  const cards = [
+    ...subFil.slice(0,120).map(p => renderCard(p, sid, sel, allProds, false)),
+    ...incompat.map(p => renderCard(p, sid, sel, allProds, true)),
+  ].join('');
+
+  const emptyHtml = subFil.length === 0 && incompat.length === 0
+    ? '<div class="empty-state"><h3>Nessun risultato</h3><p>Cambia i filtri o la ricerca.</p></div>'
+    : '';
+
+  const moreHtml = allProds.length > 120
+    ? `<div class="more-hint">Mostrando 120 di ${allProds.length} — usa la ricerca per trovare prodotti specifici</div>`
+    : '';
+
+  el.innerHTML = `
+    <div class="step-header">
+      <div class="step-eyebrow">step ${String(state.step+1).padStart(2,'0')} — ${step.name.toLowerCase()}</div>
+      <h1 class="step-title">${step.name.toUpperCase()}<span class="acc">.</span></h1>
+      <p class="step-desc">${DESCS[sid]||''}</p>
+    </div>
+    ${backBtn}
+    ${tipsHtml}
+    ${filterHtml}
+    <div class="search-row">
+      <span class="search-icon">⌕</span>
+      <input type="text" placeholder="Cerca nome, brand, codice…" value="${q}"
+             oninput="setS('${sid}',this.value)">
+    </div>
+    <div class="products-count">${subFil.length} prodotti compatibili${ab.length||q?' (filtrati)':''}</div>
+    ${alertHtml}
+    ${sel ? `<button class="btn-next" onclick="nextStep()" style="margin-bottom:16px;margin-top:8px">Continua con ${trunc(sel.d,28)} <span class="arrow">→</span></button>` : ''}
+    <div class="products-grid">${emptyHtml}${cards}${moreHtml}</div>
+    ${sel ? `<button class="btn-next" onclick="nextStep()">Continua con ${trunc(sel.d,28)} <span class="arrow">→</span></button>` : ''}
+    <button class="btn-skip" onclick="skipStep()">Salta questo componente →</button>
+  `;
+}
+
+// ── RENDER CARD ───────────────────────────────────────────────
+function renderCard(p, sid, sel, allProds, isIncompat) {
+  const isSel  = sel && sel.k === p.k;
+  const isOut  = p.stock === 0 && !p.incoming;
+  const price  = calcP(p.p);
+  const imgHtml = renderCardImg(p);
+
+  let sCls = '', sLbl = '';
+  if      (isOut)         { sCls = '';    sLbl = 'Esaurito'; }
+  else if (p.stock === 99){ sCls = 'ok';  sLbl = 'Disponibile'; }
+  else if (p.stock > 5)   { sCls = 'ok';  sLbl = `Disponibile · ${p.stock} pz`; }
+  else if (p.stock > 0)   { sCls = 'low'; sLbl = `Ultime ${p.stock} unità`; }
+  else if (p.incoming)    { sCls = 'inc'; sLbl = 'In arrivo'; }
+
+  const badges    = isIncompat ? [] : getBadges(p, sid, allProds);
+  const badgesHtml = badges.length
+    ? `<div class="prod-badges">${badges.map(b => `<span class="prod-badge ${b.cls}">${b.label}</span>`).join('')}</div>`
+    : '';
+
+  const whyIncompat = isIncompat ? getIncompatReason(sid, p) : null;
+
+  const socketBadge = p.socket
+    ? `<div class="prod-socket-badge">${p.socket}${p.ddr?' · '+p.ddr:''}</div>` : '';
+
+  const cls = ['prod-card', isSel?'selected':'', isOut?'unavailable':'', isIncompat?'incompatible':'']
+    .filter(Boolean).join(' ');
+
+  const onClick = isIncompat
+    ? ''
+    : isOut
+      ? `onclick="showToast('Prodotto esaurito')"`
+      : `onclick="handleCardClick(this)"`;
+
+  const dataWhy = whyIncompat ? `data-why="${whyIncompat}"` : '';
+
+  return `<div class="${cls}" ${dataWhy}
+    data-k="${encodeURIComponent(p.k)}" data-sid="${sid}" ${onClick}>
+    <div class="prod-check">${isSel ? '✓' : ''}</div>
+    <div class="prod-img-wrap">
+      <span class="prod-img-placeholder">${{'Case':'🖥️','CPU':'⚙️','GPU':'🎮','RAM':'💾','Scheda Madre':'🔌','SSD':'💿','PSU':'⚡','Dissipatore':'❄️','Extra':'🎁'}[p.c]||'📦'}</span>
+    </div>
+    <div class="prod-body">
+    <div class="prod-brand">${p.b || p.s}</div>
+    <div class="prod-name">${p.d}</div>
+    ${socketBadge}
+    ${badgesHtml}
+    <div class="prod-price"><small>IVA incl.</small>${fmt(p.p)}</div>
+    <div class="prod-rata">Scalapay: ${fmtR(p.p)}</div>
+    <div class="prod-stock ${sCls}">${sLbl}</div>
+  </div></div>`;
+}
+
+// ── RENDER RIEPILOGO ──────────────────────────────────────────
+function renderRiep(el) {
+  const totalForn = Object.values(state.build)
+    .filter(Boolean).reduce((s,p) => s + p.p, 0);
+  const totalComp = calcP(totalForn);
+  const total = calcTotale(totalComp);
+  const rata36 = total / 36;
+
+  const rows = Object.entries(BLD_LBL).map(([k,l]) => {
+    const s = state.build[k];
+    if (!s) return '';
+    return `<div class="recap-row" onclick="goToStepById('${k}')" title="Clicca per modificare">
+      <div class="recap-cat">${l}</div>
+      <div class="recap-name">${s.d}</div>
+      <div class="recap-price">${fmt(s.p)} <span class="recap-edit">✏️</span></div>
+    </div>`;
+  }).join('');
+
+  el.innerHTML = `
+    <div class="step-header">
+      <div class="step-eyebrow">step 11 — riepilogo</div>
+      <h1 class="step-title">LA TUA<br><em>BUILD</em><span class="acc">.</span></h1>
+      <p class="step-desc">Clicca su un componente per modificarlo. Quando sei pronto, procedi all'ordine.</p>
+    </div>
+    <div class="recap-list">${rows}</div>
+    <div class="recap-total">
+      <div class="recap-subtotal-row">
+        <span style="font-size:13px;color:var(--ink3)">Componenti IVA inclusa</span>
+        <span style="font-size:14px;font-weight:700;font-family:var(--mono)">${'€ '+totalComp.toFixed(2).replace('.',',')}</span>
       </div>
-      <div class="ai-input-row">
-        <input class="ai-input" id="aiInput" 
-          placeholder="Es: voglio 200fps su Fortnite con 1000€..." 
-          onkeydown="if(event.key==='Enter')aiSend()">
-        <button class="ai-send" id="aiSend" onclick="aiSend()">→</button>
+      <div class="recap-subtotal-row" style="color:var(--punch)">
+        <span style="font-size:13px">Costo implementazione <small style="display:block;font-size:10px;opacity:.7">(montaggio, test, configurazione)</small></span>
+        <span style="font-size:15px;font-weight:700;font-family:var(--mono)">${'€ '+calcImpl(totalComp).toFixed(2).replace('.',',')}</span>
+      </div>
+      <hr style="border:none;border-top:2px solid var(--punch);margin:10px 0">
+      <div class="recap-total-label">Totale finale IVA inclusa</div>
+      <div class="recap-total-price">${'€ '+total.toFixed(2).replace('.',',')}</div>
+      <div class="recap-total-rata">Scalapay: ${'€ '+rata36.toFixed(2).replace('.',',')} / mese × 36 rate a interessi zero</div>
+    </div>
+    <div class="recap-actions">
+      <button class="btn-next" onclick="openCheckout()">
+        Procedi all'ordine <span class="arrow">→</span>
+      </button>
+      <button class="btn-share" onclick="shareLink()">
+        🔗 Condividi build
+      </button>
+    </div>
+    <p class="recap-note">💳 Scalapay disponibile al checkout · 🚚 Spedizione BRT €24,90 · 🔧 Montaggio e test inclusi</p>
+  `;
+}
+
+// ── AZIONI ────────────────────────────────────────────────────
+function selPf(p) {
+  state.piattaforma = p;
+  state.socket      = null;
+  state.build       = {case:null,cpu:null,mobo:null,ram:null,gpu:null,ssd:null,psu:null,cooler:null,ventole:null};
+  render();
+  requestAnimationFrame(() => {
+    const row = document.querySelector('.pf-socket-section');
+    if (row) row.scrollIntoView({behavior:'smooth', block:'center'});
+  });
+}
+
+function selSocket(s) {
+  state.socket = s;
+  state.build  = {case:null,cpu:null,mobo:null,ram:null,gpu:null,ssd:null,psu:null,cooler:null,ventole:null};
+  render();
+  scrollToNext();
+}
+
+function handleCardClick(el) {
+  const sid  = el.dataset.sid;
+  const k    = decodeURIComponent(el.dataset.k);
+  const prod = PRODS.find(p => p.k === k);
+  if (!prod) return;
+  if (prod.stock === 0 && !prod.incoming) { showToast('Prodotto esaurito'); return; }
+  selProd(sid, prod);
+}
+
+function selProd(sid, prod) {
+  if (!prod) return;
+  const was = state.build[sid];
+  // Toggle
+  if (was && was.k === prod.k) {
+    state.build[sid] = null;
+    showToast('Rimosso dalla build');
+  } else {
+    state.build[sid] = prod;
+    // Reset downstream se cambio mobo
+    if (sid === 'mobo') { state.build.ram = null; state.build.case = null; }
+    showToast(trunc(prod.d, 38) + ' aggiunto');
+  }
+  renderSidebar();
+  render();
+  if (state.build[sid]) scrollToNext();
+}
+
+function nextStep()       { if (state.step < STEPS.length-1) { state.step++; render(); scrollToTop(); } }
+function skipStep()       { state.build[STEPS[state.step].id] = null; nextStep(); }
+function goToStep(i)      { if (i > state.step) { showToast('Completa prima gli step precedenti'); return; } state.step = i; render(); }
+function goToStepById(sid){ const i = STEPS.findIndex(s => s.id === sid); if (i >= 0) { state.step = i; render(); scrollToTop(); } }
+function togF(sid, b)     { if (!state.filters[sid]) state.filters[sid] = []; const i = state.filters[sid].indexOf(b); i >= 0 ? state.filters[sid].splice(i,1) : state.filters[sid].push(b); render(); }
+function clearF(sid)      { state.filters[sid] = []; render(); }
+function setS(sid, v)     { state.search[sid] = v; render(); }
+
+// ── CHECKOUT / WHATSAPP ───────────────────────────────────────
+function openCheckout()  { document.getElementById('modalOverlay').classList.add('open'); }
+function closeCheckout() { document.getElementById('modalOverlay').classList.remove('open'); }
+function closeCheckoutIfOutside(e) { if (e.target.id === 'modalOverlay') closeCheckout(); }
+
+function buildMsg(name, email, phone, note) {
+  const totalForn = Object.values(state.build).filter(Boolean).reduce((s,p) => s+p.p, 0);
+  const total     = calcP(totalForn);
+  let msg = `🖥️ *CONFIGURAZIONE PC GAMING — Minimal Gamers*\n\n`;
+  msg += `👤 *Cliente:* ${name}\n📧 ${email} · 📞 ${phone}\n\n`;
+  msg += `*Componenti:*\n`;
+  Object.entries(BLD_LBL).forEach(([k,l]) => {
+    if (state.build[k]) msg += `• ${l}: ${state.build[k].d} — ${fmt(state.build[k].p)}\n`;
+  });
+  const msgTotComp = Object.values(state.build).filter(Boolean).reduce((s,p)=>s+calcP(p.p),0);
+  const msgImpl = calcImpl(msgTotComp);
+  const msgTot = calcTotale(msgTotComp);
+  msg += `\n🔧 *Componenti: ${'€ '+msgTotComp.toFixed(2).replace('.',',')}*\n`;
+  msg += `⚙️ *Implementazione: ${'€ '+msgImpl.toFixed(2).replace('.',',')}*\n`;
+  msg += `💰 *TOTALE: ${'€ '+total.toFixed(2).replace('.',',')}*\n`;
+  msg += `📦 Spedizione BRT: €24,90\n`;
+  msg += `💳 Scalapay: ${'€ '+(total/36).toFixed(2).replace('.',',')} × 36 rate\n`;
+  if (note) msg += `\n📝 Note: ${note}\n`;
+  return msg;
+}
+
+function submitOrder() {
+  const name  = document.getElementById('ord-name')?.value  || '';
+  const email = document.getElementById('ord-email')?.value || '';
+  const phone = document.getElementById('ord-phone')?.value || '';
+  const note  = document.getElementById('ord-note')?.value  || '';
+  if (!name || !email || !phone) { showToast('Compila tutti i campi obbligatori'); return; }
+  const msg = buildMsg(name, email, phone, note);
+  const url = `https://wa.me/393477133866?text=${encodeURIComponent(msg)}`;
+  window.open(url, '_blank');
+  closeCheckout();
+}
+
+function shareLink() {
+  const p = new URLSearchParams();
+  if (state.piattaforma) p.set('pf', state.piattaforma);
+  if (state.socket)      p.set('sk', state.socket);
+  Object.entries(state.build).forEach(([k,v]) => { if (v) p.set(k, v.k); });
+  const url = `${location.origin}${location.pathname}?${p.toString()}`;
+  navigator.clipboard.writeText(url).then(() => showToast('Link copiato!'));
+}
+
+function loadFromURL() {
+  const p = new URLSearchParams(location.search);
+  if (p.get('pf')) state.piattaforma = p.get('pf');
+  if (p.get('sk')) state.socket      = p.get('sk');
+  ['case','cpu','mobo','ram','gpu','ssd','psu','cooler','ventole'].forEach(k => {
+    const sku = p.get(k);
+    if (sku) state.build[k] = PRODS.find(x => x.k === sku) || null;
+  });
+}
+
+// ── INIT ─────────────────────────────────────────────────────
+
+// ── ASSISTENTE AI (Groq / Llama 3.3 70B) ─────────────────────
+const AI_MOLT = 1.22 * 1.35;
+const aiState = { open:false, messages:[], loading:false, build:{} };
+const CAT_EMOJI = {'CPU':'⚙️','GPU':'🎮','RAM':'💾','SSD':'💿','Scheda Madre':'🔌','Case':'🖥️','PSU':'⚡','Dissipatore':'❄️'};
+
+function openAI() {
+  document.getElementById('aiModal').classList.add('open');
+  aiState.open = true;
+  if(aiState.messages.length === 0) {
+    aiState.messages.push({role:'bot', html:'Ciao! Sono l\'assistente di <strong>Minimal Gamers</strong>.<br>Dimmi cosa vuoi fare con il tuo PC — tipo <em>"300fps su Warzone"</em> o <em>"ho 1500€"</em> — e ti consiglio la build perfetta dal nostro catalogo.'});
+    renderAI();
+  }
+}
+function closeAI() { document.getElementById('aiModal').classList.remove('open'); aiState.open=false; }
+
+function aiRenderMessages() {
+  const el = document.getElementById('aiMessages');
+  if(!el) return;
+  el.innerHTML = aiState.messages.map(m => {
+    let prodsHtml = '';
+    if(m.products && m.products.length) {
+      prodsHtml = '<div style="display:flex;flex-direction:column;gap:6px;margin-top:8px">' + m.products.map(p => {
+        const emoji = CAT_EMOJI[p.cat]||'📦';
+        const added = aiState.build[p.cat]?.nome === p.nome;
+        const pj = JSON.stringify(p).replace(/"/g,'&quot;');
+        return `<div onclick="aiAddToBuild(${pj})" style="display:flex;align-items:center;gap:10px;padding:10px 12px;background:${added?'rgba(217,70,168,.1)':'var(--bg2)'};border:1.5px solid ${added?'var(--punch)':'var(--line2)'};border-radius:6px;cursor:pointer">
+          <span style="font-size:20px">${emoji}</span>
+          <div style="flex:1;min-width:0">
+            <div style="font-size:12px;font-weight:700;color:var(--ink)">${p.nome}</div>
+            <div style="font-size:10px;color:var(--ink3)">${p.cat}${p.spec?' · '+p.spec:''}</div>
+          </div>
+          <div style="text-align:right">
+            <div style="font-size:14px;font-weight:900;color:var(--punch)">€ ${p.prezzo.toFixed(2).replace('.',',')}</div>
+            <div style="font-size:9px;color:${added?'var(--punch)':'var(--ink4)'}">${added?'✓ Aggiunto':'+ Aggiungi'}</div>
+          </div>
+        </div>`;
+      }).join('') + '</div>';
+    }
+    const isBot = m.role === 'bot';
+    return `<div style="display:flex;flex-direction:column;gap:3px;max-width:92%;${isBot?'align-self:flex-start':'align-self:flex-end'}">
+      <div style="font-family:var(--mono);font-size:8px;letter-spacing:.12em;text-transform:uppercase;color:var(--ink4);padding:0 4px;${isBot?'':'text-align:right'}">${isBot?'Assistente Minimal Gamers':'Tu'}</div>
+      <div style="padding:10px 14px;font-size:13px;line-height:1.55;${isBot?'background:var(--white);border:1px solid var(--line2);border-radius:2px 10px 10px 10px;color:var(--ink)':'background:var(--ink);color:#fff;border-radius:10px 2px 10px 10px'}">${m.html}${prodsHtml}</div>
+    </div>`;
+  }).join('');
+  el.scrollTop = el.scrollHeight;
+}
+
+function aiAddToBuild(prod) {
+  aiState.build[prod.cat] = prod;
+  const mainProd = PRODS.find(p => p.d === prod.nome || p.d.startsWith(prod.nome.substring(0,20)));
+  if(mainProd) {
+    const sidMap = {'CPU':'cpu','GPU':'gpu','RAM':'ram','SSD':'ssd','Scheda Madre':'mobo','Case':'case','PSU':'psu','Dissipatore':'cooler'};
+    const sid = sidMap[prod.cat];
+    if(sid) { state.build[sid] = mainProd; renderSidebar(); showToast(prod.nome.substring(0,35)+' aggiunto!'); }
+  }
+  renderAI();
+}
+
+async function aiSend() {
+  const input = document.getElementById('aiInput');
+  const msg = input.value.trim();
+  if(!msg || aiState.loading) return;
+  input.value = '';
+  aiState.messages.push({role:'user', html:msg});
+  aiState.loading = true;
+  renderAI();
+  
+  // Typing indicator
+  const el = document.getElementById('aiMessages');
+  if(el) {
+    const t = document.createElement('div');
+    t.id='aiTyping'; t.className='ai-msg bot';
+    t.innerHTML='<div style=\'padding:10px 14px;background:var(--white);border:1px solid var(--line2);border-radius:2px 10px 10px 10px\'><span>•••</span></div>';
+    el.appendChild(t); el.scrollTop=el.scrollHeight;
+  }
+  
+  const prodCtx = {};
+  ['CPU','GPU','RAM','SSD','Scheda Madre','PSU','Dissipatore','Case'].forEach(cat => {
+    const items = PRODS.filter(p=>p.c===cat&&(p.stock>0||p.incoming)).sort((a,b)=>a.p-b.p).slice(0,25)
+      .map(p=>({nome:p.d,prezzo:Math.round(p.p*AI_MOLT*100)/100,socket:p.socket||undefined,linea:p._linea||undefined,serie:p._serie||undefined}));
+    if(items.length) prodCtx[cat]=items;
+  });
+
+  const systemPrompt = `Sei l'assistente AI di Minimal Gamers, negozio italiano di PC gaming.
+Aiuta i clienti a scegliere componenti ESCLUSIVAMENTE dal catalogo disponibile.
+CATALOGO (prezzi IVA inclusa): ${JSON.stringify(prodCtx)}
+BUILD ATTUALE: ${Object.entries(aiState.build).map(([c,p])=>c+': '+p.nome).join(', ')||'nessuna'}
+REGOLE: Consiglia solo prodotti del catalogo con prezzi esatti. AM5=DDR5, AM4=DDR4. Rispondi in italiano.
+FORMATO: Testo breve poi PRODOTTI_JSON:[{"nome":"...","cat":"...","prezzo":0,"spec":"..."}]`;
+
+  try {
+    const resp = await fetch('https://api.groq.com/openai/v1/chat/completions', {
+      method:'POST',
+      headers:{'Content-Type':'application/json','Authorization':'Bearer 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'},
+      body:JSON.stringify({model:'llama-3.3-70b-versatile',max_tokens:800,
+        messages:[{role:'system',content:systemPrompt},...aiState.messages.slice(-4).map(m=>({role:m.role==='bot'?'assistant':'user',content:m.html.replace(/<[^>]+>/g,'').substring(0,200)})),{role:'user',content:msg}]})
+    });
+    const data = await resp.json();
+    let text = data.choices?.[0]?.message?.content || 'Errore nella risposta.';
+    let products = [];
+    const jm = text.match(/PRODOTTI_JSON:(\[.*?\])/s);
+    if(jm) { try { products=JSON.parse(jm[1]); text=text.replace(/PRODOTTI_JSON:.*$/s,'').trim(); } catch(e){} }
+    text = text.replace(/\*\*(.*?)\*\*/g,'<strong>$1</strong>').replace(/\n/g,'<br>');
+    document.getElementById('aiTyping')?.remove();
+    aiState.messages.push({role:'bot', html:text, products});
+  } catch(e) {
+    document.getElementById('aiTyping')?.remove();
+    aiState.messages.push({role:'bot', html:'Errore di connessione. Riprova.'});
+  }
+  aiState.loading = false;
+  renderAI();
+}
+
+function aiUseSuggestion(t) { document.getElementById('aiInput').value=t; aiSend(); }
+function renderAI() {
+  aiRenderMessages();
+  const s=document.getElementById('aiSend'); if(s) s.disabled=aiState.loading;
+}
+
+async function init() {
+  // Mostra loading mentre carica i prodotti
+  const mc = document.getElementById('mainContent');
+  if(mc) mc.innerHTML = '<div style="padding:60px 40px;text-align:center;font-family:var(--mono);font-size:11px;letter-spacing:.2em;text-transform:uppercase;color:var(--ink4)">Caricamento prodotti in corso...</div>';
+  
+  await fetchProdotti();
+  loadFromURL();
+  const cnt = document.getElementById('top-count');
+  if (cnt) cnt.textContent = PRODS.length.toLocaleString('it-IT') + ' prodotti live';
+  render();
+}
+init();
+
+
+
+</script>
+
+
+<div id="aiModal" style="display:none;position:fixed;inset:0;z-index:2000;background:rgba(10,10,10,.7);justify-content:flex-end;align-items:stretch" onclick="if(event.target===this)closeAI()">
+  <div style="width:420px;background:var(--bg);display:flex;flex-direction:column;box-shadow:-4px 0 24px rgba(0,0,0,.2)">
+    <div style="background:var(--ink);padding:14px 20px;display:flex;align-items:center;justify-content:space-between;border-bottom:2px solid var(--punch);flex-shrink:0">
+      <div>
+        <div style="font-family:var(--serif);font-size:14px;font-weight:900;color:#fff">✦ Assistente AI</div>
+        <div style="font-family:var(--mono);font-size:9px;letter-spacing:.1em;color:rgba(255,255,255,.35);text-transform:uppercase;margin-top:1px">Powered by Llama 3.3 · Minimal Gamers</div>
+      </div>
+      <button onclick="closeAI()" style="width:28px;height:28px;border:1px solid rgba(255,255,255,.2);background:none;color:rgba(255,255,255,.5);font-size:16px;cursor:pointer;border-radius:50%">✕</button>
+    </div>
+    <div id="aiMessages" style="flex:1;overflow-y:auto;padding:16px;display:flex;flex-direction:column;gap:12px"></div>
+    <div style="padding:12px 16px;border-top:1px solid var(--line);background:var(--white);flex-shrink:0">
+      <div style="display:flex;gap:5px;flex-wrap:wrap;margin-bottom:8px">
+        <button onclick="aiUseSuggestion('300fps su Warzone con budget 1500€')" style="padding:4px 10px;border:1px solid var(--line2);border-radius:20px;font-family:var(--mono);font-size:9px;color:var(--ink3);cursor:pointer;background:none">300fps Warzone</button>
+        <button onclick="aiUseSuggestion('PC gaming 4K under 3000€')" style="padding:4px 10px;border:1px solid var(--line2);border-radius:20px;font-family:var(--mono);font-size:9px;color:var(--ink3);cursor:pointer;background:none">PC gaming 4K</button>
+        <button onclick="aiUseSuggestion('Build silenziosa per lavoro e gaming')" style="padding:4px 10px;border:1px solid var(--line2);border-radius:20px;font-family:var(--mono);font-size:9px;color:var(--ink3);cursor:pointer;background:none">Build silenziosa</button>
+        <button onclick="aiUseSuggestion('PC compatto ITX potente')" style="padding:4px 10px;border:1px solid var(--line2);border-radius:20px;font-family:var(--mono);font-size:9px;color:var(--ink3);cursor:pointer;background:none">ITX potente</button>
+      </div>
+      <div style="display:flex;gap:8px">
+        <input id="aiInput" placeholder="Es: voglio 200fps su Fortnite con 1000€..." onkeydown="if(event.key==='Enter')aiSend()" style="flex:1;padding:10px 14px;background:var(--bg2);border:1.5px solid var(--line2);border-radius:6px;font-family:var(--body);font-size:13px;color:var(--ink);outline:none">
+        <button id="aiSend" onclick="aiSend()" style="padding:10px 16px;background:var(--punch);color:#fff;font-family:var(--serif);font-size:13px;font-weight:900;border:none;cursor:pointer;border-radius:6px">→</button>
       </div>
     </div>
   </div>

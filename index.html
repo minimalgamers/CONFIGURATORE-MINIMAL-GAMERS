@@ -1456,10 +1456,10 @@ PRODUTTIVITÀ (video editing, 3D, streaming):
 FORMATO RISPOSTA: 2-3 frasi poi PRODOTTI_JSON:[{"nome":"nome esatto dal catalogo","cat":"Categoria","prezzo":0.0,"spec":"spec breve"}]`;
 
   try {
-    const resp = await fetch('https://api.groq.com/openai/v1/chat/completions', {
+    const resp = await fetch('https://api.openai.com/v1/chat/completions', {
       method:'POST',
-      headers:{'Content-Type':'application/json','Authorization':'Bearer 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'},
-      body:JSON.stringify({model:'llama-3.3-70b-versatile',max_tokens:800,
+      headers:{'Content-Type':'application/json','Authorization':'Bearer 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'},
+      body:JSON.stringify({model:'gpt-4o',max_tokens:1000,
         messages:[{role:'system',content:systemPrompt},...aiState.messages.slice(-2).map(m=>({role:m.role==='bot'?'assistant':'user',content:m.html.replace(/<[^>]+>/g,'').substring(0,200)})),{role:'user',content:msg}]})
     });
     const data = await resp.json();

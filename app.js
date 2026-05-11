@@ -783,7 +783,7 @@ function renderRiep(el) {
       </div>
       <div class="recap-subtotal-row recap-impl">
         <span class="recap-subtotal-lbl">Costo implementazione <small>(montaggio, test, configurazione)</small></span>
-        <span class="recap-subtotal-val">${'€ '+impl.toFixed(2).replace('.',',')}</span>
+        <span class="recap-subtotal-val">${'€ '+calcImpl(totalComp).toFixed(2).replace('.',',')}</span>
       </div>
       <div class="recap-total-divider"></div>
       <div class="recap-total-label">Totale finale IVA inclusa</div>
@@ -914,7 +914,6 @@ function loadFromURL() {
 }
 
 // ── INIT ─────────────────────────────────────────────────────
-async 
 // ════════════════════════════════════════════════════════════
 // ASSISTENTE AI — Minimal Gamers PC Configurator
 // Usa Claude API per consigliare componenti dal listino

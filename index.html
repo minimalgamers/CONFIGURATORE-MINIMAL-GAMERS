@@ -331,8 +331,6 @@ html,body{background:var(--bg);color:var(--ink);font-family:var(--font);min-heig
 .product-stock{font-size:9px;color:var(--ink4);margin-top:4px}
 .product-incompat{
   opacity:.32;
-  pointer-events:none;
-  cursor:not-allowed;
   filter:grayscale(.5);
   position:relative;
 }
@@ -1558,8 +1556,11 @@ function renderCard(p, sid, isSelected, isIncompat) {
   // Motivo incompatibilità (per tooltip)
   const reason = isIncompat ? incompatReason(sid, p) : null;
 
-  // Blocca se: esaurito O incompatibile (ma non se già selezionato)
-  const isBlocked = !isSelected && (isEsaurito || isIncompat);
+  // Blocca se esaurito O incompatibile FISICAMENTE (case/ram/psu/cooler)
+  // Per CPU/mobo: incompatibili visibili ma non bloccati (solo opachi)
+  const HARD_STEPS = ['case','ram','psu','cooler'];
+  const isHardIncompat = isIncompat && HARD_STEPS.includes(sid);
+  const isBlocked = !isSelected && (isEsaurito || isHardIncompat);
 
   const classes = [
     'product-card',
@@ -1604,9 +1605,19 @@ function renderProds(sid) {
   if (search) filtered = filtered.filter(p =>
     p.d.toLowerCase().includes(search) || (p.b||'').toLowerCase().includes(search));
 
-  // Separa: compatibili vs incompatibili
-  const compatibili   = filtered.filter(p =>  isCompat(sid, p));
-  const incompatibili = filtered.filter(p => !isCompat(sid, p));
+  // Separa compatibili/incompatibili SOLO per step con filtri fisici reali
+  // e SOLO se c'è già un componente precedente con cui confrontarsi
+  const b = state.build;
+  const hasCompatFilter =
+    (sid === 'mobo'   && state.socket) ||
+    (sid === 'case'   && b.mobo) ||
+    (sid === 'ram'    && (b.mobo || b.cpu)) ||
+    (sid === 'psu'    && b.case) ||
+    (sid === 'cooler' && (b.case || b.cpu));
+  // CPU, GPU, SSD, Ventole: nessun filtro incompatibilità
+  // Mobo/Case/RAM/PSU/Cooler: solo se c'è qualcosa con cui confrontarsi
+  const compatibili   = hasCompatFilter ? filtered.filter(p =>  isCompat(sid, p)) : filtered;
+  const incompatibili = hasCompatFilter ? filtered.filter(p => !isCompat(sid, p)) : [];
 
   // Sort: selezionato primo → esauriti in fondo → prezzo crescente
   const sortFn = (a, b) => {
@@ -1720,8 +1731,15 @@ function doSearch(sid, val) {
     return a.p - b.p;
   };
 
-  const compatibili  = filtered.filter(p =>  isCompat(sid, p)).sort(sortFn);
-  const incompatibili = filtered.filter(p => !isCompat(sid, p)).sort(sortFn);
+  const bds = state.build;
+  const hasCompatFilter =
+    (sid === 'mobo'   && state.socket) ||
+    (sid === 'case'   && bds.mobo) ||
+    (sid === 'ram'    && (bds.mobo || bds.cpu)) ||
+    (sid === 'psu'    && bds.case) ||
+    (sid === 'cooler' && (bds.case || bds.cpu));
+  const compatibili   = (hasCompatFilter ? filtered.filter(p =>  isCompat(sid, p)) : filtered).sort(sortFn);
+  const incompatibili = (hasCompatFilter ? filtered.filter(p => !isCompat(sid, p)) : []).sort(sortFn);
 
   if (filtered.length === 0) {
     gridEl.innerHTML = '<p style="color:var(--ink4);font-size:12px;padding:20px 0">Nessun prodotto trovato</p>';

@@ -1795,12 +1795,13 @@ function calcBuildTDP() {
   let total = 0;
   const breakdown = {};
 
-  if(b.cpu) { breakdown.cpu = getCPUPeak(b.cpu.d); total += breakdown.cpu; }
-  if(b.gpu) { breakdown.gpu = getTDP('gpu', b.gpu.d); total += breakdown.gpu; }
-  if(b.mobo) { breakdown.mobo = getTDP('mobo', b.mobo.d); total += breakdown.mobo; }
-  if(b.ram) { breakdown.ram = calcRAMWatt(b.ram.d); total += breakdown.ram; }
-  if(b.ssd) { breakdown.ssd = getTDP('ssd', b.ssd.d); total += breakdown.ssd; }
-  if(b.cooler) { breakdown.cooler = getTDP('cooler', b.cooler.d); total += breakdown.cooler; }
+  const _p = k => PRODS.find(x=>x.k===k);
+  if(b.cpu)    { const p=_p(b.cpu);    if(p){ breakdown.cpu    = getCPUPeak(p.d);        total += breakdown.cpu; } }
+  if(b.gpu)    { const p=_p(b.gpu);    if(p){ breakdown.gpu    = getTDP('gpu',p.d);       total += breakdown.gpu; } }
+  if(b.mobo)   { const p=_p(b.mobo);   if(p){ breakdown.mobo   = getTDP('mobo',p.d);      total += breakdown.mobo; } }
+  if(b.ram)    { const p=_p(b.ram);    if(p){ breakdown.ram    = calcRAMWatt(p.d);        total += breakdown.ram; } }
+  if(b.ssd)    { const p=_p(b.ssd);    if(p){ breakdown.ssd    = getTDP('ssd',p.d);       total += breakdown.ssd; } }
+  if(b.cooler) { const p=_p(b.cooler); if(p){ breakdown.cooler = getTDP('cooler',p.d);    total += breakdown.cooler; } }
   // Stima ventole case + misc
   breakdown.misc = 25;
   total += 25;
@@ -1860,56 +1861,57 @@ function updateRisparmio() {
 // ── ACHIEVEMENTS ─────────────────────────────────────────
 const ACHIEVEMENTS = {
   // Piattaforma
-  'team_red': { icon:'🔴', title:'Team Red', desc:'Hai scelto il lato AMD', trigger: b => b.piattaforma === 'AMD' },
-  'team_blue': { icon:'🔵', title:'Team Blue', desc:'Hai scelto il lato Intel', trigger: b => b.piattaforma === 'Intel' },
-  // CPU
-  'hunter_3d': { icon:'🎮', title:'3D Hunter', desc:'V-Cache: il segreto dei pro', trigger: b => b.cpu && b.cpu.d.toLowerCase().includes('x3d') },
-  'no_mercy': { icon:'💀', title:'No Mercy', desc:'Ryzen 9 — nessuno ti ferma', trigger: b => b.cpu && b.cpu.d.toLowerCase().includes('ryzen 9') },
-  'overclock_king': { icon:'⚡', title:'Overclock King', desc:'Intel i9 — potenza bruta', trigger: b => b.cpu && b.cpu.d.toLowerCase().includes('i9') },
-  'il_cervello': { icon:'🧠', title:'Il Cervello', desc:'CPU installata nella build', trigger: b => !!b.cpu },
+  'team_red':   { icon:'🔴', title:'Team Red',   desc:'Hai scelto il lato AMD',   trigger: b => b.piattaforma === 'AMD' },
+  'team_blue':  { icon:'🔵', title:'Team Blue',  desc:'Hai scelto il lato Intel', trigger: b => b.piattaforma === 'Intel' },
+  // CPU — usa PRODS.find() perché b.cpu è una chiave stringa
+  'hunter_3d':      { icon:'🎮', title:'3D Hunter',      desc:'V-Cache: il segreto dei pro',  trigger: b => { const p = b.cpu && PRODS.find(x=>x.k===b.cpu); return p && p.d.toLowerCase().includes('x3d'); } },
+  'no_mercy':       { icon:'💀', title:'No Mercy',       desc:'Ryzen 9 — nessuno ti ferma',   trigger: b => { const p = b.cpu && PRODS.find(x=>x.k===b.cpu); return p && p.d.toLowerCase().includes('ryzen 9'); } },
+  'overclock_king': { icon:'⚡', title:'Overclock King', desc:'Intel i9 — potenza bruta',     trigger: b => { const p = b.cpu && PRODS.find(x=>x.k===b.cpu); return p && p.d.toLowerCase().includes('i9'); } },
+  'il_cervello':    { icon:'🧠', title:'Il Cervello',    desc:'CPU installata nella build',   trigger: b => !!b.cpu },
   // Mobo
-  'premium_board': { icon:'👑', title:'Premium Board', desc:'X870/Z790 — solo il meglio', trigger: b => b.mobo && (b.mobo.d.toLowerCase().includes('x870') || b.mobo.d.toLowerCase().includes('z790')) },
-  'connesso': { icon:'🔌', title:'Connesso', desc:'Scheda madre installata', trigger: b => !!b.mobo },
+  'premium_board': { icon:'👑', title:'Premium Board', desc:'X870/Z790 — solo il meglio', trigger: b => { const p = b.mobo && PRODS.find(x=>x.k===b.mobo); return p && (p.d.toLowerCase().includes('x870') || p.d.toLowerCase().includes('z790')); } },
+  'connesso':      { icon:'🔌', title:'Connesso',      desc:'Scheda madre installata',    trigger: b => !!b.mobo },
   // Case
-  'the_castle': { icon:'🏰', title:'The Castle', desc:'Full Tower — grande e maestoso', trigger: b => b.case && b.case.d.toLowerCase().includes('full') },
-  'small_deadly': { icon:'💎', title:'Small but Deadly', desc:'ITX — piccolo e letale', trigger: b => b.case && b.case.d.toLowerCase().includes('itx') },
-  'casa_dolce': { icon:'🏠', title:'Casa Dolce Casa', desc:'Il tuo PC ha trovato dimora', trigger: b => !!b.case },
+  'the_castle':  { icon:'🏰', title:'The Castle',       desc:'Full Tower — grande e maestoso', trigger: b => { const p = b.case && PRODS.find(x=>x.k===b.case); return p && p.d.toLowerCase().includes('full'); } },
+  'small_deadly':{ icon:'💎', title:'Small but Deadly', desc:'ITX — piccolo e letale',         trigger: b => { const p = b.case && PRODS.find(x=>x.k===b.case); return p && p.d.toLowerCase().includes('itx'); } },
+  'casa_dolce':  { icon:'🏠', title:'Casa Dolce Casa',  desc:'Il tuo PC ha trovato dimora',    trigger: b => !!b.case },
   // RAM
-  'speed_demon': { icon:'🚀', title:'Speed Demon', desc:'DDR5-6000+ — oltre i limiti', trigger: b => b.ram && (b.ram.d.includes('6000') || b.ram.d.includes('6400') || b.ram.d.includes('6600') || b.ram.d.includes('7200')) },
-  'elefante': { icon:'🐘', title:'Elefante', desc:'64GB+ — memoria infinita', trigger: b => b.ram && (b.ram.d.includes('64gb') || b.ram.d.includes('128gb') || b.ram.d.toLowerCase().includes('64 gb')) },
-  'il_dna': { icon:'🧬', title:'Il DNA', desc:'RAM installata nella build', trigger: b => !!b.ram },
+  'speed_demon': { icon:'🚀', title:'Speed Demon', desc:'DDR5-6000+ — oltre i limiti', trigger: b => { const p = b.ram && PRODS.find(x=>x.k===b.ram); return p && (p.d.includes('6000')||p.d.includes('6400')||p.d.includes('6600')||p.d.includes('7200')); } },
+  'elefante':    { icon:'🐘', title:'Elefante',    desc:'64GB+ — memoria infinita',    trigger: b => { const p = b.ram && PRODS.find(x=>x.k===b.ram); return p && (p.d.toLowerCase().includes('64gb')||p.d.toLowerCase().includes('128gb')||p.d.toLowerCase().includes('64 gb')); } },
+  'il_dna':      { icon:'🧬', title:'Il DNA',      desc:'RAM installata nella build',  trigger: b => !!b.ram },
   // GPU
-  'vulcano': { icon:'🌋', title:'Vulcano', desc:'RTX 5080+ — potenza eruttiva', trigger: b => b.gpu && (b.gpu.d.toLowerCase().includes('5080') || b.gpu.d.toLowerCase().includes('5090')) },
-  'high_roller': { icon:'🔥', title:'High Roller', desc:'GPU top-tier senza compromessi', trigger: b => b.gpu && (b.gpu.d.toLowerCase().includes('5070 ti') || b.gpu.d.toLowerCase().includes('9070 xt') || b.gpu.d.toLowerCase().includes('4090')) },
-  'sweet_spot': { icon:'🎯', title:'Sweet Spot', desc:'Massimo valore per ogni euro', trigger: b => b.gpu && (b.gpu.d.toLowerCase().includes('5060') || b.gpu.d.toLowerCase().includes('4070') || b.gpu.d.toLowerCase().includes('9060')) },
-  'la_visione': { icon:'👁️', title:'La Visione', desc:'GPU installata nella build', trigger: b => !!b.gpu },
+  'vulcano':    { icon:'🌋', title:'Vulcano',    desc:'RTX 5080+ — potenza eruttiva',       trigger: b => { const p = b.gpu && PRODS.find(x=>x.k===b.gpu); return p && (p.d.toLowerCase().includes('5080')||p.d.toLowerCase().includes('5090')); } },
+  'high_roller':{ icon:'🔥', title:'High Roller',desc:'GPU top-tier senza compromessi',     trigger: b => { const p = b.gpu && PRODS.find(x=>x.k===b.gpu); return p && (p.d.toLowerCase().includes('5070 ti')||p.d.toLowerCase().includes('9070 xt')||p.d.toLowerCase().includes('4090')); } },
+  'sweet_spot': { icon:'🎯', title:'Sweet Spot', desc:'Massimo valore per ogni euro',        trigger: b => { const p = b.gpu && PRODS.find(x=>x.k===b.gpu); return p && (p.d.toLowerCase().includes('5060')||p.d.toLowerCase().includes('4070')||p.d.toLowerCase().includes('9060')); } },
+  'la_visione': { icon:'👁️', title:'La Visione', desc:'GPU installata nella build',         trigger: b => !!b.gpu },
   // SSD
-  'ludicrous': { icon:'💨', title:'Ludicrous Speed', desc:'Gen 5 — Spaceballs approved', trigger: b => b.ssd && (b.ssd._tipo === 'gen5' || b.ssd.d.toLowerCase().includes('gen 5') || b.ssd.d.toLowerCase().includes('gen5')) },
-  'flash': { icon:'⚡', title:'Flash', desc:'Gen 4 — caricamenti? cosa sono?', trigger: b => b.ssd && (b.ssd._tipo === 'gen4' || b.ssd.d.toLowerCase().includes('gen 4') || b.ssd.d.toLowerCase().includes('gen4')) },
-  'archiviato': { icon:'💾', title:'Archiviato', desc:'SSD installato nella build', trigger: b => !!b.ssd },
+  'ludicrous':   { icon:'💨', title:'Ludicrous Speed', desc:'Gen 5 — Spaceballs approved',    trigger: b => { const p = b.ssd && PRODS.find(x=>x.k===b.ssd); return p && (p._tipo==='NVMe Gen 5'||p.d.toLowerCase().includes('gen 5')||p.d.toLowerCase().includes('gen5')); } },
+  'flash':       { icon:'⚡', title:'Flash',           desc:'Gen 4 — caricamenti? cosa sono?',trigger: b => { const p = b.ssd && PRODS.find(x=>x.k===b.ssd); return p && (p._tipo==='NVMe Gen 4'||p.d.toLowerCase().includes('gen 4')||p.d.toLowerCase().includes('gen4')); } },
+  'archiviato':  { icon:'💾', title:'Archiviato',      desc:'SSD installato nella build',     trigger: b => !!b.ssd },
   // PSU
-  'nuclear_power': { icon:'☢️', title:'Nuclear Power', desc:'1000W+ — centrale elettrica', trigger: b => b.psu && getPSUWatt(b.psu.d) >= 1000 },
-  'equilibrio': { icon:'✅', title:'Equilibrio Perfetto', desc:'PSU perfettamente dimensionata', trigger: b => {
-    if(!b.psu) return false;
-    const w = getPSUWatt(b.psu.d);
+  'nuclear_power': { icon:'☢️', title:'Nuclear Power', desc:'1000W+ — centrale elettrica', trigger: b => { const p = b.psu && PRODS.find(x=>x.k===b.psu); return p && getPSUWatt(p.d) >= 1000; } },
+  'equilibrio':    { icon:'✅', title:'Equilibrio Perfetto', desc:'PSU perfettamente dimensionata', trigger: b => {
+    const p = b.psu && PRODS.find(x=>x.k===b.psu);
+    if(!p) return false;
+    const w = getPSUWatt(p.d);
     const {minPSU} = calcBuildTDP();
     return w >= minPSU && w <= minPSU + 150;
   }},
   'alimentato': { icon:'🔋', title:'Alimentato', desc:'PSU installata nella build', trigger: b => !!b.psu },
   // Dissipatore
-  'arctic_circle': { icon:'❄️', title:'Arctic Circle', desc:'AIO 360mm — freddo polare', trigger: b => b.cooler && b.cooler.d.toLowerCase().includes('360') },
-  'silent_thunder': { icon:'🌬️', title:'Silent Thunder', desc:'Dual tower — silenzioso ma letale', trigger: b => b.cooler && b.cooler.d.toLowerCase().includes('dual') },
-  'sotto_controllo': { icon:'🌡️', title:'Sotto Controllo', desc:'Dissipatore installato', trigger: b => !!b.cooler },
+  'arctic_circle':  { icon:'❄️', title:'Arctic Circle',  desc:'AIO 360mm — freddo polare',      trigger: b => { const p = b.cooler && PRODS.find(x=>x.k===b.cooler); return p && p.d.toLowerCase().includes('360'); } },
+  'silent_thunder': { icon:'🌬️', title:'Silent Thunder', desc:'Dual tower — silenzioso ma letale',trigger: b => { const p = b.cooler && PRODS.find(x=>x.k===b.cooler); return p && p.d.toLowerCase().includes('dual'); } },
+  'sotto_controllo':{ icon:'🌡️', title:'Sotto Controllo',desc:'Dissipatore installato',           trigger: b => !!b.cooler },
   // Build completa
   'build_complete': { icon:'🏆', title:'Build Complete', desc:'Sei ufficialmente un PC Builder', trigger: b => Object.keys(b).filter(k => b[k]).length >= 8 },
   'no_budget': { icon:'💸', title:'No Budget No Party', desc:'Build da oltre €3.000', trigger: b => {
-    const tot = Object.values(b).filter(Boolean).reduce((s,p)=>s+calcP(p.p),0);
+    const tot = Object.values(b).filter(Boolean).reduce((s,k) => { const p=PRODS.find(x=>x.k===k); return s+(p?calcP(p.p):0); }, 0);
     return tot > 3000;
   }},
   'budget_master': { icon:'🧠', title:'Budget Master', desc:'Build completa sotto €1.200', trigger: b => {
-    const done = Object.values(b).filter(Boolean).length;
-    const tot = Object.values(b).filter(Boolean).reduce((s,p)=>s+calcP(p.p),0);
-    return done >= 8 && tot < 1200;
+    const vals = Object.values(b).filter(Boolean);
+    const tot = vals.reduce((s,k) => { const p=PRODS.find(x=>x.k===k); return s+(p?calcP(p.p):0); }, 0);
+    return vals.length >= 8 && tot < 1200;
   }},
   'perfectly_balanced': { icon:'⚖️', title:'Perfectly Balanced', desc:'Nessun bottleneck rilevato', trigger: b => {
     const alert = getResocontoAlerts();
@@ -2033,17 +2035,26 @@ function playSound(type) {
 function getResocontoAlerts() {
   const b = state.build;
   const alerts = [];
+  // Helper: risolve chiave stringa → oggetto prodotto
+  const _p = k => k ? PRODS.find(x=>x.k===k) : null;
+  const pCPU    = _p(b.cpu);
+  const pGPU    = _p(b.gpu);
+  const pPSU    = _p(b.psu);
+  const pRAM    = _p(b.ram);
+  const pMobo   = _p(b.mobo);
+  const pSSD    = _p(b.ssd);
+  const pCooler = _p(b.cooler);
 
   // 1. PSU check
-  if(b.psu && (b.cpu || b.gpu)) {
+  if(pPSU && (b.cpu || b.gpu)) {
     const {total, minPSU, breakdown} = calcBuildTDP();
-    const psuW = getPSUWatt(b.psu.d);
+    const psuW = getPSUWatt(pPSU.d);
     if(psuW > 0 && psuW < minPSU) {
       alerts.push({
         level: 'critical',
         icon: '⚡',
         title: 'PSU insufficiente',
-        msg: `La tua PSU ${b.psu.d} (${psuW}W) è sotto il minimo consigliato di ${minPSU}W per questa build (consumo stimato: ${total}W × 1.20 margine).`,
+        msg: `La tua PSU ${pPSU.d} (${psuW}W) è sotto il minimo consigliato di ${minPSU}W per questa build (consumo stimato: ${total}W × 1.20 margine).`,
         step: 'psu',
         btnLabel: 'Cambia PSU'
       });
@@ -2052,35 +2063,35 @@ function getResocontoAlerts() {
         level: 'ok',
         icon: '✅',
         title: 'PSU dimensionata correttamente',
-        msg: `${b.psu.d} (${psuW}W) — margine ideale rispetto al consumo stimato di ${total}W.`,
+        msg: `${pPSU.d} (${psuW}W) — margine ideale rispetto al consumo stimato di ${total}W.`,
         step: null
       });
     }
   }
 
   // 2. Dissipatore inadeguato per TDP CPU
-  if(b.cpu && !b.cooler) {
-    const cpuPeak = getCPUPeak(b.cpu.d);
+  if(pCPU && !b.cooler) {
+    const cpuPeak = getCPUPeak(pCPU.d);
     if(cpuPeak > 88) {
       alerts.push({
         level: 'critical',
         icon: '🌡️',
         title: 'Nessun dissipatore',
-        msg: `${b.cpu.d} ha un TDP di picco di ${cpuPeak}W e richiede un dissipatore adeguato. Senza raffreddamento adeguato rischi thermal throttling.`,
+        msg: `${pCPU.d} ha un TDP di picco di ${cpuPeak}W e richiede un dissipatore adeguato. Senza raffreddamento adeguato rischi thermal throttling.`,
         step: 'cooler',
         btnLabel: 'Aggiungi dissipatore'
       });
     }
-  } else if(b.cpu && b.cooler) {
-    const cpuPeak = getCPUPeak(b.cpu.d);
-    const coolerName = b.cooler.d.toLowerCase();
+  } else if(pCPU && pCooler) {
+    const cpuPeak = getCPUPeak(pCPU.d);
+    const coolerName = pCooler.d.toLowerCase();
     const isTowerOnly = !coolerName.includes('aio') && !coolerName.includes('240') && !coolerName.includes('280') && !coolerName.includes('360');
     if(cpuPeak > 162 && isTowerOnly) {
       alerts.push({
         level: 'warning',
         icon: '🌡️',
         title: 'Dissipatore non ottimale',
-        msg: `${b.cpu.d} (${cpuPeak}W picco) su dissipatore a torre — considera un AIO 240/360mm per prestazioni ottimali.`,
+        msg: `${pCPU.d} (${cpuPeak}W picco) su dissipatore a torre — considera un AIO 240/360mm per prestazioni ottimali.`,
         step: 'cooler',
         btnLabel: 'Migliora dissipatore'
       });
@@ -2088,9 +2099,9 @@ function getResocontoAlerts() {
   }
 
   // 3. RAM non ottimale per CPU
-  if(b.cpu && b.ram) {
-    const cpuName = b.cpu.d.toLowerCase();
-    const ramName = b.ram.d.toLowerCase();
+  if(pCPU && pRAM) {
+    const cpuName = pCPU.d.toLowerCase();
+    const ramName = pRAM.d.toLowerCase();
     const isZen5 = cpuName.includes('9600') || cpuName.includes('9700') || cpuName.includes('9800') || cpuName.includes('9900') || cpuName.includes('9950');
     const isDDR5 = ramName.includes('ddr5');
     const hasGoodSpeed = ramName.includes('6000') || ramName.includes('6200') || ramName.includes('6400') || ramName.includes('6600');
@@ -2099,7 +2110,7 @@ function getResocontoAlerts() {
         level: 'warning',
         icon: '🧬',
         title: 'RAM non ottimizzata per Zen 5',
-        msg: `I Ryzen serie 9000 rendono al meglio con DDR5-6000 o superiore. La tua RAM potrebbe limitare le prestazioni del ${b.cpu.d}.`,
+        msg: `I Ryzen serie 9000 rendono al meglio con DDR5-6000 o superiore. La tua RAM potrebbe limitare le prestazioni del ${pCPU.d}.`,
         step: 'ram',
         btnLabel: 'Ottimizza RAM'
       });
@@ -2109,7 +2120,7 @@ function getResocontoAlerts() {
         level: 'warning',
         icon: '🧬',
         title: 'DDR4 su piattaforma AM5',
-        msg: `AM5 supporta nativamente DDR5. Con DDR4 perdi parte del bandwidth disponibile per ${b.cpu.d}.`,
+        msg: `AM5 supporta nativamente DDR5. Con DDR4 perdi parte del bandwidth disponibile per ${pCPU.d}.`,
         step: 'ram',
         btnLabel: 'Passa a DDR5'
       });
@@ -2117,9 +2128,9 @@ function getResocontoAlerts() {
   }
 
   // 4. Bottleneck CPU/GPU
-  if(b.cpu && b.gpu) {
-    const cpuName = b.cpu.d.toLowerCase();
-    const gpuName = b.gpu.d.toLowerCase();
+  if(pCPU && pGPU) {
+    const cpuName = pCPU.d.toLowerCase();
+    const gpuName = pGPU.d.toLowerCase();
     const isWeakCPU = cpuName.includes('i3') || cpuName.includes('ryzen 3') || cpuName.includes('5500') || cpuName.includes('i5-12');
     const isStrongGPU = gpuName.includes('5080') || gpuName.includes('5090') || gpuName.includes('4090') || gpuName.includes('5070 ti') || gpuName.includes('9070 xt');
     if(isWeakCPU && isStrongGPU) {
@@ -2127,7 +2138,7 @@ function getResocontoAlerts() {
         level: 'critical',
         icon: '⚠️',
         title: 'Bottleneck CPU/GPU rilevato',
-        msg: `${b.cpu.d} limiterà significativamente ${b.gpu.d}. Il processore non riesce ad alimentare una GPU di questa fascia. Stima: 20-35% di performance persa.`,
+        msg: `${pCPU.d} limiterà significativamente ${pGPU.d}. Il processore non riesce ad alimentare una GPU di questa fascia. Stima: 20-35% di performance persa.`,
         step: 'cpu',
         btnLabel: 'Migliora CPU'
       });
@@ -2139,7 +2150,7 @@ function getResocontoAlerts() {
         level: 'info',
         icon: '💡',
         title: 'CPU sovradimensionata',
-        msg: `${b.cpu.d} è eccessiva per ${b.gpu.d}. Potresti scalare su una CPU meno costosa e investire il risparmio su una GPU migliore.`,
+        msg: `${pCPU.d} è eccessiva per ${pGPU.d}. Potresti scalare su una CPU meno costosa e investire il risparmio su una GPU migliore.`,
         step: 'gpu',
         btnLabel: 'Migliora GPU'
       });
@@ -2159,9 +2170,9 @@ function getResocontoAlerts() {
   }
 
   // 6. Upgrade consigliato SSD
-  if(b.ssd && b.ssd.d) {
-    const ssdName = b.ssd.d.toLowerCase();
-    if((ssdName.includes('gen 3') || ssdName.includes('gen3')) && b.mobo && (b.mobo.d.toLowerCase().includes('b650') || b.mobo.d.toLowerCase().includes('x870') || b.mobo.d.toLowerCase().includes('b850'))) {
+  if(pSSD) {
+    const ssdName = pSSD.d.toLowerCase();
+    if((ssdName.includes('gen 3') || ssdName.includes('gen3')) && pMobo && (pMobo.d.toLowerCase().includes('b650') || pMobo.d.toLowerCase().includes('x870') || pMobo.d.toLowerCase().includes('b850'))) {
       alerts.push({
         level: 'info',
         icon: '💡',

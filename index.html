@@ -270,6 +270,29 @@ html,body{background:var(--bg);color:var(--ink);font-family:var(--font);min-heig
 }
 .product-card:hover{border-color:rgba(45,212,191,.25);transform:translateY(-1px);background:rgba(255,255,255,.04)}
 .product-card.selected{border-color:var(--teal);background:rgba(45,212,191,.06)}
+.incompat-divider{
+  display:flex;align-items:center;gap:10px;
+  margin:20px 0 10px;
+  font-size:11px;color:rgba(255,160,60,.7);
+  font-weight:600;
+}
+.incompat-divider span{flex:1}
+.incompat-divider::before{
+  content:'';display:block;height:1px;width:24px;
+  background:rgba(255,160,60,.3);flex-shrink:0;
+}
+.incompat-toggle{
+  font-size:10px;font-weight:700;
+  padding:3px 10px;border-radius:20px;
+  border:1px solid rgba(255,160,60,.4);
+  background:rgba(255,160,60,.08);
+  color:rgba(255,160,60,.8);
+  cursor:pointer;transition:all .15s;
+  font-family:inherit;
+}
+.incompat-toggle:hover{background:rgba(255,160,60,.15)}
+.incompat-section{animation:fadeIn .2s ease}
+.incompat-grid .product-card{opacity:.35;pointer-events:none;filter:grayscale(.5)}
 .compat-banner{
   font-size:11px;color:rgba(45,212,191,.8);
   background:rgba(45,212,191,.07);
@@ -306,7 +329,21 @@ html,body{background:var(--bg);color:var(--ink);font-family:var(--font);min-heig
 .product-badge.warn{background:rgba(245,158,11,.08);color:#f59e0b;border-color:rgba(245,158,11,.12)}
 .product-badge.danger{background:rgba(239,68,68,.08);color:#ef4444;border-color:rgba(239,68,68,.12)}
 .product-stock{font-size:9px;color:var(--ink4);margin-top:4px}
-.product-incompat{opacity:.4;pointer-events:none}
+.product-incompat{
+  opacity:.32;
+  pointer-events:none;
+  cursor:not-allowed;
+  filter:grayscale(.5);
+  position:relative;
+}
+.product-incompat .product-price{color:var(--ink4)!important}
+.product-incompat-reason{
+  font-size:9px;
+  color:rgba(255,160,60,.8);
+  margin-top:6px;
+  line-height:1.4;
+  font-weight:600;
+}
 
 /* Search */
 .search-wrap{margin-bottom:14px}
@@ -932,14 +969,73 @@ function fmt(x){ return '€ ' + x.toFixed(2).replace('.',','); }
 function fmtR(tot){ return fmt(tot / 36); }
 
 // ══ COMPATIBILITÀ ════════════════════════════════════════
+
+// Motivo di incompatibilità — usato per il tooltip sulla card
+function incompatReason(stepId, p) {
+  const b  = state.build;
+  const sk = state.socket;
+  const RANK = {'Mini-ITX':1,'Micro-ATX':2,'ATX':3,'E-ATX':4};
+
+  if (stepId === 'cpu') {
+    if (sk && p.socket && p.socket !== sk)
+      return `Socket ${p.socket} non compatibile con ${sk}`;
+  }
+  if (stepId === 'mobo') {
+    if (sk && p.socket && p.socket !== sk)
+      return `Socket ${p.socket} non compatibile con ${sk}`;
+  }
+  if (stepId === 'case') {
+    const mobo = b.mobo ? PRODS.find(x=>x.k===b.mobo) : null;
+    if (mobo && mobo._form_factor && p._form_factor) {
+      const mr = RANK[mobo._form_factor]||3, cr = RANK[p._form_factor]||3;
+      if (cr < mr) return `Case ${p._form_factor} troppo piccolo per mobo ${mobo._form_factor}`;
+    }
+  }
+  if (stepId === 'ram') {
+    const mobo = b.mobo ? PRODS.find(x=>x.k===b.mobo) : null;
+    const cpu  = b.cpu  ? PRODS.find(x=>x.k===b.cpu)  : null;
+    const ddr  = (mobo||cpu) ? (mobo||cpu).ddr : null;
+    if (ddr && p.ddr && p.ddr !== ddr)
+      return `RAM ${p.ddr} non compatibile — la tua mobo richiede ${ddr}`;
+  }
+  if (stepId === 'psu') {
+    const sc = b.case ? PRODS.find(x=>x.k===b.case) : null;
+    if (sc && sc._psu_form && p._psu_form) {
+      if (sc._psu_form !== p._psu_form)
+        return `PSU ${p._psu_form} non entra nel tuo case (richiede ${sc._psu_form})`;
+    }
+  }
+  if (stepId === 'cooler') {
+    const sc = b.case ? PRODS.find(x=>x.k===b.case) : null;
+    if (sc && sc._max_cooler_h && p._cooler_h && p._cooler_h > 0) {
+      if (p._cooler_h > sc._max_cooler_h)
+        return `Dissipatore ${p._cooler_h}mm troppo alto — max ${sc._max_cooler_h}mm per il tuo case`;
+    }
+    // TDP check CPU vs cooler
+    const cpu = b.cpu ? PRODS.find(x=>x.k===b.cpu) : null;
+    if (cpu) {
+      const tdp = getCPUPeak(cpu.d);
+      const tc  = (p._tipo_cool||'').toLowerCase();
+      const isAIO = tc.includes('aio');
+      const isLow = tc.includes('low');
+      if (tdp > 170 && !isAIO)
+        return `CPU da ${tdp}W richiede AIO — questo dissipatore potrebbe non bastare`;
+      if (tdp > 125 && isLow)
+        return `CPU da ${tdp}W troppo potente per un dissipatore low-profile`;
+    }
+  }
+  return null;
+}
+
 function isCompat(stepId, p) {
   const b  = state.build;
   const pi = state.piattaforma;
   const sk = state.socket;
+  const RANK = {'Mini-ITX':1,'Micro-ATX':2,'ATX':3,'E-ATX':4};
 
   // ── CPU ───────────────────────────────────────────────────
   if (stepId === 'cpu') {
-    if (sk && p.socket !== sk) return false;
+    if (sk && p.socket && p.socket !== sk) return false;
     if (!sk) {
       if (pi === 'amd'   && p.platform !== 'AMD')   return false;
       if (pi === 'intel' && p.platform !== 'INTEL') return false;
@@ -949,57 +1045,66 @@ function isCompat(stepId, p) {
 
   // ── SCHEDA MADRE ──────────────────────────────────────────
   if (stepId === 'mobo') {
-    if (sk && p.socket !== sk) return false;
+    if (sk && p.socket && p.socket !== sk) return false;
     return true;
   }
 
-  // ── CASE: deve supportare il form factor della mobo ───────
+  // ── CASE ──────────────────────────────────────────────────
+  // Regola: caseRank >= moboRank
+  // case Mini-ITX(1) < mobo ATX(3) → incompatibile
+  // case ATX(3) >= mobo Micro-ATX(2) → compatibile
   if (stepId === 'case') {
     const mobo = b.mobo ? PRODS.find(x=>x.k===b.mobo) : null;
     if (mobo && mobo._form_factor && p._form_factor) {
-      // Gerarchia: Mini-ITX=1, Micro-ATX=2, ATX=3, E-ATX=4
-      // Un case supporta SEMPRE i form factor UGUALI O INFERIORI al suo
-      // Es: case ATX → accetta mobo ATX, Micro-ATX, Mini-ITX
-      // Es: case Micro-ATX → accetta mobo Micro-ATX, Mini-ITX
-      // Es: case Mini-ITX → solo mobo Mini-ITX
-      const RANK = {'Mini-ITX':1,'Micro-ATX':2,'ATX':3,'E-ATX':4};
-      const moboRank = RANK[mobo._form_factor] || 3;
-      const caseRank = RANK[p._form_factor]    || 3;
-      if (caseRank < moboRank) return false;
+      const mr = RANK[mobo._form_factor] || 3;
+      const cr = RANK[p._form_factor]    || 3;
+      if (cr < mr) return false;
     }
     return true;
   }
 
-  // ── RAM: compatibile col tipo DDR della mobo/cpu ──────────
+  // ── RAM ───────────────────────────────────────────────────
   if (stepId === 'ram') {
     const mobo = b.mobo ? PRODS.find(x=>x.k===b.mobo) : null;
     const cpu  = b.cpu  ? PRODS.find(x=>x.k===b.cpu)  : null;
-    const ddr  = (mobo || cpu) ? (mobo || cpu).ddr : null;
+    const ddr  = (mobo||cpu) ? (mobo||cpu).ddr : null;
     if (ddr && p.ddr && p.ddr !== ddr) return false;
     return true;
   }
 
-  // ── PSU: form factor compatibile col case ─────────────────
+  // ── PSU ───────────────────────────────────────────────────
+  // SFX case → solo SFX/SFX-L PSU
+  // ATX case → solo ATX PSU
   if (stepId === 'psu') {
-    const selCase = b.case ? PRODS.find(x=>x.k===b.case) : null;
-    if (selCase && selCase._psu_form && p._psu_form) {
-      const casePSU = selCase._psu_form;
-      const psuForm = p._psu_form;
-      // Case SFX → accetta solo SFX e SFX-L
-      // Case ATX → accetta ATX (e TFX ma sono rari)
-      if (casePSU === 'SFX' && psuForm === 'ATX') return false;
-      if (casePSU === 'SFX-L' && psuForm === 'ATX') return false;
-      if (casePSU === 'ATX' && psuForm === 'SFX') return false;
-      if (casePSU === 'ATX' && psuForm === 'SFX-L') return false;
+    const sc = b.case ? PRODS.find(x=>x.k===b.case) : null;
+    if (sc && sc._psu_form && p._psu_form) {
+      const cf = sc._psu_form;
+      const pf = p._psu_form;
+      if (cf === 'ATX'   && (pf === 'SFX' || pf === 'SFX-L')) return false;
+      if (cf === 'SFX'   && pf === 'ATX') return false;
+      if (cf === 'SFX-L' && pf === 'ATX') return false;
     }
     return true;
   }
 
-  // ── DISSIPATORE: altezza max compatibile col case ─────────
+  // ── DISSIPATORE ───────────────────────────────────────────
   if (stepId === 'cooler') {
-    const selCase = b.case ? PRODS.find(x=>x.k===b.case) : null;
-    if (selCase && selCase._max_cooler_h && p._cooler_h && p._cooler_h > 0) {
-      if (p._cooler_h > selCase._max_cooler_h) return false;
+    // 1. Altezza fisica vs case
+    const sc = b.case ? PRODS.find(x=>x.k===b.case) : null;
+    if (sc && sc._max_cooler_h && p._cooler_h && p._cooler_h > 0) {
+      if (p._cooler_h > sc._max_cooler_h) return false;
+    }
+    // 2. TDP CPU vs tipo cooler
+    const cpu = b.cpu ? PRODS.find(x=>x.k===b.cpu) : null;
+    if (cpu) {
+      const tdp = getCPUPeak(cpu.d);
+      const tc  = (p._tipo_cool||'').toLowerCase();
+      const isAIO  = tc.includes('aio');
+      const isLow  = tc.includes('low');
+      // CPU >170W (es. 9950X, i9-14900K): solo AIO
+      if (tdp > 170 && !isAIO) return false;
+      // CPU >125W: no low-profile
+      if (tdp > 125 && isLow) return false;
     }
     return true;
   }
@@ -1431,28 +1536,51 @@ function selectSubcat(sid, val) {
 function renderCard(p, sid, isSelected, isIncompat) {
   const pc = prezzoCliente(p.p);
   const badges = [];
-  if (p._linea) badges.push(`<span class="product-badge">${p._linea}</span>`);
-  if (p._chipset) badges.push(`<span class="product-badge">${p._chipset}</span>`);
-  if (p._serie) badges.push(`<span class="product-badge">${p._serie}</span>`);
-  if (p._tipo) badges.push(`<span class="product-badge">${p._tipo}</span>`);
-  if (p._fascia_w) badges.push(`<span class="product-badge punch">${p._fascia_w}</span>`);
-  if (p._cert) badges.push(`<span class="product-badge ok">${p._cert}</span>`);
+  if (p._linea)     badges.push(`<span class="product-badge">${p._linea}</span>`);
+  if (p._chipset)   badges.push(`<span class="product-badge">${p._chipset}</span>`);
+  if (p._serie)     badges.push(`<span class="product-badge">${p._serie}</span>`);
+  if (p._tipo)      badges.push(`<span class="product-badge">${p._tipo}</span>`);
+  if (p._fascia_w)  badges.push(`<span class="product-badge punch">${p._fascia_w}</span>`);
+  if (p._cert)      badges.push(`<span class="product-badge ok">${p._cert}</span>`);
   if (p._tipo_cool) badges.push(`<span class="product-badge">${p._tipo_cool}</span>`);
-  if (p.b && !['AMD','Intel','INTEL'].includes(p.b)) badges.push(`<span class="product-badge">${p.b}</span>`);
+  if (p._form_factor && (sid==='case'||sid==='mobo'))
+    badges.push(`<span class="product-badge">${p._form_factor}</span>`);
+  if (p.b && !['AMD','Intel','INTEL'].includes(p.b))
+    badges.push(`<span class="product-badge">${p.b}</span>`);
+
   const stockTxt = p.stock > 50 ? ''
     : p.stock > 0 ? `<div class="product-stock">Ultime ${p.stock} unità</div>`
     : p.incoming  ? `<div class="product-stock" style="color:#f59e0b">🕐 In arrivo</div>`
     : `<div class="product-stock" style="color:#ef4444">Esaurito</div>`;
+
   const isEsaurito = (p.stock === 0 || p.stock === null) && !p.incoming;
-  const esauritoClass = isEsaurito && !isSelected ? 'product-esaurito' : '';
-  const clickAttr = isEsaurito && !isSelected
-    ? '' // non cliccabile se esaurito
+
+  // Motivo incompatibilità (per tooltip)
+  const reason = isIncompat ? incompatReason(sid, p) : null;
+
+  // Blocca se: esaurito O incompatibile (ma non se già selezionato)
+  const isBlocked = !isSelected && (isEsaurito || isIncompat);
+
+  const classes = [
+    'product-card',
+    isSelected  ? 'selected'         : '',
+    isIncompat  ? 'product-incompat' : '',
+    isEsaurito && !isSelected ? 'product-esaurito' : '',
+  ].filter(Boolean).join(' ');
+
+  const clickAttr = isBlocked
+    ? '' 
     : `data-sid="${sid}" data-k="${encodeURIComponent(p.k)}" onclick="selProdEl(this,event)"`;
-  return `<div class="product-card ${isSelected?'selected':''} ${isIncompat?'product-incompat':''} ${esauritoClass}"
-    ${clickAttr}>
+
+  const incompatBadge = isIncompat && reason
+    ? `<div class="product-incompat-reason">⚠ ${reason}</div>`
+    : '';
+
+  return `<div class="${classes}" ${clickAttr} ${reason ? `title="${reason}"` : ''}>
     <div class="product-name">${p.d}</div>
     <div class="product-price">${fmt(pc)}</div>
     <div class="product-meta">${badges.join('')}</div>
+    ${incompatBadge}
     ${stockTxt}
   </div>`;
 }
@@ -1464,117 +1592,170 @@ function renderProds(sid) {
   const search = (state.search[sid] || '').toLowerCase();
   const selKey = state.build[sid];
 
-  // Se ha sottocategorie e nessuna selezionata, mostra le card sottocategorie
+  // Se ha sottocategorie e nessuna selezionata → mostra le subcat card
   if (sc && !active) {
     const subcatHtml = renderSubcatSelector(sid, allProds, () => {});
     if (subcatHtml) return subcatHtml;
   }
 
-  // Filtra
+  // Filtra per sottocategoria e ricerca
   let filtered = allProds;
-  if (sc && active) {
-    filtered = filtered.filter(p => p[sc.field] === active);
-  }
-  if (search) {
-    filtered = filtered.filter(p => p.d.toLowerCase().includes(search) || (p.b||'').toLowerCase().includes(search));
-  }
+  if (sc && active) filtered = filtered.filter(p => p[sc.field] === active);
+  if (search) filtered = filtered.filter(p =>
+    p.d.toLowerCase().includes(search) || (p.b||'').toLowerCase().includes(search));
 
-  // Ordina: selezionato primo, poi per prezzo
-  filtered.sort((a,b) => {
-    // Selezionato sempre primo
+  // Separa: compatibili vs incompatibili
+  const compatibili   = filtered.filter(p =>  isCompat(sid, p));
+  const incompatibili = filtered.filter(p => !isCompat(sid, p));
+
+  // Sort: selezionato primo → esauriti in fondo → prezzo crescente
+  const sortFn = (a, b) => {
     if (a.k === selKey) return -1;
     if (b.k === selKey) return 1;
-    // Esauriti (stock===0 e no incoming) sempre in fondo
-    const aEsaurito = (a.stock === 0 || a.stock === null) && !a.incoming;
-    const bEsaurito = (b.stock === 0 || b.stock === null) && !b.incoming;
-    if (aEsaurito && !bEsaurito) return 1;
-    if (!aEsaurito && bEsaurito) return -1;
-    // Compatibili prima degli incompatibili
-    const ca = isCompat(sid,a), cb = isCompat(sid,b);
-    if (ca && !cb) return -1;
-    if (!ca && cb) return 1;
-    // Poi per prezzo crescente
+    const aE = (a.stock === 0 || a.stock === null) && !a.incoming;
+    const bE = (b.stock === 0 || b.stock === null) && !b.incoming;
+    if (aE && !bE) return 1;
+    if (!aE && bE) return -1;
     return a.p - b.p;
-  });
+  };
+  compatibili.sort(sortFn);
+  incompatibili.sort(sortFn);
 
-  const backBtn = sc && active ? `<div class="subcat-back" onclick="selectSubcat('${sid}','')">← Torna alle categorie</div>` : '';
-
-  // Banner compatibilità attiva
+  // Banner compatibilità
   let compatBanner = '';
   if (sid === 'case') {
     const mobo = state.build.mobo ? PRODS.find(x=>x.k===state.build.mobo) : null;
-    if (mobo && mobo._form_factor) {
-      compatBanner = `<div class="compat-banner">🔧 Case compatibili con scheda madre <strong>${mobo._form_factor}</strong></div>`;
-    }
+    if (mobo && mobo._form_factor)
+      compatBanner = `<div class="compat-banner">🔧 Mostro i case compatibili con scheda madre <strong>${mobo._form_factor}</strong> — gli altri sono in fondo non selezionabili</div>`;
   }
   if (sid === 'psu') {
     const tdp = calcBuildTDP ? calcBuildTDP() : null;
-    if (tdp && tdp.minPSU > 0) {
-      const selCase = state.build.case ? PRODS.find(x=>x.k===state.build.case) : null;
-      const psuInfo = selCase?._psu_form && selCase._psu_form !== 'ATX' ? ` · Form: <strong>${selCase._psu_form}</strong>` : '';
-      compatBanner = `<div class="compat-banner">⚡ Consumo stimato: <strong>${tdp.minPSU}W</strong> (margine 20% incluso)${psuInfo}</div>`;
-    }
+    const selCase = state.build.case ? PRODS.find(x=>x.k===state.build.case) : null;
+    let psuMsg = '';
+    if (tdp && tdp.minPSU > 0) psuMsg += `Consumo stimato: <strong>${tdp.minPSU}W</strong> (margine 20% incluso)`;
+    if (selCase && selCase._psu_form && selCase._psu_form !== 'ATX')
+      psuMsg += (psuMsg ? ' · ' : '') + `Form factor richiesto: <strong>${selCase._psu_form}</strong>`;
+    if (psuMsg) compatBanner = `<div class="compat-banner">⚡ ${psuMsg}</div>`;
   }
   if (sid === 'cooler') {
     const selCase = state.build.case ? PRODS.find(x=>x.k===state.build.case) : null;
-    if (selCase && selCase._max_cooler_h) {
-      compatBanner = `<div class="compat-banner">📐 Altezza max dissipatore per il tuo case: <strong>${selCase._max_cooler_h}mm</strong></div>`;
+    const cpu = state.build.cpu ? PRODS.find(x=>x.k===state.build.cpu) : null;
+    let coolMsg = '';
+    if (selCase && selCase._max_cooler_h)
+      coolMsg += `Altezza max per il tuo case: <strong>${selCase._max_cooler_h}mm</strong>`;
+    if (cpu) {
+      const tdp = getCPUPeak(cpu.d);
+      if (tdp > 170) coolMsg += (coolMsg?' · ':'') + `CPU da <strong>${tdp}W</strong> — consigliato AIO 360mm`;
+      else if (tdp > 125) coolMsg += (coolMsg?' · ':'') + `CPU da <strong>${tdp}W</strong> — consigliato AIO 240mm o tower alta`;
     }
+    if (coolMsg) compatBanner = `<div class="compat-banner">📐 ${coolMsg}</div>`;
   }
   if (sid === 'ram') {
     const mobo = state.build.mobo ? PRODS.find(x=>x.k===state.build.mobo) : null;
     const cpu  = state.build.cpu  ? PRODS.find(x=>x.k===state.build.cpu)  : null;
     const ddr  = (mobo||cpu) ? (mobo||cpu).ddr : null;
-    if (ddr) {
-      compatBanner = `<div class="compat-banner">🧬 Scheda madre richiede <strong>${ddr}</strong> — mostro solo RAM compatibili</div>`;
-    }
+    if (ddr) compatBanner = `<div class="compat-banner">🧬 La tua scheda madre richiede <strong>${ddr}</strong> — RAM di tipo diverso sono in fondo non selezionabili</div>`;
   }
+
+  const backBtn = sc && active
+    ? `<div class="subcat-back" onclick="selectSubcat('${sid}','')">← Torna alle categorie</div>` : '';
   const searchHtml = `<div class="search-wrap"><input id="search_${sid}" class="search-input" type="text" placeholder="Cerca..." value="${state.search[sid]||''}" oninput="doSearch('${sid}',this.value)"></div>`;
 
+  // Costruisci griglia
+  let gridHtml = '';
   if (filtered.length === 0) {
-    return backBtn + compatBanner + searchHtml + `<div id="productGrid_${sid}"><p style="color:var(--ink4);font-size:12px;padding:20px 0">Nessun prodotto trovato</p></div>`;
+    gridHtml = '<p style="color:var(--ink4);font-size:12px;padding:20px 0">Nessun prodotto trovato</p>';
+  } else {
+    // Compatibili sempre in cima, selezionabili
+    if (compatibili.length > 0) {
+      gridHtml += `<div class="products-grid">${compatibili.map(p => renderCard(p, sid, p.k===selKey, false)).join('')}</div>`;
+    } else if (incompatibili.length > 0) {
+      gridHtml += `<p style="color:rgba(45,212,191,.5);font-size:12px;padding:10px 0 4px">Nessun prodotto compatibile — prova a cambiare la scheda madre o il case.</p>`;
+    }
+    // Incompatibili sotto: opachi, non cliccabili, con divisore
+    if (incompatibili.length > 0) {
+      gridHtml += `<div class="incompat-divider">
+        <span>⚠️ Non compatibili con la tua configurazione (${incompatibili.length})</span>
+        <button class="incompat-toggle" onclick="toggleIncompat('${sid}')">Mostra</button>
+      </div>
+      <div id="incompat_${sid}" class="incompat-section" style="display:none">
+        <div class="products-grid">${incompatibili.map(p => renderCard(p, sid, p.k===selKey, true)).join('')}</div>
+      </div>`;
+    }
   }
 
-  return backBtn + compatBanner + searchHtml + `<div id="productGrid_${sid}"><div class="products-grid">${
-    filtered.map(p => renderCard(p, sid, p.k === selKey, !isCompat(sid,p))).join('')
-  }</div></div>`;
+  return backBtn + compatBanner + searchHtml + `<div id="productGrid_${sid}">${gridHtml}</div>`;
+}
+
+function toggleIncompat(sid) {
+  const el = document.getElementById('incompat_' + sid);
+  const btn = el ? el.previousElementSibling.querySelector('.incompat-toggle') : null;
+  if (!el) return;
+  const isHidden = el.style.display === 'none';
+  el.style.display = isHidden ? 'block' : 'none';
+  if (btn) btn.textContent = isHidden ? 'Nascondi' : 'Mostra';
 }
 
 function doSearch(sid, val) {
   state.search[sid] = val;
   const gridEl = document.getElementById('productGrid_' + sid);
-  if (gridEl) {
-    const allProds = getProds(sid);
-    const sc = SUBCATS[sid];
-    const active = state.filters[sid];
-    const selKey = state.build[sid];
-    let filtered = allProds;
-    if (sc && active) filtered = filtered.filter(p => p[sc.field] === active);
-    if (val) filtered = filtered.filter(p => p.d.toLowerCase().includes(val.toLowerCase()) || (p.b||'').toLowerCase().includes(val.toLowerCase()));
-    filtered.sort((a,b) => {
-      if (a.k === selKey) return -1;
-      if (b.k === selKey) return 1;
-      const ca = isCompat(sid,a), cb = isCompat(sid,b);
-      if (ca && !cb) return -1;
-      if (!ca && cb) return 1;
-      return a.p - b.p;
-    });
-    if (filtered.length === 0) {
-      gridEl.innerHTML = '<p style="color:var(--ink4);font-size:12px;padding:20px 0">Nessun prodotto trovato</p>';
-    } else {
-      gridEl.innerHTML = '<div class="products-grid">' + filtered.map(p => renderCard(p, sid, p.k === selKey, !isCompat(sid,p))).join('') + '</div>';
-    }
-  } else {
-    render();
+  if (!gridEl) { render(); return; }
+
+  const sc     = SUBCATS[sid];
+  const active = state.filters[sid];
+  const selKey = state.build[sid];
+
+  let filtered = getProds(sid);
+  if (sc && active) filtered = filtered.filter(p => p[sc.field] === active);
+  if (val) filtered = filtered.filter(p =>
+    p.d.toLowerCase().includes(val.toLowerCase()) || (p.b||'').toLowerCase().includes(val.toLowerCase()));
+
+  const sortFn = (a, b) => {
+    if (a.k === selKey) return -1;
+    if (b.k === selKey) return 1;
+    const aE = (a.stock===0||a.stock===null) && !a.incoming;
+    const bE = (b.stock===0||b.stock===null) && !b.incoming;
+    if (aE && !bE) return 1;
+    if (!aE && bE) return -1;
+    return a.p - b.p;
+  };
+
+  const compatibili  = filtered.filter(p =>  isCompat(sid, p)).sort(sortFn);
+  const incompatibili = filtered.filter(p => !isCompat(sid, p)).sort(sortFn);
+
+  if (filtered.length === 0) {
+    gridEl.innerHTML = '<p style="color:var(--ink4);font-size:12px;padding:20px 0">Nessun prodotto trovato</p>';
+    return;
   }
+
+  let h = '';
+  if (compatibili.length > 0) {
+    h += '<div class="products-grid">' + compatibili.map(p => renderCard(p, sid, p.k===selKey, false)).join('') + '</div>';
+  }
+  if (incompatibili.length > 0) {
+    h += '<div class="incompat-divider"><span>⚠️ Non compatibili (' + incompatibili.length + ')</span>'
+       + '<button class="incompat-toggle" onclick="toggleIncompat(\'' + sid + '\')">Mostra</button></div>';
+    h += '<div id="incompat_' + sid + '" class="incompat-section" style="display:none">'
+       + '<div class="products-grid">' + incompatibili.map(p => renderCard(p, sid, p.k===selKey, true)).join('') + '</div></div>';
+  }
+  gridEl.innerHTML = h;
 }
 
-// ══ SELEZIONE PRODOTTO ═══════════════════════════════════
+// ── UPDATE SIDEBAR UNIFICATO ──────────────────────────────
+function updateAllExtras() {
+  updateBuildHealth();
+  updateRisparmio();
+  checkAchievements();
+  renderResoconto();
+}
+
+
 function selProd(sid, key) {
   const prev = state.build[sid];
   state.build[sid] = prev === key ? null : key;
   if (state.build[sid]) {
     playClick();
+    checkAndUnlockAchievement(sid, key);
     sparkEffect(event);
   }
   renderSidebar();
@@ -1681,7 +1862,8 @@ function selPlatform(pl) {
   state.build.ram = null;
   state.filters = {};
   playClick();
-
+  if (pl === 'amd') checkAndUnlockAchievement('platform','amd');
+  else checkAndUnlockAchievement('platform','intel');
   render();
 }
 
@@ -1914,13 +2096,12 @@ function calcBuildTDP() {
   let total = 0;
   const breakdown = {};
 
-  const _p = k => PRODS.find(x=>x.k===k);
-  if(b.cpu)    { const p=_p(b.cpu);    if(p){ breakdown.cpu    = getCPUPeak(p.d);        total += breakdown.cpu; } }
-  if(b.gpu)    { const p=_p(b.gpu);    if(p){ breakdown.gpu    = getTDP('gpu',p.d);       total += breakdown.gpu; } }
-  if(b.mobo)   { const p=_p(b.mobo);   if(p){ breakdown.mobo   = getTDP('mobo',p.d);      total += breakdown.mobo; } }
-  if(b.ram)    { const p=_p(b.ram);    if(p){ breakdown.ram    = calcRAMWatt(p.d);        total += breakdown.ram; } }
-  if(b.ssd)    { const p=_p(b.ssd);    if(p){ breakdown.ssd    = getTDP('ssd',p.d);       total += breakdown.ssd; } }
-  if(b.cooler) { const p=_p(b.cooler); if(p){ breakdown.cooler = getTDP('cooler',p.d);    total += breakdown.cooler; } }
+  if(b.cpu) { breakdown.cpu = getCPUPeak(b.cpu.d); total += breakdown.cpu; }
+  if(b.gpu) { breakdown.gpu = getTDP('gpu', b.gpu.d); total += breakdown.gpu; }
+  if(b.mobo) { breakdown.mobo = getTDP('mobo', b.mobo.d); total += breakdown.mobo; }
+  if(b.ram) { breakdown.ram = calcRAMWatt(b.ram.d); total += breakdown.ram; }
+  if(b.ssd) { breakdown.ssd = getTDP('ssd', b.ssd.d); total += breakdown.ssd; }
+  if(b.cooler) { breakdown.cooler = getTDP('cooler', b.cooler.d); total += breakdown.cooler; }
   // Stima ventole case + misc
   breakdown.misc = 25;
   total += 25;
@@ -1980,57 +2161,56 @@ function updateRisparmio() {
 // ── ACHIEVEMENTS ─────────────────────────────────────────
 const ACHIEVEMENTS = {
   // Piattaforma
-  'team_red':   { icon:'🔴', title:'Team Red',   desc:'Hai scelto il lato AMD',   trigger: b => b.piattaforma === 'AMD' },
-  'team_blue':  { icon:'🔵', title:'Team Blue',  desc:'Hai scelto il lato Intel', trigger: b => b.piattaforma === 'Intel' },
-  // CPU — usa PRODS.find() perché b.cpu è una chiave stringa
-  'hunter_3d':      { icon:'🎮', title:'3D Hunter',      desc:'V-Cache: il segreto dei pro',  trigger: b => { const p = b.cpu && PRODS.find(x=>x.k===b.cpu); return p && p.d.toLowerCase().includes('x3d'); } },
-  'no_mercy':       { icon:'💀', title:'No Mercy',       desc:'Ryzen 9 — nessuno ti ferma',   trigger: b => { const p = b.cpu && PRODS.find(x=>x.k===b.cpu); return p && p.d.toLowerCase().includes('ryzen 9'); } },
-  'overclock_king': { icon:'⚡', title:'Overclock King', desc:'Intel i9 — potenza bruta',     trigger: b => { const p = b.cpu && PRODS.find(x=>x.k===b.cpu); return p && p.d.toLowerCase().includes('i9'); } },
-  'il_cervello':    { icon:'🧠', title:'Il Cervello',    desc:'CPU installata nella build',   trigger: b => !!b.cpu },
+  'team_red': { icon:'🔴', title:'Team Red', desc:'Hai scelto il lato AMD', trigger: b => b.piattaforma === 'AMD' },
+  'team_blue': { icon:'🔵', title:'Team Blue', desc:'Hai scelto il lato Intel', trigger: b => b.piattaforma === 'Intel' },
+  // CPU
+  'hunter_3d': { icon:'🎮', title:'3D Hunter', desc:'V-Cache: il segreto dei pro', trigger: b => b.cpu && b.cpu.d.toLowerCase().includes('x3d') },
+  'no_mercy': { icon:'💀', title:'No Mercy', desc:'Ryzen 9 — nessuno ti ferma', trigger: b => b.cpu && b.cpu.d.toLowerCase().includes('ryzen 9') },
+  'overclock_king': { icon:'⚡', title:'Overclock King', desc:'Intel i9 — potenza bruta', trigger: b => b.cpu && b.cpu.d.toLowerCase().includes('i9') },
+  'il_cervello': { icon:'🧠', title:'Il Cervello', desc:'CPU installata nella build', trigger: b => !!b.cpu },
   // Mobo
-  'premium_board': { icon:'👑', title:'Premium Board', desc:'X870/Z790 — solo il meglio', trigger: b => { const p = b.mobo && PRODS.find(x=>x.k===b.mobo); return p && (p.d.toLowerCase().includes('x870') || p.d.toLowerCase().includes('z790')); } },
-  'connesso':      { icon:'🔌', title:'Connesso',      desc:'Scheda madre installata',    trigger: b => !!b.mobo },
+  'premium_board': { icon:'👑', title:'Premium Board', desc:'X870/Z790 — solo il meglio', trigger: b => b.mobo && (b.mobo.d.toLowerCase().includes('x870') || b.mobo.d.toLowerCase().includes('z790')) },
+  'connesso': { icon:'🔌', title:'Connesso', desc:'Scheda madre installata', trigger: b => !!b.mobo },
   // Case
-  'the_castle':  { icon:'🏰', title:'The Castle',       desc:'Full Tower — grande e maestoso', trigger: b => { const p = b.case && PRODS.find(x=>x.k===b.case); return p && p.d.toLowerCase().includes('full'); } },
-  'small_deadly':{ icon:'💎', title:'Small but Deadly', desc:'ITX — piccolo e letale',         trigger: b => { const p = b.case && PRODS.find(x=>x.k===b.case); return p && p.d.toLowerCase().includes('itx'); } },
-  'casa_dolce':  { icon:'🏠', title:'Casa Dolce Casa',  desc:'Il tuo PC ha trovato dimora',    trigger: b => !!b.case },
+  'the_castle': { icon:'🏰', title:'The Castle', desc:'Full Tower — grande e maestoso', trigger: b => b.case && b.case.d.toLowerCase().includes('full') },
+  'small_deadly': { icon:'💎', title:'Small but Deadly', desc:'ITX — piccolo e letale', trigger: b => b.case && b.case.d.toLowerCase().includes('itx') },
+  'casa_dolce': { icon:'🏠', title:'Casa Dolce Casa', desc:'Il tuo PC ha trovato dimora', trigger: b => !!b.case },
   // RAM
-  'speed_demon': { icon:'🚀', title:'Speed Demon', desc:'DDR5-6000+ — oltre i limiti', trigger: b => { const p = b.ram && PRODS.find(x=>x.k===b.ram); return p && (p.d.includes('6000')||p.d.includes('6400')||p.d.includes('6600')||p.d.includes('7200')); } },
-  'elefante':    { icon:'🐘', title:'Elefante',    desc:'64GB+ — memoria infinita',    trigger: b => { const p = b.ram && PRODS.find(x=>x.k===b.ram); return p && (p.d.toLowerCase().includes('64gb')||p.d.toLowerCase().includes('128gb')||p.d.toLowerCase().includes('64 gb')); } },
-  'il_dna':      { icon:'🧬', title:'Il DNA',      desc:'RAM installata nella build',  trigger: b => !!b.ram },
+  'speed_demon': { icon:'🚀', title:'Speed Demon', desc:'DDR5-6000+ — oltre i limiti', trigger: b => b.ram && (b.ram.d.includes('6000') || b.ram.d.includes('6400') || b.ram.d.includes('6600') || b.ram.d.includes('7200')) },
+  'elefante': { icon:'🐘', title:'Elefante', desc:'64GB+ — memoria infinita', trigger: b => b.ram && (b.ram.d.includes('64gb') || b.ram.d.includes('128gb') || b.ram.d.toLowerCase().includes('64 gb')) },
+  'il_dna': { icon:'🧬', title:'Il DNA', desc:'RAM installata nella build', trigger: b => !!b.ram },
   // GPU
-  'vulcano':    { icon:'🌋', title:'Vulcano',    desc:'RTX 5080+ — potenza eruttiva',       trigger: b => { const p = b.gpu && PRODS.find(x=>x.k===b.gpu); return p && (p.d.toLowerCase().includes('5080')||p.d.toLowerCase().includes('5090')); } },
-  'high_roller':{ icon:'🔥', title:'High Roller',desc:'GPU top-tier senza compromessi',     trigger: b => { const p = b.gpu && PRODS.find(x=>x.k===b.gpu); return p && (p.d.toLowerCase().includes('5070 ti')||p.d.toLowerCase().includes('9070 xt')||p.d.toLowerCase().includes('4090')); } },
-  'sweet_spot': { icon:'🎯', title:'Sweet Spot', desc:'Massimo valore per ogni euro',        trigger: b => { const p = b.gpu && PRODS.find(x=>x.k===b.gpu); return p && (p.d.toLowerCase().includes('5060')||p.d.toLowerCase().includes('4070')||p.d.toLowerCase().includes('9060')); } },
-  'la_visione': { icon:'👁️', title:'La Visione', desc:'GPU installata nella build',         trigger: b => !!b.gpu },
+  'vulcano': { icon:'🌋', title:'Vulcano', desc:'RTX 5080+ — potenza eruttiva', trigger: b => b.gpu && (b.gpu.d.toLowerCase().includes('5080') || b.gpu.d.toLowerCase().includes('5090')) },
+  'high_roller': { icon:'🔥', title:'High Roller', desc:'GPU top-tier senza compromessi', trigger: b => b.gpu && (b.gpu.d.toLowerCase().includes('5070 ti') || b.gpu.d.toLowerCase().includes('9070 xt') || b.gpu.d.toLowerCase().includes('4090')) },
+  'sweet_spot': { icon:'🎯', title:'Sweet Spot', desc:'Massimo valore per ogni euro', trigger: b => b.gpu && (b.gpu.d.toLowerCase().includes('5060') || b.gpu.d.toLowerCase().includes('4070') || b.gpu.d.toLowerCase().includes('9060')) },
+  'la_visione': { icon:'👁️', title:'La Visione', desc:'GPU installata nella build', trigger: b => !!b.gpu },
   // SSD
-  'ludicrous':   { icon:'💨', title:'Ludicrous Speed', desc:'Gen 5 — Spaceballs approved',    trigger: b => { const p = b.ssd && PRODS.find(x=>x.k===b.ssd); return p && (p._tipo==='NVMe Gen 5'||p.d.toLowerCase().includes('gen 5')||p.d.toLowerCase().includes('gen5')); } },
-  'flash':       { icon:'⚡', title:'Flash',           desc:'Gen 4 — caricamenti? cosa sono?',trigger: b => { const p = b.ssd && PRODS.find(x=>x.k===b.ssd); return p && (p._tipo==='NVMe Gen 4'||p.d.toLowerCase().includes('gen 4')||p.d.toLowerCase().includes('gen4')); } },
-  'archiviato':  { icon:'💾', title:'Archiviato',      desc:'SSD installato nella build',     trigger: b => !!b.ssd },
+  'ludicrous': { icon:'💨', title:'Ludicrous Speed', desc:'Gen 5 — Spaceballs approved', trigger: b => b.ssd && (b.ssd._tipo === 'gen5' || b.ssd.d.toLowerCase().includes('gen 5') || b.ssd.d.toLowerCase().includes('gen5')) },
+  'flash': { icon:'⚡', title:'Flash', desc:'Gen 4 — caricamenti? cosa sono?', trigger: b => b.ssd && (b.ssd._tipo === 'gen4' || b.ssd.d.toLowerCase().includes('gen 4') || b.ssd.d.toLowerCase().includes('gen4')) },
+  'archiviato': { icon:'💾', title:'Archiviato', desc:'SSD installato nella build', trigger: b => !!b.ssd },
   // PSU
-  'nuclear_power': { icon:'☢️', title:'Nuclear Power', desc:'1000W+ — centrale elettrica', trigger: b => { const p = b.psu && PRODS.find(x=>x.k===b.psu); return p && getPSUWatt(p.d) >= 1000; } },
-  'equilibrio':    { icon:'✅', title:'Equilibrio Perfetto', desc:'PSU perfettamente dimensionata', trigger: b => {
-    const p = b.psu && PRODS.find(x=>x.k===b.psu);
-    if(!p) return false;
-    const w = getPSUWatt(p.d);
+  'nuclear_power': { icon:'☢️', title:'Nuclear Power', desc:'1000W+ — centrale elettrica', trigger: b => b.psu && getPSUWatt(b.psu.d) >= 1000 },
+  'equilibrio': { icon:'✅', title:'Equilibrio Perfetto', desc:'PSU perfettamente dimensionata', trigger: b => {
+    if(!b.psu) return false;
+    const w = getPSUWatt(b.psu.d);
     const {minPSU} = calcBuildTDP();
     return w >= minPSU && w <= minPSU + 150;
   }},
   'alimentato': { icon:'🔋', title:'Alimentato', desc:'PSU installata nella build', trigger: b => !!b.psu },
   // Dissipatore
-  'arctic_circle':  { icon:'❄️', title:'Arctic Circle',  desc:'AIO 360mm — freddo polare',      trigger: b => { const p = b.cooler && PRODS.find(x=>x.k===b.cooler); return p && p.d.toLowerCase().includes('360'); } },
-  'silent_thunder': { icon:'🌬️', title:'Silent Thunder', desc:'Dual tower — silenzioso ma letale',trigger: b => { const p = b.cooler && PRODS.find(x=>x.k===b.cooler); return p && p.d.toLowerCase().includes('dual'); } },
-  'sotto_controllo':{ icon:'🌡️', title:'Sotto Controllo',desc:'Dissipatore installato',           trigger: b => !!b.cooler },
+  'arctic_circle': { icon:'❄️', title:'Arctic Circle', desc:'AIO 360mm — freddo polare', trigger: b => b.cooler && b.cooler.d.toLowerCase().includes('360') },
+  'silent_thunder': { icon:'🌬️', title:'Silent Thunder', desc:'Dual tower — silenzioso ma letale', trigger: b => b.cooler && b.cooler.d.toLowerCase().includes('dual') },
+  'sotto_controllo': { icon:'🌡️', title:'Sotto Controllo', desc:'Dissipatore installato', trigger: b => !!b.cooler },
   // Build completa
   'build_complete': { icon:'🏆', title:'Build Complete', desc:'Sei ufficialmente un PC Builder', trigger: b => Object.keys(b).filter(k => b[k]).length >= 8 },
   'no_budget': { icon:'💸', title:'No Budget No Party', desc:'Build da oltre €3.000', trigger: b => {
-    const tot = Object.values(b).filter(Boolean).reduce((s,k) => { const p=PRODS.find(x=>x.k===k); return s+(p?calcP(p.p):0); }, 0);
+    const tot = Object.values(b).filter(Boolean).reduce((s,p)=>s+calcP(p.p),0);
     return tot > 3000;
   }},
   'budget_master': { icon:'🧠', title:'Budget Master', desc:'Build completa sotto €1.200', trigger: b => {
-    const vals = Object.values(b).filter(Boolean);
-    const tot = vals.reduce((s,k) => { const p=PRODS.find(x=>x.k===k); return s+(p?calcP(p.p):0); }, 0);
-    return vals.length >= 8 && tot < 1200;
+    const done = Object.values(b).filter(Boolean).length;
+    const tot = Object.values(b).filter(Boolean).reduce((s,p)=>s+calcP(p.p),0);
+    return done >= 8 && tot < 1200;
   }},
   'perfectly_balanced': { icon:'⚖️', title:'Perfectly Balanced', desc:'Nessun bottleneck rilevato', trigger: b => {
     const alert = getResocontoAlerts();
@@ -2154,26 +2334,17 @@ function playSound(type) {
 function getResocontoAlerts() {
   const b = state.build;
   const alerts = [];
-  // Helper: risolve chiave stringa → oggetto prodotto
-  const _p = k => k ? PRODS.find(x=>x.k===k) : null;
-  const pCPU    = _p(b.cpu);
-  const pGPU    = _p(b.gpu);
-  const pPSU    = _p(b.psu);
-  const pRAM    = _p(b.ram);
-  const pMobo   = _p(b.mobo);
-  const pSSD    = _p(b.ssd);
-  const pCooler = _p(b.cooler);
 
   // 1. PSU check
-  if(pPSU && (b.cpu || b.gpu)) {
+  if(b.psu && (b.cpu || b.gpu)) {
     const {total, minPSU, breakdown} = calcBuildTDP();
-    const psuW = getPSUWatt(pPSU.d);
+    const psuW = getPSUWatt(b.psu.d);
     if(psuW > 0 && psuW < minPSU) {
       alerts.push({
         level: 'critical',
         icon: '⚡',
         title: 'PSU insufficiente',
-        msg: `La tua PSU ${pPSU.d} (${psuW}W) è sotto il minimo consigliato di ${minPSU}W per questa build (consumo stimato: ${total}W × 1.20 margine).`,
+        msg: `La tua PSU ${b.psu.d} (${psuW}W) è sotto il minimo consigliato di ${minPSU}W per questa build (consumo stimato: ${total}W × 1.20 margine).`,
         step: 'psu',
         btnLabel: 'Cambia PSU'
       });
@@ -2182,35 +2353,35 @@ function getResocontoAlerts() {
         level: 'ok',
         icon: '✅',
         title: 'PSU dimensionata correttamente',
-        msg: `${pPSU.d} (${psuW}W) — margine ideale rispetto al consumo stimato di ${total}W.`,
+        msg: `${b.psu.d} (${psuW}W) — margine ideale rispetto al consumo stimato di ${total}W.`,
         step: null
       });
     }
   }
 
   // 2. Dissipatore inadeguato per TDP CPU
-  if(pCPU && !b.cooler) {
-    const cpuPeak = getCPUPeak(pCPU.d);
+  if(b.cpu && !b.cooler) {
+    const cpuPeak = getCPUPeak(b.cpu.d);
     if(cpuPeak > 88) {
       alerts.push({
         level: 'critical',
         icon: '🌡️',
         title: 'Nessun dissipatore',
-        msg: `${pCPU.d} ha un TDP di picco di ${cpuPeak}W e richiede un dissipatore adeguato. Senza raffreddamento adeguato rischi thermal throttling.`,
+        msg: `${b.cpu.d} ha un TDP di picco di ${cpuPeak}W e richiede un dissipatore adeguato. Senza raffreddamento adeguato rischi thermal throttling.`,
         step: 'cooler',
         btnLabel: 'Aggiungi dissipatore'
       });
     }
-  } else if(pCPU && pCooler) {
-    const cpuPeak = getCPUPeak(pCPU.d);
-    const coolerName = pCooler.d.toLowerCase();
+  } else if(b.cpu && b.cooler) {
+    const cpuPeak = getCPUPeak(b.cpu.d);
+    const coolerName = b.cooler.d.toLowerCase();
     const isTowerOnly = !coolerName.includes('aio') && !coolerName.includes('240') && !coolerName.includes('280') && !coolerName.includes('360');
     if(cpuPeak > 162 && isTowerOnly) {
       alerts.push({
         level: 'warning',
         icon: '🌡️',
         title: 'Dissipatore non ottimale',
-        msg: `${pCPU.d} (${cpuPeak}W picco) su dissipatore a torre — considera un AIO 240/360mm per prestazioni ottimali.`,
+        msg: `${b.cpu.d} (${cpuPeak}W picco) su dissipatore a torre — considera un AIO 240/360mm per prestazioni ottimali.`,
         step: 'cooler',
         btnLabel: 'Migliora dissipatore'
       });
@@ -2218,9 +2389,9 @@ function getResocontoAlerts() {
   }
 
   // 3. RAM non ottimale per CPU
-  if(pCPU && pRAM) {
-    const cpuName = pCPU.d.toLowerCase();
-    const ramName = pRAM.d.toLowerCase();
+  if(b.cpu && b.ram) {
+    const cpuName = b.cpu.d.toLowerCase();
+    const ramName = b.ram.d.toLowerCase();
     const isZen5 = cpuName.includes('9600') || cpuName.includes('9700') || cpuName.includes('9800') || cpuName.includes('9900') || cpuName.includes('9950');
     const isDDR5 = ramName.includes('ddr5');
     const hasGoodSpeed = ramName.includes('6000') || ramName.includes('6200') || ramName.includes('6400') || ramName.includes('6600');
@@ -2229,7 +2400,7 @@ function getResocontoAlerts() {
         level: 'warning',
         icon: '🧬',
         title: 'RAM non ottimizzata per Zen 5',
-        msg: `I Ryzen serie 9000 rendono al meglio con DDR5-6000 o superiore. La tua RAM potrebbe limitare le prestazioni del ${pCPU.d}.`,
+        msg: `I Ryzen serie 9000 rendono al meglio con DDR5-6000 o superiore. La tua RAM potrebbe limitare le prestazioni del ${b.cpu.d}.`,
         step: 'ram',
         btnLabel: 'Ottimizza RAM'
       });
@@ -2239,7 +2410,7 @@ function getResocontoAlerts() {
         level: 'warning',
         icon: '🧬',
         title: 'DDR4 su piattaforma AM5',
-        msg: `AM5 supporta nativamente DDR5. Con DDR4 perdi parte del bandwidth disponibile per ${pCPU.d}.`,
+        msg: `AM5 supporta nativamente DDR5. Con DDR4 perdi parte del bandwidth disponibile per ${b.cpu.d}.`,
         step: 'ram',
         btnLabel: 'Passa a DDR5'
       });
@@ -2247,9 +2418,9 @@ function getResocontoAlerts() {
   }
 
   // 4. Bottleneck CPU/GPU
-  if(pCPU && pGPU) {
-    const cpuName = pCPU.d.toLowerCase();
-    const gpuName = pGPU.d.toLowerCase();
+  if(b.cpu && b.gpu) {
+    const cpuName = b.cpu.d.toLowerCase();
+    const gpuName = b.gpu.d.toLowerCase();
     const isWeakCPU = cpuName.includes('i3') || cpuName.includes('ryzen 3') || cpuName.includes('5500') || cpuName.includes('i5-12');
     const isStrongGPU = gpuName.includes('5080') || gpuName.includes('5090') || gpuName.includes('4090') || gpuName.includes('5070 ti') || gpuName.includes('9070 xt');
     if(isWeakCPU && isStrongGPU) {
@@ -2257,7 +2428,7 @@ function getResocontoAlerts() {
         level: 'critical',
         icon: '⚠️',
         title: 'Bottleneck CPU/GPU rilevato',
-        msg: `${pCPU.d} limiterà significativamente ${pGPU.d}. Il processore non riesce ad alimentare una GPU di questa fascia. Stima: 20-35% di performance persa.`,
+        msg: `${b.cpu.d} limiterà significativamente ${b.gpu.d}. Il processore non riesce ad alimentare una GPU di questa fascia. Stima: 20-35% di performance persa.`,
         step: 'cpu',
         btnLabel: 'Migliora CPU'
       });
@@ -2269,7 +2440,7 @@ function getResocontoAlerts() {
         level: 'info',
         icon: '💡',
         title: 'CPU sovradimensionata',
-        msg: `${pCPU.d} è eccessiva per ${pGPU.d}. Potresti scalare su una CPU meno costosa e investire il risparmio su una GPU migliore.`,
+        msg: `${b.cpu.d} è eccessiva per ${b.gpu.d}. Potresti scalare su una CPU meno costosa e investire il risparmio su una GPU migliore.`,
         step: 'gpu',
         btnLabel: 'Migliora GPU'
       });
@@ -2289,9 +2460,9 @@ function getResocontoAlerts() {
   }
 
   // 6. Upgrade consigliato SSD
-  if(pSSD) {
-    const ssdName = pSSD.d.toLowerCase();
-    if((ssdName.includes('gen 3') || ssdName.includes('gen3')) && pMobo && (pMobo.d.toLowerCase().includes('b650') || pMobo.d.toLowerCase().includes('x870') || pMobo.d.toLowerCase().includes('b850'))) {
+  if(b.ssd && b.ssd.d) {
+    const ssdName = b.ssd.d.toLowerCase();
+    if((ssdName.includes('gen 3') || ssdName.includes('gen3')) && b.mobo && (b.mobo.d.toLowerCase().includes('b650') || b.mobo.d.toLowerCase().includes('x870') || b.mobo.d.toLowerCase().includes('b850'))) {
       alerts.push({
         level: 'info',
         icon: '💡',
@@ -2344,6 +2515,220 @@ function updateAllExtras() {
   renderResoconto();
 }
 
+
+// ══ CHECKOUT ═════════════════════════════════════════════
+function openCheckout() {
+  document.getElementById('modalOverlay').classList.add('open');
+}
+function closeCheckout() {
+  document.getElementById('modalOverlay').classList.remove('open');
+}
+function closeCheckoutIfOutside(e) {
+  if (e.target === document.getElementById('modalOverlay')) closeCheckout();
+}
+function openWhatsApp() {
+  const msg = buildMsg('','','','');
+  window.open(`https://wa.me/393477133866?text=${encodeURIComponent('Ciao! Sono interessato al configuratore PC.')}`, '_blank');
+}
+function buildMsg(name, email, phone, note) {
+  const LABELS = {case:'Case',cpu:'CPU',mobo:'Mobo',ram:'RAM',gpu:'GPU',ssd:'SSD',psu:'PSU',cooler:'Cooler',ventole:'Ventole'};
+  let totalForn = 0;
+  let lines = `*Configuratore PC — Minimal Gamers*\n`;
+  if (name) lines += `*Cliente:* ${name}\n`;
+  if (email) lines += `*Email:* ${email}\n`;
+  if (phone) lines += `*Tel:* ${phone}\n`;
+  lines += '\n*Build:*\n';
+  Object.entries(state.build).forEach(([sid,key]) => {
+    if (!key) return;
+    const p = PRODS.find(x=>x.k===key);
+    if (!p) return;
+    totalForn += p.p;
+    lines += `• ${LABELS[sid]||sid}: ${p.d} — ${fmt(p.p*IVA)}\n`;
+  });
+  const totalComp = totalForn * IVA;
+  const impl = calcImpl(totalComp);
+  lines += `
+*Totale:* ${fmt(totalComp + impl)}`;
+  if (note) lines += `
+*Note:* ${note}`;
+  return lines;
+}
+function submitOrder() {
+  const name  = document.getElementById('ord-name')?.value || '';
+  const email = document.getElementById('ord-email')?.value || '';
+  const phone = document.getElementById('ord-phone')?.value || '';
+  const note  = document.getElementById('ord-note')?.value  || '';
+  if (!name || !email || !phone) { showToast('Compila tutti i campi obbligatori'); return; }
+  const msg = buildMsg(name, email, phone, note);
+  const url = `https://wa.me/393477133866?text=${encodeURIComponent(msg)}`;
+  window.open(url, '_blank');
+  closeCheckout();
+}
+function shareLink() {
+  const p = new URLSearchParams();
+  if (state.piattaforma) p.set('pf', state.piattaforma);
+  if (state.socket)      p.set('sk', state.socket);
+  Object.entries(state.build).forEach(([k,v]) => { if(v) p.set(k,v); });
+  const url = location.href.split('?')[0] + '?' + p.toString();
+  navigator.clipboard.writeText(url).then(() => showToast('Link copiato!'));
+}
+
+// ══ TOAST ════════════════════════════════════════════════
+function showToast(msg) {
+  const t = document.getElementById('toast');
+  if (!t) return;
+  t.textContent = msg;
+  t.classList.add('show');
+  setTimeout(() => t.classList.remove('show'), 2500);
+}
+
+// ══ SUONI ════════════════════════════════════════════════
+function playClick() {
+  if (!soundEnabled) return;
+  try {
+    const ctx = new (window.AudioContext || window.webkitAudioContext)();
+    const osc = ctx.createOscillator();
+    const gain = ctx.createGain();
+    osc.connect(gain); gain.connect(ctx.destination);
+    osc.frequency.setValueAtTime(800, ctx.currentTime);
+    osc.frequency.exponentialRampToValueAtTime(400, ctx.currentTime + 0.1);
+    gain.gain.setValueAtTime(0.08, ctx.currentTime);
+    gain.gain.exponentialRampToValueAtTime(0.001, ctx.currentTime + 0.1);
+    osc.start(); osc.stop(ctx.currentTime + 0.1);
+  } catch(e) {}
+}
+function playWhoosh() {
+  if (!soundEnabled) return;
+  try {
+    const ctx = new (window.AudioContext || window.webkitAudioContext)();
+    const osc = ctx.createOscillator();
+    const gain = ctx.createGain();
+    osc.connect(gain); gain.connect(ctx.destination);
+    osc.frequency.setValueAtTime(200, ctx.currentTime);
+    osc.frequency.exponentialRampToValueAtTime(800, ctx.currentTime + 0.15);
+    gain.gain.setValueAtTime(0.06, ctx.currentTime);
+    gain.gain.exponentialRampToValueAtTime(0.001, ctx.currentTime + 0.15);
+    osc.start(); osc.stop(ctx.currentTime + 0.15);
+  } catch(e) {}
+}
+
+// ══ SPARK EFFECT ═════════════════════════════════════════
+function sparkEffect(e) {
+  if (!e || !e.currentTarget) return;
+  const rect = e.currentTarget.getBoundingClientRect();
+  const x = e.clientX - rect.left;
+  const y = e.clientY - rect.top;
+  for (let i = 0; i < 8; i++) {
+    const spark = document.createElement('div');
+    const angle = (Math.PI * 2 / 8) * i;
+    const distance = 30 + Math.random() * 20;
+    const dx = Math.cos(angle) * distance;
+    const dy = Math.sin(angle) * distance;
+    spark.style.cssText = `
+      position:absolute;width:4px;height:4px;border-radius:50%;
+      background:${Math.random()>.5?'var(--teal)':'var(--punch)'};
+      pointer-events:none;z-index:9999;
+      left:${e.clientX}px;top:${e.clientY}px;
+      transform:translate(-50%,-50%);
+      transition:all .4s ease-out;opacity:1;\n    `;
+    document.body.appendChild(spark);
+    requestAnimationFrame(() => {
+      spark.style.transform = `translate(calc(-50% + ${dx}px), calc(-50% + ${dy}px))`;
+      spark.style.opacity = '0';
+    });
+    setTimeout(() => spark.remove(), 400);
+  }
+}
+
+// ══ CANVAS PARTICELLE ════════════════════════════════════
+(function initParticles() {
+  const canvas = document.getElementById('particleCanvas');
+  if (!canvas) return;
+  const ctx = canvas.getContext('2d');
+  let W, H, particles = [];
+  
+  function resize() {
+    W = canvas.width = window.innerWidth;
+    H = canvas.height = window.innerHeight;
+  }
+  resize();
+  window.addEventListener('resize', resize);
+
+  const COLORS = ['rgba(45,212,191,', 'rgba(217,70,168,', 'rgba(255,255,255,'];
+  
+  for (let i = 0; i < 80; i++) {
+    particles.push({
+      x: Math.random() * window.innerWidth,
+      y: Math.random() * window.innerHeight,
+      r: Math.random() * 1.5 + .5,
+      vx: (Math.random()-.5) * .4,
+      vy: -(Math.random() * .6 + .2),
+      color: COLORS[Math.floor(Math.random()*COLORS.length)],
+      alpha: Math.random() * .6 + .2,
+      phase: Math.random() * Math.PI * 2,
+    });
+  }
+
+  function draw() {
+    ctx.clearRect(0, 0, W, H);
+    particles.forEach((p, i) => {
+      p.x += p.vx + Math.sin(Date.now()*.001 + p.phase) * .3;
+      p.y += p.vy;
+      if (p.y < -10) { p.y = H + 10; p.x = Math.random() * W; }
+      if (p.x < -10) p.x = W + 10;
+      if (p.x > W + 10) p.x = -10;
+
+      // Glow
+      const grad = ctx.createRadialGradient(p.x, p.y, 0, p.x, p.y, p.r * 4);
+      grad.addColorStop(0, p.color + p.alpha + ')');
+      grad.addColorStop(1, p.color + '0)');
+      ctx.beginPath();
+      ctx.arc(p.x, p.y, p.r * 4, 0, Math.PI * 2);
+      ctx.fillStyle = grad;
+      ctx.fill();
+
+      // Nucleo
+      ctx.beginPath();
+      ctx.arc(p.x, p.y, p.r, 0, Math.PI * 2);
+      ctx.fillStyle = p.color + (p.alpha * 1.5).toFixed(2) + ')';
+      ctx.fill();
+
+      // Connessioni
+      for (let j = i + 1; j < Math.min(i + 6, particles.length); j++) {
+        const p2 = particles[j];
+        const dx = p.x - p2.x, dy = p.y - p2.y;
+        const dist = Math.sqrt(dx*dx + dy*dy);
+        if (dist < 100) {
+          ctx.beginPath();
+          ctx.moveTo(p.x, p.y);
+          ctx.lineTo(p2.x, p2.y);
+          ctx.strokeStyle = `rgba(45,212,191,${(.15 * (1 - dist/100)).toFixed(3)})`;
+          ctx.lineWidth = .5;
+          ctx.stroke();
+        }
+      }
+    });
+    requestAnimationFrame(draw);
+  }
+  draw();
+})();
+
+// ══ URL PARAMS ═══════════════════════════════════════════
+function loadFromUrl() {
+  const p = new URLSearchParams(location.search);
+  if (p.get('pf')) state.piattaforma = p.get('pf');
+  if (p.get('sk')) state.socket = p.get('sk');
+  Object.keys(state.build).forEach(k => { if(p.get(k)) state.build[k] = p.get(k); });
+}
+
+// ══ ALIAS COMPATIBILITÀ ═══════════════════════════════════
+function buildResoconto() {
+  if (typeof getResocontoAlerts === 'function') return getResocontoAlerts();
+  return [];
+}
+function checkAndUnlockAchievement(sid, key) {
+  if (typeof checkAchievements === 'function') checkAchievements(sid, key);
+}
 
 // ══ CHECKOUT ═════════════════════════════════════════════
 function openCheckout() {

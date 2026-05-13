@@ -587,18 +587,96 @@ html,body{background:var(--bg);color:var(--ink);font-family:var(--font);min-heig
 
 /* ── RESPONSIVE MOBILE ───────────────────────────────────── */
 @media(max-width:768px){
-  .main-wrap{display:block;padding-bottom:80px}
+  /* ── Layout base ── */
+  .main-wrap{display:block;padding-bottom:88px}
   .sidebar{display:none!important}
+
+  /* ── Topbar ── */
   .topbar{height:52px}
   .topbar-sounds{display:none}
-  .progress-strip{top:52px;height:36px}
-  .scalapay-dynamic{top:52px}
-  .platform-grid{grid-template-columns:1fr 1fr}
-  .subcat-grid{grid-template-columns:1fr 1fr}
-  .mbb-bar{display:flex}
+  .topbar-brand{gap:8px}
+  .topbar-logo{width:28px;height:28px}
+  .topbar-name{font-size:13px}
+
+  /* ── Progress strip ── */
+  .progress-strip{top:52px;height:36px;gap:0}
+  .step-pill{padding:0 8px;font-size:9px;gap:4px}
+  .step-pill-num{width:16px;height:16px;font-size:7px}
+  .scalapay-dynamic{top:52px;font-size:10px;padding:6px 16px}
+
+  /* ── Content padding ── */
+  .content{padding:14px 14px}
+
+  /* ── Step header ── */
+  .step-header{padding:14px 0 12px}
+  .step-title{font-size:clamp(20px,6vw,26px)}
+  .step-subtitle{font-size:11px}
+
+  /* ── Piattaforma ── */
+  .pf-brand-row{flex-direction:row;gap:8px}
+  .pf-brand{padding:18px 12px}
+  .pf-brand-name{font-size:clamp(28px,10vw,40px)}
+  .pf-brand-sub{font-size:9px}
+  .pf-brand-badge{font-size:7px;padding:2px 7px;margin-top:7px}
+  .pf-socket-grid{grid-template-columns:1fr 1fr}
+  .pf-socket-card{padding:10px 12px}
+
+  /* ── Subcategorie: 1 colonna su mobile stretto, 2 su largo ── */
+  .subcat-grid{grid-template-columns:1fr 1fr;gap:8px}
+  .subcat-card{padding:14px 12px 12px}
+  .subcat-icon{width:32px;height:32px;margin-bottom:8px;border-radius:8px}
+  .subcat-icon svg{width:16px;height:16px}
+  .subcat-name{font-size:12px}
+  .subcat-note{font-size:9px}
+
+  /* ── Prodotti: griglia adattiva ── */
+  .products-grid{grid-template-columns:1fr 1fr;gap:8px}
+  .product-card{padding:11px 10px}
+  .product-name{font-size:11px;margin-bottom:4px}
+  .product-price{font-size:14px}
+  .product-meta{gap:3px;margin-top:6px}
+  .product-badge{font-size:7px;padding:1px 5px}
+
+  /* ── Search ── */
+  .search-input{font-size:16px;padding:9px 12px}
+
+  /* ── Footer ── */
+  .footer-inner{
+    flex-direction:column;align-items:flex-start;gap:16px;
+    padding:20px 16px 24px;
+  }
+  .footer-feats{gap:12px}
+  .footer-feat{gap:6px}
+  .footer-feat-icon{width:28px;height:28px;border-radius:6px}
+  .footer-feat-t{font-size:10px}
+  .footer-feat-s{font-size:8px}
+  .footer-cta{align-items:flex-start;width:100%}
+  .footer-wa-btn{width:100%;justify-content:center}
+
+  /* ── Achievement ── */
+  #achievementContainer{bottom:96px;right:12px;left:12px}
+  .achievement-popup{min-width:0;width:100%}
+
+  /* ── Modal bottom sheet ── */
   .modal-overlay{align-items:flex-end;padding:0}
-  .modal{width:100%;max-width:100%;border-radius:20px 20px 0 0;max-height:92vh;overflow-y:auto;border-left:none;border-right:none;border-bottom:none}
+  .modal{
+    width:100%;max-width:100%;
+    border-radius:20px 20px 0 0;
+    max-height:92vh;overflow-y:auto;
+    border-left:none;border-right:none;border-bottom:none;
+  }
   .form-input{font-size:16px}
+
+  /* ── Mobile bottom bar ── */
+  .mbb-bar{display:flex}
+}
+
+/* Extra stretto: sotto 380px tutto su 1 colonna */
+@media(max-width:380px){
+  .pf-brand-row{gap:6px}
+  .subcat-grid{grid-template-columns:1fr}
+  .products-grid{grid-template-columns:1fr}
+  .pf-socket-grid{grid-template-columns:1fr 1fr}
 }
 @media(min-width:769px){.mbb-bar{display:none!important}}
 </style>

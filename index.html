@@ -356,15 +356,31 @@ html,body{background:var(--bg);color:var(--ink);font-family:var(--font);min-heig
 
 /* Pagamenti */
 .sp-sidebar{
-  display:flex;align-items:stretch;gap:0;
-  padding:10px 16px;border-bottom:1px solid rgba(255,255,255,.04);
+  display:flex;flex-direction:column;gap:6px;
+  padding:10px 16px 12px;border-bottom:1px solid rgba(255,255,255,.04);
 }
-.sp-method{flex:1;display:flex;align-items:center;gap:6px;padding:0 8px;border-right:1px solid rgba(255,255,255,.06)}
-.sp-method:first-child{padding-left:0}
-.sp-method:last-child{border-right:none;padding-right:0}
-.sp-logo2{font-size:11px;color:var(--teal);font-weight:800;letter-spacing:-.01em;flex-shrink:0}
-.sp-txt{font-size:9px;color:rgba(255,255,255,.35);line-height:1.4}
+.sp-sidebar-title{font-size:9px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:rgba(255,255,255,.25);margin-bottom:2px}
+.sp-method{
+  display:flex;align-items:center;gap:10px;
+  padding:7px 10px;border-radius:8px;
+  background:rgba(255,255,255,.03);
+  border:1px solid rgba(255,255,255,.06);
+  transition:background .15s;
+}
+.sp-method:hover{background:rgba(45,212,191,.05);border-color:rgba(45,212,191,.15)}
+.sp-logo2{
+  font-size:10px;font-weight:900;letter-spacing:.02em;
+  color:#07050d;background:var(--teal);
+  padding:3px 7px;border-radius:4px;
+  flex-shrink:0;min-width:56px;text-align:center;
+}
+.sp-logo2.klarna{background:#ffb3c7;color:#1a1a2e}
+.sp-logo2.paypal{background:#003087;color:#fff}
+.sp-txt{font-size:10px;color:rgba(255,255,255,.45);line-height:1.3;flex:1}
 .sp-rate{color:var(--teal);font-weight:700}
+.sp-rate.klarna{color:#ffb3c7}
+.sp-rate.paypal{color:#60a5fa}
+.sp-months{font-size:13px;font-weight:800;color:var(--ink2);margin-left:auto;letter-spacing:-.02em}
 
 /* CTA group */
 .cta-group{padding:12px 16px;display:none;flex-direction:column;gap:7px}
@@ -639,17 +655,21 @@ html,body{background:var(--bg);color:var(--ink);font-family:var(--font);min-heig
       <div class="risp-val" id="risparmioVal"></div>
     </div>
     <div class="sp-sidebar">
+      <div class="sp-sidebar-title">Pagamento rateale</div>
       <div class="sp-method">
         <div class="sp-logo2">Scalapay</div>
-        <div class="sp-txt">Paga in <span class="sp-rate">36 rate</span><br>1ª rata tra 30gg</div>
+        <div class="sp-txt">Paga in <span class="sp-rate">36 rate</span><br>Prima rata tra 30gg</div>
+        <div class="sp-months">×36</div>
       </div>
       <div class="sp-method">
-        <div class="sp-logo2">Klarna</div>
-        <div class="sp-txt">Paga in <span class="sp-rate">12 rate</span><br>1ª rata tra 30gg</div>
+        <div class="sp-logo2 klarna">Klarna</div>
+        <div class="sp-txt">Paga in <span class="sp-rate klarna">12 rate</span><br>Prima rata tra 30gg</div>
+        <div class="sp-months">×12</div>
       </div>
       <div class="sp-method">
-        <div class="sp-logo2">PayPal</div>
-        <div class="sp-txt">Paga in <span class="sp-rate">24 rate</span><br>1ª rata tra 30gg</div>
+        <div class="sp-logo2 paypal">PayPal</div>
+        <div class="sp-txt">Paga in <span class="sp-rate paypal">24 rate</span><br>Prima rata tra 30gg</div>
+        <div class="sp-months">×24</div>
       </div>
     </div>
     <div class="cta-group" id="ctaGroup">
@@ -674,7 +694,15 @@ html,body{background:var(--bg);color:var(--ink);font-family:var(--font);min-heig
     <div class="footer-feats">
       <div class="footer-feat">
         <div class="footer-feat-icon"><svg viewBox="0 0 24 24" fill="none" stroke="rgba(255,255,255,.5)" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" width="16" height="16"><rect x="1" y="4" width="22" height="16" rx="2"/><line x1="1" y1="10" x2="23" y2="10"/></svg></div>
-        <div><div class="footer-feat-t">Scalapay</div><div class="footer-feat-s">36 rate</div></div>
+        <div><div class="footer-feat-t" style="color:var(--teal)">Scalapay</div><div class="footer-feat-s">36 rate</div></div>
+      </div>
+      <div class="footer-feat">
+        <div class="footer-feat-icon"><svg viewBox="0 0 24 24" fill="none" stroke="rgba(255,255,255,.5)" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" width="16" height="16"><rect x="1" y="4" width="22" height="16" rx="2"/><line x1="1" y1="10" x2="23" y2="10"/></svg></div>
+        <div><div class="footer-feat-t" style="color:#ffb3c7">Klarna</div><div class="footer-feat-s">12 rate</div></div>
+      </div>
+      <div class="footer-feat">
+        <div class="footer-feat-icon"><svg viewBox="0 0 24 24" fill="none" stroke="rgba(255,255,255,.5)" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" width="16" height="16"><rect x="1" y="4" width="22" height="16" rx="2"/><line x1="1" y1="10" x2="23" y2="10"/></svg></div>
+        <div><div class="footer-feat-t" style="color:#60a5fa">PayPal</div><div class="footer-feat-s">24 rate</div></div>
       </div>
       <div class="footer-feat">
         <div class="footer-feat-icon"><svg viewBox="0 0 24 24" fill="none" stroke="rgba(255,255,255,.5)" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" width="16" height="16"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg></div>
@@ -1261,10 +1289,9 @@ function renderCard(p, sid, isSelected, isIncompat) {
   if (p.b && !['AMD','Intel','INTEL'].includes(p.b)) badges.push(`<span class="product-badge">${p.b}</span>`);
   const stockTxt = p.stock > 50 ? '' : p.stock > 0 ? `<div class="product-stock">Ultime ${p.stock} unità</div>` : `<div class="product-stock" style="color:#ef4444">Esaurito</div>`;
   return `<div class="product-card ${isSelected?'selected':''} ${isIncompat?'product-incompat':''}"
-    onclick="selProd('${sid}','${p.k.replace(/'/g,"\'")}')">
+    data-sid="${sid}" data-k="${encodeURIComponent(p.k)}" onclick="selProdEl(this,event)">
     <div class="product-name">${p.d}</div>
     <div class="product-price">${fmt(pc)}</div>
-    <div class="product-price-sub">Fornitore: ${fmt(p.p)}</div>
     <div class="product-meta">${badges.join('')}</div>
     ${stockTxt}
   </div>`;
@@ -1303,20 +1330,44 @@ function renderProds(sid) {
   });
 
   const backBtn = sc && active ? `<div class="subcat-back" onclick="selectSubcat('${sid}','')">← Torna alle categorie</div>` : '';
-  const searchHtml = `<div class="search-wrap"><input class="search-input" type="text" placeholder="Cerca..." value="${state.search[sid]||''}" oninput="doSearch('${sid}',this.value)"></div>`;
+  const searchHtml = `<div class="search-wrap"><input id="search_${sid}" class="search-input" type="text" placeholder="Cerca..." value="${state.search[sid]||''}" oninput="doSearch('${sid}',this.value)"></div>`;
 
   if (filtered.length === 0) {
-    return backBtn + searchHtml + `<p style="color:var(--ink4);font-size:12px;padding:20px 0">Nessun prodotto trovato</p>`;
+    return backBtn + searchHtml + `<div id="productGrid_${sid}"><p style="color:var(--ink4);font-size:12px;padding:20px 0">Nessun prodotto trovato</p></div>`;
   }
 
-  return backBtn + searchHtml + `<div class="products-grid">${
+  return backBtn + searchHtml + `<div id="productGrid_${sid}"><div class="products-grid">${
     filtered.map(p => renderCard(p, sid, p.k === selKey, !isCompat(sid,p))).join('')
-  }</div>`;
+  }</div></div>`;
 }
 
 function doSearch(sid, val) {
   state.search[sid] = val;
-  render();
+  const gridEl = document.getElementById('productGrid_' + sid);
+  if (gridEl) {
+    const allProds = getProds(sid);
+    const sc = SUBCATS[sid];
+    const active = state.filters[sid];
+    const selKey = state.build[sid];
+    let filtered = allProds;
+    if (sc && active) filtered = filtered.filter(p => p[sc.field] === active);
+    if (val) filtered = filtered.filter(p => p.d.toLowerCase().includes(val.toLowerCase()) || (p.b||'').toLowerCase().includes(val.toLowerCase()));
+    filtered.sort((a,b) => {
+      if (a.k === selKey) return -1;
+      if (b.k === selKey) return 1;
+      const ca = isCompat(sid,a), cb = isCompat(sid,b);
+      if (ca && !cb) return -1;
+      if (!ca && cb) return 1;
+      return a.p - b.p;
+    });
+    if (filtered.length === 0) {
+      gridEl.innerHTML = '<p style="color:var(--ink4);font-size:12px;padding:20px 0">Nessun prodotto trovato</p>';
+    } else {
+      gridEl.innerHTML = '<div class="products-grid">' + filtered.map(p => renderCard(p, sid, p.k === selKey, !isCompat(sid,p))).join('') + '</div>';
+    }
+  } else {
+    render();
+  }
 }
 
 // ══ SELEZIONE PRODOTTO ═══════════════════════════════════
@@ -1335,6 +1386,12 @@ function selProd(sid, key) {
     const btn = document.getElementById('btnNext');
     if (btn && state.build[sid]) btn.scrollIntoView({behavior:'smooth', block:'center'});
   }, 100);
+}
+
+function selProdEl(el, evt) {
+  const sid = el.dataset.sid;
+  const key = decodeURIComponent(el.dataset.k);
+  selProd(sid, key, evt);
 }
 
 // ══ NAVIGAZIONE ══════════════════════════════════════════

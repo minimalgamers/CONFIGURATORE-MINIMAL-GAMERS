@@ -1032,9 +1032,14 @@ function isCompat(stepId, p) {
   const RANK = {'Mini-ITX':1,'Micro-ATX':2,'ATX':3,'E-ATX':4};
 
   // ── CPU ───────────────────────────────────────────────────
+  // Se socket scelto: match esatto richiesto, prodotti senza socket esclusi
   if (stepId === 'cpu') {
-    if (sk && p.socket && p.socket !== sk) return false;
-    if (!sk) {
+    if (sk) {
+      // Socket scelto → DEVE matchare esattamente
+      if (!p.socket) return false;       // prodotto senza socket → escluso
+      if (p.socket !== sk) return false; // socket diverso → escluso
+    } else if (pi) {
+      // Solo piattaforma → match piattaforma
       if (pi === 'amd'   && p.platform !== 'AMD')   return false;
       if (pi === 'intel' && p.platform !== 'INTEL') return false;
     }
@@ -1043,7 +1048,10 @@ function isCompat(stepId, p) {
 
   // ── SCHEDA MADRE ──────────────────────────────────────────
   if (stepId === 'mobo') {
-    if (sk && p.socket && p.socket !== sk) return false;
+    if (sk) {
+      if (!p.socket) return false;
+      if (p.socket !== sk) return false;
+    }
     return true;
   }
 
@@ -1326,6 +1334,11 @@ function renderProgress() {
 }
 
 function goStep(i) {
+  // Blocca salto a step >= 1 se non c'è il socket
+  if (i >= 1 && state.piattaforma && !state.socket) {
+    showToast('Scegli prima il socket (AM5/AM4 o LGA)');
+    return;
+  }
   if (i >= 0 && i < STEPS.length) {
     state.step = i;
     render();
@@ -1793,6 +1806,12 @@ function selProdEl(el, evt) {
 
 // ══ NAVIGAZIONE ══════════════════════════════════════════
 function nextStep() {
+  const curStep = STEPS[state.step];
+  // Blocca passaggio se piattaforma scelta ma socket no
+  if (curStep && curStep.id === 'piattaforma' && state.piattaforma && !state.socket) {
+    showToast('Scegli prima il socket (AM5/AM4 o LGA) prima di continuare');
+    return;
+  }
   if (state.step < STEPS.length - 1) {
     state.step++;
     playWhoosh();

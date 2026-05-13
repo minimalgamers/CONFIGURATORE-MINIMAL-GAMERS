@@ -270,6 +270,21 @@ html,body{background:var(--bg);color:var(--ink);font-family:var(--font);min-heig
 }
 .product-card:hover{border-color:rgba(45,212,191,.25);transform:translateY(-1px);background:rgba(255,255,255,.04)}
 .product-card.selected{border-color:var(--teal);background:rgba(45,212,191,.06)}
+.compat-banner{
+  font-size:11px;color:rgba(45,212,191,.8);
+  background:rgba(45,212,191,.07);
+  border:1px solid rgba(45,212,191,.2);
+  border-radius:8px;padding:8px 12px;margin-bottom:12px;
+  line-height:1.5;
+}
+.compat-banner strong{color:var(--teal)}
+.product-esaurito{
+  opacity:.38;
+  filter:grayscale(.6);
+  cursor:not-allowed;
+  pointer-events:none;
+}
+.product-esaurito .product-price{color:var(--ink4)!important}
 .product-card.selected::after{
   content:'✓';position:absolute;top:8px;right:8px;
   width:18px;height:18px;border-radius:50%;
@@ -783,8 +798,19 @@ html,body{background:var(--bg);color:var(--ink);font-family:var(--font);min-heig
         <div><div class="footer-feat-t" style="color:#60a5fa">PayPal</div><div class="footer-feat-s">24 rate</div></div>
       </div>
       <div class="footer-feat">
-        <div class="footer-feat-icon"><svg viewBox="0 0 24 24" fill="none" stroke="rgba(255,255,255,.5)" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" width="16" height="16"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg></div>
-        <div><div class="footer-feat-t">Napoli</div><div class="footer-feat-s">Consegna Italia</div></div>
+        <div class="footer-feat-icon"><svg viewBox="0 0 32 32" fill="none" width="16" height="16" xmlns="http://www.w3.org/2000/svg">
+          <!-- furgone corriere -->
+          <rect x="1" y="10" width="19" height="13" rx="1.5" fill="none" stroke="rgba(255,255,255,.5)" stroke-width="1.6"/>
+          <path d="M20 14h5.5l3.5 4.5V23h-9V14z" fill="none" stroke="rgba(255,255,255,.5)" stroke-width="1.6" stroke-linejoin="round"/>
+          <!-- ruote -->
+          <circle cx="7" cy="23" r="2.2" fill="none" stroke="rgba(255,255,255,.5)" stroke-width="1.6"/>
+          <circle cx="24" cy="23" r="2.2" fill="none" stroke="rgba(255,255,255,.5)" stroke-width="1.6"/>
+          <!-- stelle Europa (3 stilizzate) -->
+          <circle cx="10" cy="16" r=".9" fill="rgba(255,255,255,.45)"/>
+          <circle cx="13" cy="14.2" r=".9" fill="rgba(255,255,255,.45)"/>
+          <circle cx="16" cy="16" r=".9" fill="rgba(255,255,255,.45)"/>
+        </svg></div>
+        <div><div class="footer-feat-t">Spedizione</div><div class="footer-feat-s">In tutta Europa</div></div>
       </div>
       <div class="footer-feat">
         <div class="footer-feat-icon"><svg viewBox="0 0 24 24" fill="none" stroke="rgba(255,255,255,.5)" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" width="16" height="16"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg></div>
@@ -911,6 +937,7 @@ function isCompat(stepId, p) {
   const pi = state.piattaforma;
   const sk = state.socket;
 
+  // ── CPU ──────────────────────────────────────────────────
   if (stepId === 'cpu') {
     if (sk && p.socket !== sk) return false;
     if (!sk) {
@@ -919,10 +946,14 @@ function isCompat(stepId, p) {
     }
     return true;
   }
+
+  // ── SCHEDA MADRE ─────────────────────────────────────────
   if (stepId === 'mobo') {
     if (sk && p.socket !== sk) return false;
     return true;
   }
+
+  // ── RAM ──────────────────────────────────────────────────
   if (stepId === 'ram') {
     const mobo = b.mobo ? PRODS.find(x=>x.k===b.mobo) : null;
     const cpu  = b.cpu  ? PRODS.find(x=>x.k===b.cpu)  : null;
@@ -930,6 +961,47 @@ function isCompat(stepId, p) {
     if (ddr && p.ddr && p.ddr !== ddr) return false;
     return true;
   }
+
+  // ── CASE: compatibile col form factor della mobo ─────────
+  if (stepId === 'case') {
+    const mobo = b.mobo ? PRODS.find(x=>x.k===b.mobo) : null;
+    if (mobo && mobo._form_factor && p._form_factor) {
+      const ORDER = { 'Mini-ITX':1, 'Micro-ATX':2, 'ATX':3, 'E-ATX':4 };
+      const moboRank = ORDER[mobo._form_factor] || 3;
+      const caseRank = ORDER[p._form_factor]    || 3;
+      // Il case deve supportare almeno il form factor della mobo
+      // Mini-ITX case → solo Mini-ITX mobo
+      // Micro-ATX case → Mini-ITX e Micro-ATX
+      // ATX case → Mini-ITX, Micro-ATX, ATX
+      // E-ATX case → tutto
+      if (caseRank < moboRank) return false;
+    }
+    return true;
+  }
+
+  // ── PSU: form factor + wattaggio adeguato ────────────────
+  if (stepId === 'psu') {
+    // Form factor: il case determina quale PSU accetta
+    const selectedCase = b.case ? PRODS.find(x=>x.k===b.case) : null;
+    if (selectedCase && selectedCase._psu_form && p._psu_form) {
+      const casePSU = selectedCase._psu_form;
+      const psuForm = p._psu_form;
+      // SFX case accetta SFX e SFX-L, ATX case accetta ATX
+      if (casePSU === 'SFX' && psuForm === 'ATX') return false;
+      if (casePSU === 'SFX-L' && psuForm === 'ATX') return false;
+    }
+    return true;
+  }
+
+  // ── DISSIPATORE: altezza compatibile col case ─────────────
+  if (stepId === 'cooler') {
+    const selectedCase = b.case ? PRODS.find(x=>x.k===b.case) : null;
+    if (selectedCase && selectedCase._max_cooler_h && p._cooler_h && p._cooler_h > 0) {
+      if (p._cooler_h > selectedCase._max_cooler_h) return false;
+    }
+    return true;
+  }
+
   return true;
 }
 
@@ -1365,9 +1437,17 @@ function renderCard(p, sid, isSelected, isIncompat) {
   if (p._cert) badges.push(`<span class="product-badge ok">${p._cert}</span>`);
   if (p._tipo_cool) badges.push(`<span class="product-badge">${p._tipo_cool}</span>`);
   if (p.b && !['AMD','Intel','INTEL'].includes(p.b)) badges.push(`<span class="product-badge">${p.b}</span>`);
-  const stockTxt = p.stock > 50 ? '' : p.stock > 0 ? `<div class="product-stock">Ultime ${p.stock} unità</div>` : `<div class="product-stock" style="color:#ef4444">Esaurito</div>`;
-  return `<div class="product-card ${isSelected?'selected':''} ${isIncompat?'product-incompat':''}"
-    data-sid="${sid}" data-k="${encodeURIComponent(p.k)}" onclick="selProdEl(this,event)">
+  const stockTxt = p.stock > 50 ? ''
+    : p.stock > 0 ? `<div class="product-stock">Ultime ${p.stock} unità</div>`
+    : p.incoming  ? `<div class="product-stock" style="color:#f59e0b">🕐 In arrivo</div>`
+    : `<div class="product-stock" style="color:#ef4444">Esaurito</div>`;
+  const isEsaurito = (p.stock === 0 || p.stock === null) && !p.incoming;
+  const esauritoClass = isEsaurito && !isSelected ? 'product-esaurito' : '';
+  const clickAttr = isEsaurito && !isSelected
+    ? '' // non cliccabile se esaurito
+    : `data-sid="${sid}" data-k="${encodeURIComponent(p.k)}" onclick="selProdEl(this,event)"`;
+  return `<div class="product-card ${isSelected?'selected':''} ${isIncompat?'product-incompat':''} ${esauritoClass}"
+    ${clickAttr}>
     <div class="product-name">${p.d}</div>
     <div class="product-price">${fmt(pc)}</div>
     <div class="product-meta">${badges.join('')}</div>
@@ -1399,22 +1479,61 @@ function renderProds(sid) {
 
   // Ordina: selezionato primo, poi per prezzo
   filtered.sort((a,b) => {
+    // Selezionato sempre primo
     if (a.k === selKey) return -1;
     if (b.k === selKey) return 1;
+    // Esauriti (stock===0 e no incoming) sempre in fondo
+    const aEsaurito = (a.stock === 0 || a.stock === null) && !a.incoming;
+    const bEsaurito = (b.stock === 0 || b.stock === null) && !b.incoming;
+    if (aEsaurito && !bEsaurito) return 1;
+    if (!aEsaurito && bEsaurito) return -1;
+    // Compatibili prima degli incompatibili
     const ca = isCompat(sid,a), cb = isCompat(sid,b);
     if (ca && !cb) return -1;
     if (!ca && cb) return 1;
+    // Poi per prezzo crescente
     return a.p - b.p;
   });
 
   const backBtn = sc && active ? `<div class="subcat-back" onclick="selectSubcat('${sid}','')">← Torna alle categorie</div>` : '';
+
+  // Banner compatibilità attiva
+  let compatBanner = '';
+  if (sid === 'case') {
+    const mobo = state.build.mobo ? PRODS.find(x=>x.k===state.build.mobo) : null;
+    if (mobo && mobo._form_factor) {
+      compatBanner = `<div class="compat-banner">🔧 Case compatibili con scheda madre <strong>${mobo._form_factor}</strong></div>`;
+    }
+  }
+  if (sid === 'psu') {
+    const tdp = calcBuildTDP ? calcBuildTDP() : null;
+    if (tdp && tdp.minPSU > 0) {
+      const selCase = state.build.case ? PRODS.find(x=>x.k===state.build.case) : null;
+      const psuInfo = selCase?._psu_form && selCase._psu_form !== 'ATX' ? ` · Form: <strong>${selCase._psu_form}</strong>` : '';
+      compatBanner = `<div class="compat-banner">⚡ Consumo stimato: <strong>${tdp.minPSU}W</strong> (margine 20% incluso)${psuInfo}</div>`;
+    }
+  }
+  if (sid === 'cooler') {
+    const selCase = state.build.case ? PRODS.find(x=>x.k===state.build.case) : null;
+    if (selCase && selCase._max_cooler_h) {
+      compatBanner = `<div class="compat-banner">📐 Altezza max dissipatore per il tuo case: <strong>${selCase._max_cooler_h}mm</strong></div>`;
+    }
+  }
+  if (sid === 'ram') {
+    const mobo = state.build.mobo ? PRODS.find(x=>x.k===state.build.mobo) : null;
+    const cpu  = state.build.cpu  ? PRODS.find(x=>x.k===state.build.cpu)  : null;
+    const ddr  = (mobo||cpu) ? (mobo||cpu).ddr : null;
+    if (ddr) {
+      compatBanner = `<div class="compat-banner">🧬 Scheda madre richiede <strong>${ddr}</strong> — mostro solo RAM compatibili</div>`;
+    }
+  }
   const searchHtml = `<div class="search-wrap"><input id="search_${sid}" class="search-input" type="text" placeholder="Cerca..." value="${state.search[sid]||''}" oninput="doSearch('${sid}',this.value)"></div>`;
 
   if (filtered.length === 0) {
-    return backBtn + searchHtml + `<div id="productGrid_${sid}"><p style="color:var(--ink4);font-size:12px;padding:20px 0">Nessun prodotto trovato</p></div>`;
+    return backBtn + compatBanner + searchHtml + `<div id="productGrid_${sid}"><p style="color:var(--ink4);font-size:12px;padding:20px 0">Nessun prodotto trovato</p></div>`;
   }
 
-  return backBtn + searchHtml + `<div id="productGrid_${sid}"><div class="products-grid">${
+  return backBtn + compatBanner + searchHtml + `<div id="productGrid_${sid}"><div class="products-grid">${
     filtered.map(p => renderCard(p, sid, p.k === selKey, !isCompat(sid,p))).join('')
   }</div></div>`;
 }
@@ -1454,7 +1573,6 @@ function selProd(sid, key) {
   state.build[sid] = prev === key ? null : key;
   if (state.build[sid]) {
     playClick();
-    checkAndUnlockAchievement(sid, key);
     sparkEffect(event);
   }
   renderSidebar();
@@ -1561,8 +1679,7 @@ function selPlatform(pl) {
   state.build.ram = null;
   state.filters = {};
   playClick();
-  if (pl === 'amd') checkAndUnlockAchievement('platform','amd');
-  else checkAndUnlockAchievement('platform','intel');
+
   render();
 }
 
@@ -2436,10 +2553,6 @@ function buildResoconto() {
   if (typeof getResocontoAlerts === 'function') return getResocontoAlerts();
   return [];
 }
-function checkAndUnlockAchievement(sid, key) {
-  if (typeof checkAchievements === 'function') checkAchievements(sid, key);
-}
-
 // ══ FETCH PRODOTTI ═══════════════════════════════════════
 async function fetchProdotti() {
   // Mostra loading

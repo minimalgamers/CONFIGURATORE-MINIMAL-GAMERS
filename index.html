@@ -270,29 +270,6 @@ html,body{background:var(--bg);color:var(--ink);font-family:var(--font);min-heig
 }
 .product-card:hover{border-color:rgba(45,212,191,.25);transform:translateY(-1px);background:rgba(255,255,255,.04)}
 .product-card.selected{border-color:var(--teal);background:rgba(45,212,191,.06)}
-.incompat-divider{
-  display:flex;align-items:center;gap:10px;
-  margin:20px 0 10px;
-  font-size:11px;color:rgba(255,160,60,.7);
-  font-weight:600;
-}
-.incompat-divider span{flex:1}
-.incompat-divider::before{
-  content:'';display:block;height:1px;width:24px;
-  background:rgba(255,160,60,.3);flex-shrink:0;
-}
-.incompat-toggle{
-  font-size:10px;font-weight:700;
-  padding:3px 10px;border-radius:20px;
-  border:1px solid rgba(255,160,60,.4);
-  background:rgba(255,160,60,.08);
-  color:rgba(255,160,60,.8);
-  cursor:pointer;transition:all .15s;
-  font-family:inherit;
-}
-.incompat-toggle:hover{background:rgba(255,160,60,.15)}
-.incompat-section{animation:fadeIn .2s ease}
-.incompat-grid .product-card{opacity:.35;pointer-events:none;filter:grayscale(.5)}
 .compat-banner{
   font-size:11px;color:rgba(45,212,191,.8);
   background:rgba(45,212,191,.07);
@@ -329,19 +306,17 @@ html,body{background:var(--bg);color:var(--ink);font-family:var(--font);min-heig
 .product-badge.warn{background:rgba(245,158,11,.08);color:#f59e0b;border-color:rgba(245,158,11,.12)}
 .product-badge.danger{background:rgba(239,68,68,.08);color:#ef4444;border-color:rgba(239,68,68,.12)}
 .product-stock{font-size:9px;color:var(--ink4);margin-top:4px}
-.product-incompat{
-  opacity:.32;
-  filter:grayscale(.5);
-  position:relative;
-}
+.product-incompat{opacity:.32;filter:grayscale(.5);pointer-events:none;position:relative}
 .product-incompat .product-price{color:var(--ink4)!important}
-.product-incompat-reason{
-  font-size:9px;
-  color:rgba(255,160,60,.8);
-  margin-top:6px;
-  line-height:1.4;
-  font-weight:600;
-}
+.product-incompat-reason{font-size:9px;color:rgba(255,160,60,.8);margin-top:6px;line-height:1.4;font-weight:600}
+.incompat-divider{display:flex;align-items:center;gap:10px;margin:20px 0 10px;font-size:11px;color:rgba(255,160,60,.7);font-weight:600}
+.incompat-divider span{flex:1}
+.incompat-divider::before{content:'';display:block;height:1px;width:24px;background:rgba(255,160,60,.3);flex-shrink:0}
+.incompat-toggle{font-size:10px;font-weight:700;padding:3px 10px;border-radius:20px;border:1px solid rgba(255,160,60,.4);background:rgba(255,160,60,.08);color:rgba(255,160,60,.8);cursor:pointer;transition:all .15s;font-family:inherit}
+.incompat-toggle:hover{background:rgba(255,160,60,.15)}
+.incompat-section{animation:fadeIn .2s ease}
+.compat-banner{font-size:11px;color:rgba(45,212,191,.8);background:rgba(45,212,191,.07);border:1px solid rgba(45,212,191,.2);border-radius:8px;padding:8px 12px;margin-bottom:12px;line-height:1.5}
+.compat-banner strong{color:var(--teal)}
 
 /* Search */
 .search-wrap{margin-bottom:14px}
@@ -968,25 +943,112 @@ function fmtR(tot){ return fmt(tot / 36); }
 
 // ══ COMPATIBILITÀ ════════════════════════════════════════
 
-// Motivo di incompatibilità — usato per il tooltip sulla card
+// ─── Deduzione form factor MOBO dal nome del prodotto ───
+// Fallback usato quando il json non ha _form_factor precomputato
+function deduceMoboFormFactor(d) {
+  if (!d) return 'ATX';
+  const dn = d.toUpperCase();
+  // 1. Esplicito
+  if (/(MINI-ITX|MINI ITX|M-ITX)/.test(dn)) return 'Mini-ITX';
+  if (/(E-ATX|EATX|XL-ATX|EXTENDED ATX)/.test(dn)) return 'E-ATX';
+  if (/(MICRO-ATX|MICROATX|M-ATX)/.test(dn)) return 'Micro-ATX';
+  if (/\bMATX\b/.test(dn)) return 'Micro-ATX';
+  // 2. Suffisso ITX nel chipset (B650I, B650E-I, Z790I, X870I)
+  if (/\b[A-Z]\d{3,4}[A-Z]?[-]?I\b/.test(dn)) return 'Mini-ITX';
+  if (/\bITX\b/.test(dn)) return 'Mini-ITX';
+  // 3. Suffisso M nel chipset (B550M, B650M, A620M, H610M, B760M, A620AM)
+  if (/\b[A-Z]\d{3,4}M\b/.test(dn))  return 'Micro-ATX';
+  if (/\b[A-Z]\d{3,4}M-/.test(dn))    return 'Micro-ATX';
+  if (/\b[A-Z]\d{3,4}AM\b/.test(dn)) return 'Micro-ATX';
+  if (/\b[A-Z]\d{3,4}AM-/.test(dn))   return 'Micro-ATX';
+  // 4. ATX esplicito
+  if (/\bATX\b/.test(dn)) return 'ATX';
+  // 5. Workstation extreme
+  if (/(WRX80|TRX40|SWRX|TR4|TRX)/.test(dn)) return 'E-ATX';
+  // 6. Default ATX (la maggior parte delle mobo senza suffisso è ATX)
+  return 'ATX';
+}
+
+// ─── Deduzione form factor CASE dal nome ────────────────
+function deduceCaseFormFactor(d) {
+  if (!d) return 'ATX';
+  const dn = d.toUpperCase();
+  // Un case supporta il form factor PIÙ GRANDE che riesce a ospitare.
+  // Il json elenca i FF supportati nel nome (es. "Mini-Gehäuse, mATX, ATX").
+  // Quindi cerco prima il più grande: E-ATX → ATX → Micro-ATX → Mini-ITX.
+
+  // 1. E-ATX / Full Tower (supporta tutto)
+  if (/(E-ATX|EATX|XL-ATX|FULL-TOWER|FULL TOWER|FULLTOWER|BIG TOWER|BIG-TOWER|SUPER TOWER|SUPER-TOWER)/.test(dn)) return 'E-ATX';
+
+  // 2. ATX (Midi/Mid Tower, o ATX esplicito non preceduto da Micro/M-)
+  if (/(MIDI-TOWER|MIDI TOWER|MID-TOWER|MID TOWER|MIDTOWER)/.test(dn)) return 'ATX';
+  // ATX da solo: cerca "ATX" come parola intera ma escludi se preceduto da MATX o MICRO-ATX
+  // Es: "Mini-Gehäuse, mATX, ATX" → trova ATX standalone → ATX
+  const hasAtxStandalone = /(?:^|[^A-Z])(ATX)(?:[^A-Z]|$)/.test(dn) && !/[^ ]M[-]?ATX/.test(dn.replace(/MATX/g,'_MATX_'));
+  // Semplifico: se contiene "ATX" e NON è solo "mATX/MICRO-ATX", è ATX
+  const hasOnlyMicroATX = /(MICRO-ATX|MICROATX|M-ATX|\bMATX\b)/.test(dn) && !/[^M\-]ATX|^ATX/.test(dn.replace(/M-ATX/g,'').replace(/MATX/g,'').replace(/MICRO-ATX/g,'').replace(/MICROATX/g,''));
+  if (/\bATX\b/.test(dn) && !hasOnlyMicroATX) return 'ATX';
+
+  // 3. Micro-ATX (compatto)
+  if (/(MICRO-ATX|MICROATX|M-ATX|MATX)/.test(dn)) return 'Micro-ATX';
+  if (/(SLIM TOWER|SLIM-TOWER|MICRO TOWER|MICRO-TOWER|MICRO-CASE|MICRO CASE)/.test(dn)) return 'Micro-ATX';
+
+  // 4. Mini-ITX
+  if (/(MINI-ITX|MINI ITX|M-ITX)/.test(dn)) return 'Mini-ITX';
+  if (/\bITX\b/.test(dn)) return 'Mini-ITX';
+  if (/(NUC|UCFF|HTPC|SUGO|MINI-PC|MINI PC|\bSFF\b|MINI-DTX|MINI DTX)/.test(dn)) return 'Mini-ITX';
+  if (/(MINI-GEHÄUSE|MINI GEHÄUSE|MINI TOWER|MINI-TOWER)/.test(dn)) return 'Mini-ITX';
+
+  // 5. Tower generico → ATX
+  if (/\bTOWER\b/.test(dn)) return 'ATX';
+  // 6. Rackmount → ATX
+  if (/(RACKMOUNT|RACK MOUNT|\b\dU\b)/.test(dn)) return 'ATX';
+  // 7. Default
+  return 'ATX';
+}
+
+// ─── Deduzione PSU form factor ─────────────────────────
+function deducePsuForm(d) {
+  if (!d) return 'ATX';
+  const dn = d.toUpperCase();
+  if (dn.includes('SFX-L')) return 'SFX-L';
+  if (dn.includes('SFX'))   return 'SFX';
+  if (dn.includes('TFX'))   return 'TFX';
+  return 'ATX';
+}
+
+// ─── Helper: prendi form factor del prodotto, dal campo precomputato o calcolato ───
+function getFormFactor(p, category) {
+  if (!p) return null;
+  if (p._form_factor) return p._form_factor;
+  if (category === 'mobo' || category === 'case') {
+    return category === 'mobo' ? deduceMoboFormFactor(p.d) : deduceCaseFormFactor(p.d);
+  }
+  return null;
+}
+function getPsuForm(p) {
+  if (!p) return 'ATX';
+  if (p._psu_form) return p._psu_form;
+  return deducePsuForm(p.d);
+}
+
+// ─── Motivo incompatibilità per tooltip ─────────────────
 function incompatReason(stepId, p) {
   const b  = state.build;
   const sk = state.socket;
   const RANK = {'Mini-ITX':1,'Micro-ATX':2,'ATX':3,'E-ATX':4};
 
-  if (stepId === 'cpu') {
-    if (sk && p.socket && p.socket !== sk)
-      return `Socket ${p.socket} non compatibile con ${sk}`;
-  }
-  if (stepId === 'mobo') {
-    if (sk && p.socket && p.socket !== sk)
-      return `Socket ${p.socket} non compatibile con ${sk}`;
+  if (stepId === 'cpu' || stepId === 'mobo') {
+    if (sk && (!p.socket || p.socket !== sk))
+      return `Socket ${p.socket || '?'} non compatibile con ${sk}`;
   }
   if (stepId === 'case') {
     const mobo = b.mobo ? PRODS.find(x=>x.k===b.mobo) : null;
-    if (mobo && mobo._form_factor && p._form_factor) {
-      const mr = RANK[mobo._form_factor]||3, cr = RANK[p._form_factor]||3;
-      if (cr < mr) return `Case ${p._form_factor} troppo piccolo per mobo ${mobo._form_factor}`;
+    if (mobo) {
+      const mff = getFormFactor(mobo,'mobo');
+      const cff = getFormFactor(p,'case');
+      if (mff && cff && (RANK[cff]||3) < (RANK[mff]||3))
+        return `Case ${cff} troppo piccolo per mobo ${mff}`;
     }
   }
   if (stepId === 'ram') {
@@ -994,50 +1056,47 @@ function incompatReason(stepId, p) {
     const cpu  = b.cpu  ? PRODS.find(x=>x.k===b.cpu)  : null;
     const ddr  = (mobo||cpu) ? (mobo||cpu).ddr : null;
     if (ddr && p.ddr && p.ddr !== ddr)
-      return `RAM ${p.ddr} non compatibile — la tua mobo richiede ${ddr}`;
+      return `RAM ${p.ddr} non compatibile — richiesta ${ddr}`;
   }
   if (stepId === 'psu') {
     const sc = b.case ? PRODS.find(x=>x.k===b.case) : null;
-    if (sc && sc._psu_form && p._psu_form) {
-      if (sc._psu_form !== p._psu_form)
-        return `PSU ${p._psu_form} non entra nel tuo case (richiede ${sc._psu_form})`;
+    if (sc) {
+      const caseForm = getPsuForm(sc); // form PSU che il case accetta
+      const psuForm  = getPsuForm(p);
+      if (caseForm !== psuForm) {
+        if (caseForm === 'ATX' && (psuForm === 'SFX' || psuForm === 'SFX-L'))
+          return `PSU ${psuForm} troppo piccola per case ATX`;
+        if ((caseForm === 'SFX' || caseForm === 'SFX-L') && psuForm === 'ATX')
+          return `PSU ATX non entra in un case ${caseForm}`;
+      }
     }
   }
   if (stepId === 'cooler') {
-    const sc = b.case ? PRODS.find(x=>x.k===b.case) : null;
-    if (sc && sc._max_cooler_h && p._cooler_h && p._cooler_h > 0) {
-      if (p._cooler_h > sc._max_cooler_h)
-        return `Dissipatore ${p._cooler_h}mm troppo alto — max ${sc._max_cooler_h}mm per il tuo case`;
-    }
-    // TDP check CPU vs cooler
     const cpu = b.cpu ? PRODS.find(x=>x.k===b.cpu) : null;
     if (cpu) {
       const tdp = getCPUPeak(cpu.d);
       const tc  = (p._tipo_cool||'').toLowerCase();
-      const isAIO = tc.includes('aio');
-      const isLow = tc.includes('low');
-      if (tdp > 170 && !isAIO)
-        return `CPU da ${tdp}W richiede AIO — questo dissipatore potrebbe non bastare`;
-      if (tdp > 125 && isLow)
-        return `CPU da ${tdp}W troppo potente per un dissipatore low-profile`;
+      if (tdp > 170 && !tc.includes('aio'))
+        return `CPU da ${tdp}W richiede AIO`;
+      if (tdp > 125 && tc.includes('low'))
+        return `CPU da ${tdp}W troppo potente per low-profile`;
     }
   }
   return null;
 }
 
+// ─── Funzione principale di compatibilità ──────────────
 function isCompat(stepId, p) {
   const b  = state.build;
   const pi = state.piattaforma;
   const sk = state.socket;
   const RANK = {'Mini-ITX':1,'Micro-ATX':2,'ATX':3,'E-ATX':4};
 
-  // ── CPU ───────────────────────────────────────────────────
-  // Se socket scelto: match esatto richiesto, prodotti senza socket esclusi
+  // ── CPU ──────────────────────────────────────────────
   if (stepId === 'cpu') {
     if (sk) {
-      // Socket scelto → DEVE matchare esattamente
-      if (!p.socket) return false;       // prodotto senza socket → escluso
-      if (p.socket !== sk) return false; // socket diverso → escluso
+      // Socket scelto → match esatto richiesto, prodotti senza socket esclusi
+      if (!p.socket || p.socket !== sk) return false;
     } else if (pi) {
       // Solo piattaforma → match piattaforma
       if (pi === 'amd'   && p.platform !== 'AMD')   return false;
@@ -1046,30 +1105,30 @@ function isCompat(stepId, p) {
     return true;
   }
 
-  // ── SCHEDA MADRE ──────────────────────────────────────────
+  // ── MOBO ─────────────────────────────────────────────
   if (stepId === 'mobo') {
     if (sk) {
-      if (!p.socket) return false;
-      if (p.socket !== sk) return false;
+      if (!p.socket || p.socket !== sk) return false;
     }
     return true;
   }
 
-  // ── CASE ──────────────────────────────────────────────────
-  // Regola: caseRank >= moboRank
-  // case Mini-ITX(1) < mobo ATX(3) → incompatibile
-  // case ATX(3) >= mobo Micro-ATX(2) → compatibile
+  // ── CASE ─────────────────────────────────────────────
   if (stepId === 'case') {
     const mobo = b.mobo ? PRODS.find(x=>x.k===b.mobo) : null;
-    if (mobo && mobo._form_factor && p._form_factor) {
-      const mr = RANK[mobo._form_factor] || 3;
-      const cr = RANK[p._form_factor]    || 3;
-      if (cr < mr) return false;
+    if (mobo) {
+      const mff = getFormFactor(mobo,'mobo');
+      const cff = getFormFactor(p,'case');
+      if (mff && cff) {
+        const mr = RANK[mff] || 3;
+        const cr = RANK[cff] || 3;
+        if (cr < mr) return false;
+      }
     }
     return true;
   }
 
-  // ── RAM ───────────────────────────────────────────────────
+  // ── RAM ──────────────────────────────────────────────
   if (stepId === 'ram') {
     const mobo = b.mobo ? PRODS.find(x=>x.k===b.mobo) : null;
     const cpu  = b.cpu  ? PRODS.find(x=>x.k===b.cpu)  : null;
@@ -1078,39 +1137,30 @@ function isCompat(stepId, p) {
     return true;
   }
 
-  // ── PSU ───────────────────────────────────────────────────
-  // SFX case → solo SFX/SFX-L PSU
-  // ATX case → solo ATX PSU
+  // ── PSU ──────────────────────────────────────────────
   if (stepId === 'psu') {
     const sc = b.case ? PRODS.find(x=>x.k===b.case) : null;
-    if (sc && sc._psu_form && p._psu_form) {
-      const cf = sc._psu_form;
-      const pf = p._psu_form;
-      if (cf === 'ATX'   && (pf === 'SFX' || pf === 'SFX-L')) return false;
-      if (cf === 'SFX'   && pf === 'ATX') return false;
-      if (cf === 'SFX-L' && pf === 'ATX') return false;
+    if (sc) {
+      const caseForm = getPsuForm(sc);
+      const psuForm  = getPsuForm(p);
+      // Case ATX → accetta solo PSU ATX
+      // Case SFX/SFX-L → accetta SFX e SFX-L
+      if (caseForm === 'ATX' && (psuForm === 'SFX' || psuForm === 'SFX-L')) return false;
+      if ((caseForm === 'SFX' || caseForm === 'SFX-L') && psuForm === 'ATX') return false;
     }
     return true;
   }
 
-  // ── DISSIPATORE ───────────────────────────────────────────
+  // ── DISSIPATORE ──────────────────────────────────────
   if (stepId === 'cooler') {
-    // 1. Altezza fisica vs case
-    const sc = b.case ? PRODS.find(x=>x.k===b.case) : null;
-    if (sc && sc._max_cooler_h && p._cooler_h && p._cooler_h > 0) {
-      if (p._cooler_h > sc._max_cooler_h) return false;
-    }
-    // 2. TDP CPU vs tipo cooler
     const cpu = b.cpu ? PRODS.find(x=>x.k===b.cpu) : null;
     if (cpu) {
       const tdp = getCPUPeak(cpu.d);
       const tc  = (p._tipo_cool||'').toLowerCase();
-      const isAIO  = tc.includes('aio');
-      const isLow  = tc.includes('low');
-      // CPU >170W (es. 9950X, i9-14900K): solo AIO
+      const isAIO = tc.includes('aio');
+      const isLow = tc.includes('low');
       if (tdp > 170 && !isAIO) return false;
-      // CPU >125W: no low-profile
-      if (tdp > 125 && isLow) return false;
+      if (tdp > 125 && isLow)  return false;
     }
     return true;
   }
@@ -1334,11 +1384,6 @@ function renderProgress() {
 }
 
 function goStep(i) {
-  // Blocca salto a step >= 1 se non c'è il socket
-  if (i >= 1 && state.piattaforma && !state.socket) {
-    showToast('Scegli prima il socket (AM5/AM4 o LGA)');
-    return;
-  }
   if (i >= 0 && i < STEPS.length) {
     state.step = i;
     render();
@@ -1554,8 +1599,14 @@ function renderCard(p, sid, isSelected, isIncompat) {
   if (p._fascia_w)  badges.push(`<span class="product-badge punch">${p._fascia_w}</span>`);
   if (p._cert)      badges.push(`<span class="product-badge ok">${p._cert}</span>`);
   if (p._tipo_cool) badges.push(`<span class="product-badge">${p._tipo_cool}</span>`);
-  if (p._form_factor && (sid==='case'||sid==='mobo'))
-    badges.push(`<span class="product-badge">${p._form_factor}</span>`);
+  // Badge form factor per mobo e case (anche se non in json, calcolato al volo)
+  if (sid === 'mobo') {
+    const ff = getFormFactor(p, 'mobo');
+    if (ff) badges.push(`<span class="product-badge">${ff}</span>`);
+  } else if (sid === 'case') {
+    const ff = getFormFactor(p, 'case');
+    if (ff) badges.push(`<span class="product-badge">${ff}</span>`);
+  }
   if (p.b && !['AMD','Intel','INTEL'].includes(p.b))
     badges.push(`<span class="product-badge">${p.b}</span>`);
 
@@ -1565,28 +1616,21 @@ function renderCard(p, sid, isSelected, isIncompat) {
     : `<div class="product-stock" style="color:#ef4444">Esaurito</div>`;
 
   const isEsaurito = (p.stock === 0 || p.stock === null) && !p.incoming;
-
-  // Motivo incompatibilità (per tooltip)
   const reason = isIncompat ? incompatReason(sid, p) : null;
-
-  // Blocca se esaurito O incompatibile FISICAMENTE (case/ram/psu/cooler)
-  // Per CPU/mobo: incompatibili visibili ma non bloccati (solo opachi)
-  const HARD_STEPS = ['case','ram','psu','cooler'];
-  const isHardIncompat = isIncompat && HARD_STEPS.includes(sid);
-  const isBlocked = !isSelected && (isEsaurito || isHardIncompat);
+  const isBlocked = !isSelected && (isEsaurito || isIncompat);
 
   const classes = [
     'product-card',
-    isSelected  ? 'selected'         : '',
-    isIncompat  ? 'product-incompat' : '',
+    isSelected ? 'selected' : '',
+    isIncompat ? 'product-incompat' : '',
     isEsaurito && !isSelected ? 'product-esaurito' : '',
   ].filter(Boolean).join(' ');
 
   const clickAttr = isBlocked
-    ? '' 
+    ? ''
     : `data-sid="${sid}" data-k="${encodeURIComponent(p.k)}" onclick="selProdEl(this,event)"`;
 
-  const incompatBadge = isIncompat && reason
+  const reasonHtml = reason
     ? `<div class="product-incompat-reason">⚠ ${reason}</div>`
     : '';
 
@@ -1594,11 +1638,10 @@ function renderCard(p, sid, isSelected, isIncompat) {
     <div class="product-name">${p.d}</div>
     <div class="product-price">${fmt(pc)}</div>
     <div class="product-meta">${badges.join('')}</div>
-    ${incompatBadge}
+    ${reasonHtml}
     ${stockTxt}
   </div>`;
 }
-
 function renderProds(sid) {
   const allProds = getProds(sid);
   const sc = SUBCATS[sid];
@@ -1606,7 +1649,7 @@ function renderProds(sid) {
   const search = (state.search[sid] || '').toLowerCase();
   const selKey = state.build[sid];
 
-  // Se ha sottocategorie e nessuna selezionata → mostra le subcat card
+  // Se ha sottocategorie e nessuna selezionata, mostra le card sottocategorie
   if (sc && !active) {
     const subcatHtml = renderSubcatSelector(sid, allProds, () => {});
     if (subcatHtml) return subcatHtml;
@@ -1618,21 +1661,7 @@ function renderProds(sid) {
   if (search) filtered = filtered.filter(p =>
     p.d.toLowerCase().includes(search) || (p.b||'').toLowerCase().includes(search));
 
-  // Separa compatibili/incompatibili SOLO per step con filtri fisici reali
-  // e SOLO se c'è già un componente precedente con cui confrontarsi
-  const b = state.build;
-  const hasCompatFilter =
-    (sid === 'mobo'   && state.socket) ||
-    (sid === 'case'   && b.mobo) ||
-    (sid === 'ram'    && (b.mobo || b.cpu)) ||
-    (sid === 'psu'    && b.case) ||
-    (sid === 'cooler' && (b.case || b.cpu));
-  // CPU, GPU, SSD, Ventole: nessun filtro incompatibilità
-  // Mobo/Case/RAM/PSU/Cooler: solo se c'è qualcosa con cui confrontarsi
-  const compatibili   = hasCompatFilter ? filtered.filter(p =>  isCompat(sid, p)) : filtered;
-  const incompatibili = hasCompatFilter ? filtered.filter(p => !isCompat(sid, p)) : [];
-
-  // Sort: selezionato primo → esauriti in fondo → prezzo crescente
+  // Sort: selezionato primo, esauriti in fondo, poi prezzo
   const sortFn = (a, b) => {
     if (a.k === selKey) return -1;
     if (b.k === selKey) return 1;
@@ -1642,61 +1671,69 @@ function renderProds(sid) {
     if (!aE && bE) return -1;
     return a.p - b.p;
   };
-  compatibili.sort(sortFn);
-  incompatibili.sort(sortFn);
 
-  // Banner compatibilità
+  // Per step CPU: la lista è già filtrata dal socket nell'isCompat
+  //   → mostrare solo i compatibili, mai gli incompatibili
+  // Per Mobo/Case/RAM/PSU/Cooler: separa solo se c'è un componente di riferimento
+  const b = state.build;
+  const hasReference =
+    (sid === 'mobo'   && state.socket) ||
+    (sid === 'case'   && b.mobo) ||
+    (sid === 'ram'    && (b.mobo || b.cpu)) ||
+    (sid === 'psu'    && b.case) ||
+    (sid === 'cooler' && (b.case || b.cpu));
+
+  const compatibili = filtered.filter(p => isCompat(sid, p)).sort(sortFn);
+  const incompatibili = hasReference
+    ? filtered.filter(p => !isCompat(sid, p)).sort(sortFn)
+    : [];
+
+  // Banner compatibilità contestuale
   let compatBanner = '';
   if (sid === 'case') {
-    const mobo = state.build.mobo ? PRODS.find(x=>x.k===state.build.mobo) : null;
-    if (mobo && mobo._form_factor)
-      compatBanner = `<div class="compat-banner">🔧 Mostro i case compatibili con scheda madre <strong>${mobo._form_factor}</strong> — gli altri sono in fondo non selezionabili</div>`;
-  }
-  if (sid === 'psu') {
-    const tdp = calcBuildTDP ? calcBuildTDP() : null;
-    const selCase = state.build.case ? PRODS.find(x=>x.k===state.build.case) : null;
-    let psuMsg = '';
-    if (tdp && tdp.minPSU > 0) psuMsg += `Consumo stimato: <strong>${tdp.minPSU}W</strong> (margine 20% incluso)`;
-    if (selCase && selCase._psu_form && selCase._psu_form !== 'ATX')
-      psuMsg += (psuMsg ? ' · ' : '') + `Form factor richiesto: <strong>${selCase._psu_form}</strong>`;
-    if (psuMsg) compatBanner = `<div class="compat-banner">⚡ ${psuMsg}</div>`;
-  }
-  if (sid === 'cooler') {
-    const selCase = state.build.case ? PRODS.find(x=>x.k===state.build.case) : null;
-    const cpu = state.build.cpu ? PRODS.find(x=>x.k===state.build.cpu) : null;
-    let coolMsg = '';
-    if (selCase && selCase._max_cooler_h)
-      coolMsg += `Altezza max per il tuo case: <strong>${selCase._max_cooler_h}mm</strong>`;
-    if (cpu) {
-      const tdp = getCPUPeak(cpu.d);
-      if (tdp > 170) coolMsg += (coolMsg?' · ':'') + `CPU da <strong>${tdp}W</strong> — consigliato AIO 360mm`;
-      else if (tdp > 125) coolMsg += (coolMsg?' · ':'') + `CPU da <strong>${tdp}W</strong> — consigliato AIO 240mm o tower alta`;
+    const mobo = b.mobo ? PRODS.find(x=>x.k===b.mobo) : null;
+    if (mobo) {
+      const ff = getFormFactor(mobo, 'mobo');
+      if (ff) compatBanner = `<div class="compat-banner">🔧 Mostro i case compatibili con scheda madre <strong>${ff}</strong> — gli incompatibili sono in fondo</div>`;
     }
-    if (coolMsg) compatBanner = `<div class="compat-banner">📐 ${coolMsg}</div>`;
-  }
-  if (sid === 'ram') {
-    const mobo = state.build.mobo ? PRODS.find(x=>x.k===state.build.mobo) : null;
-    const cpu  = state.build.cpu  ? PRODS.find(x=>x.k===state.build.cpu)  : null;
+  } else if (sid === 'ram') {
+    const mobo = b.mobo ? PRODS.find(x=>x.k===b.mobo) : null;
+    const cpu  = b.cpu  ? PRODS.find(x=>x.k===b.cpu)  : null;
     const ddr  = (mobo||cpu) ? (mobo||cpu).ddr : null;
-    if (ddr) compatBanner = `<div class="compat-banner">🧬 La tua scheda madre richiede <strong>${ddr}</strong> — RAM di tipo diverso sono in fondo non selezionabili</div>`;
+    if (ddr) compatBanner = `<div class="compat-banner">🧬 La tua scheda madre richiede <strong>${ddr}</strong></div>`;
+  } else if (sid === 'psu') {
+    const sc2 = b.case ? PRODS.find(x=>x.k===b.case) : null;
+    const tdp = typeof calcBuildTDP === 'function' ? calcBuildTDP() : null;
+    let msg = '';
+    if (tdp && tdp.minPSU > 0) msg += `Consumo stimato: <strong>${tdp.minPSU}W</strong> (margine 20%)`;
+    if (sc2) {
+      const pf = getPsuForm(sc2);
+      if (pf && pf !== 'ATX') msg += (msg?' · ':'') + `Form factor richiesto: <strong>${pf}</strong>`;
+    }
+    if (msg) compatBanner = `<div class="compat-banner">⚡ ${msg}</div>`;
+  } else if (sid === 'cooler') {
+    const cpu = b.cpu ? PRODS.find(x=>x.k===b.cpu) : null;
+    if (cpu && typeof getCPUPeak === 'function') {
+      const tdp = getCPUPeak(cpu.d);
+      if (tdp > 170) compatBanner = `<div class="compat-banner">📐 CPU da <strong>${tdp}W</strong> — richiede AIO 240/360mm</div>`;
+      else if (tdp > 125) compatBanner = `<div class="compat-banner">📐 CPU da <strong>${tdp}W</strong> — consigliato AIO o tower alta</div>`;
+    }
   }
 
   const backBtn = sc && active
     ? `<div class="subcat-back" onclick="selectSubcat('${sid}','')">← Torna alle categorie</div>` : '';
   const searchHtml = `<div class="search-wrap"><input id="search_${sid}" class="search-input" type="text" placeholder="Cerca..." value="${state.search[sid]||''}" oninput="doSearch('${sid}',this.value)"></div>`;
 
-  // Costruisci griglia
+  // Costruisci HTML griglia
   let gridHtml = '';
   if (filtered.length === 0) {
     gridHtml = '<p style="color:var(--ink4);font-size:12px;padding:20px 0">Nessun prodotto trovato</p>';
   } else {
-    // Compatibili sempre in cima, selezionabili
     if (compatibili.length > 0) {
       gridHtml += `<div class="products-grid">${compatibili.map(p => renderCard(p, sid, p.k===selKey, false)).join('')}</div>`;
     } else if (incompatibili.length > 0) {
-      gridHtml += `<p style="color:rgba(45,212,191,.5);font-size:12px;padding:10px 0 4px">Nessun prodotto compatibile — prova a cambiare la scheda madre o il case.</p>`;
+      gridHtml += '<p style="color:rgba(45,212,191,.5);font-size:12px;padding:12px 0">Nessun prodotto compatibile — prova a cambiare i componenti precedenti.</p>';
     }
-    // Incompatibili sotto: opachi, non cliccabili, con divisore
     if (incompatibili.length > 0) {
       gridHtml += `<div class="incompat-divider">
         <span>⚠️ Non compatibili con la tua configurazione (${incompatibili.length})</span>
@@ -1713,8 +1750,8 @@ function renderProds(sid) {
 
 function toggleIncompat(sid) {
   const el = document.getElementById('incompat_' + sid);
-  const btn = el ? el.previousElementSibling.querySelector('.incompat-toggle') : null;
   if (!el) return;
+  const btn = el.previousElementSibling && el.previousElementSibling.querySelector('.incompat-toggle');
   const isHidden = el.style.display === 'none';
   el.style.display = isHidden ? 'block' : 'none';
   if (btn) btn.textContent = isHidden ? 'Nascondi' : 'Mostra';
@@ -1724,8 +1761,7 @@ function doSearch(sid, val) {
   state.search[sid] = val;
   const gridEl = document.getElementById('productGrid_' + sid);
   if (!gridEl) { render(); return; }
-
-  const sc     = SUBCATS[sid];
+  const sc = SUBCATS[sid];
   const active = state.filters[sid];
   const selKey = state.build[sid];
 
@@ -1744,49 +1780,40 @@ function doSearch(sid, val) {
     return a.p - b.p;
   };
 
-  const bds = state.build;
-  const hasCompatFilter =
+  const b = state.build;
+  const hasReference =
     (sid === 'mobo'   && state.socket) ||
-    (sid === 'case'   && bds.mobo) ||
-    (sid === 'ram'    && (bds.mobo || bds.cpu)) ||
-    (sid === 'psu'    && bds.case) ||
-    (sid === 'cooler' && (bds.case || bds.cpu));
-  const compatibili   = (hasCompatFilter ? filtered.filter(p =>  isCompat(sid, p)) : filtered).sort(sortFn);
-  const incompatibili = (hasCompatFilter ? filtered.filter(p => !isCompat(sid, p)) : []).sort(sortFn);
+    (sid === 'case'   && b.mobo) ||
+    (sid === 'ram'    && (b.mobo || b.cpu)) ||
+    (sid === 'psu'    && b.case) ||
+    (sid === 'cooler' && (b.case || b.cpu));
+
+  const compatibili   = filtered.filter(p => isCompat(sid, p)).sort(sortFn);
+  const incompatibili = hasReference ? filtered.filter(p => !isCompat(sid, p)).sort(sortFn) : [];
 
   if (filtered.length === 0) {
     gridEl.innerHTML = '<p style="color:var(--ink4);font-size:12px;padding:20px 0">Nessun prodotto trovato</p>';
     return;
   }
-
   let h = '';
   if (compatibili.length > 0) {
     h += '<div class="products-grid">' + compatibili.map(p => renderCard(p, sid, p.k===selKey, false)).join('') + '</div>';
   }
   if (incompatibili.length > 0) {
     h += '<div class="incompat-divider"><span>⚠️ Non compatibili (' + incompatibili.length + ')</span>'
-       + '<button class="incompat-toggle" onclick="toggleIncompat(\'' + sid + '\')">Mostra</button></div>';
-    h += '<div id="incompat_' + sid + '" class="incompat-section" style="display:none">'
+       + '<button class="incompat-toggle" onclick="toggleIncompat(\'' + sid + '\')">Mostra</button></div>'
+       + '<div id="incompat_' + sid + '" class="incompat-section" style="display:none">'
        + '<div class="products-grid">' + incompatibili.map(p => renderCard(p, sid, p.k===selKey, true)).join('') + '</div></div>';
   }
   gridEl.innerHTML = h;
 }
 
-// ── UPDATE SIDEBAR UNIFICATO ──────────────────────────────
-function updateAllExtras() {
-  updateBuildHealth();
-  updateRisparmio();
-  checkAchievements();
-  renderResoconto();
-}
-
-
+// ══ SELEZIONE PRODOTTO ═══════════════════════════════════
 function selProd(sid, key) {
   const prev = state.build[sid];
   state.build[sid] = prev === key ? null : key;
   if (state.build[sid]) {
     playClick();
-    checkAndUnlockAchievement(sid, key);
     sparkEffect(event);
   }
   renderSidebar();
@@ -1806,12 +1833,6 @@ function selProdEl(el, evt) {
 
 // ══ NAVIGAZIONE ══════════════════════════════════════════
 function nextStep() {
-  const curStep = STEPS[state.step];
-  // Blocca passaggio se piattaforma scelta ma socket no
-  if (curStep && curStep.id === 'piattaforma' && state.piattaforma && !state.socket) {
-    showToast('Scegli prima il socket (AM5/AM4 o LGA) prima di continuare');
-    return;
-  }
   if (state.step < STEPS.length - 1) {
     state.step++;
     playWhoosh();
@@ -1899,8 +1920,7 @@ function selPlatform(pl) {
   state.build.ram = null;
   state.filters = {};
   playClick();
-  if (pl === 'amd') checkAndUnlockAchievement('platform','amd');
-  else checkAndUnlockAchievement('platform','intel');
+
   render();
 }
 
@@ -2134,12 +2154,12 @@ function calcBuildTDP() {
   const breakdown = {};
 
   const _p = k => PRODS.find(x=>x.k===k);
-  if(b.cpu)    { const p=_p(b.cpu);    if(p){ breakdown.cpu    = getCPUPeak(p.d);     total += breakdown.cpu; } }
-  if(b.gpu)    { const p=_p(b.gpu);    if(p){ breakdown.gpu    = getTDP('gpu',p.d);   total += breakdown.gpu; } }
-  if(b.mobo)   { const p=_p(b.mobo);   if(p){ breakdown.mobo   = getTDP('mobo',p.d);  total += breakdown.mobo; } }
-  if(b.ram)    { const p=_p(b.ram);    if(p){ breakdown.ram    = calcRAMWatt(p.d);    total += breakdown.ram; } }
-  if(b.ssd)    { const p=_p(b.ssd);    if(p){ breakdown.ssd    = getTDP('ssd',p.d);   total += breakdown.ssd; } }
-  if(b.cooler) { const p=_p(b.cooler); if(p){ breakdown.cooler = getTDP('cooler',p.d);total += breakdown.cooler; } }
+  if(b.cpu)    { const p=_p(b.cpu);    if(p){ breakdown.cpu    = getCPUPeak(p.d);        total += breakdown.cpu; } }
+  if(b.gpu)    { const p=_p(b.gpu);    if(p){ breakdown.gpu    = getTDP('gpu',p.d);       total += breakdown.gpu; } }
+  if(b.mobo)   { const p=_p(b.mobo);   if(p){ breakdown.mobo   = getTDP('mobo',p.d);      total += breakdown.mobo; } }
+  if(b.ram)    { const p=_p(b.ram);    if(p){ breakdown.ram    = calcRAMWatt(p.d);        total += breakdown.ram; } }
+  if(b.ssd)    { const p=_p(b.ssd);    if(p){ breakdown.ssd    = getTDP('ssd',p.d);       total += breakdown.ssd; } }
+  if(b.cooler) { const p=_p(b.cooler); if(p){ breakdown.cooler = getTDP('cooler',p.d);    total += breakdown.cooler; } }
   // Stima ventole case + misc
   breakdown.misc = 25;
   total += 25;
@@ -2199,55 +2219,57 @@ function updateRisparmio() {
 // ── ACHIEVEMENTS ─────────────────────────────────────────
 const ACHIEVEMENTS = {
   // Piattaforma
-  'team_red': { icon:'🔴', title:'Team Red', desc:'Hai scelto il lato AMD', trigger: b => b.piattaforma === 'AMD' },
-  'team_blue': { icon:'🔵', title:'Team Blue', desc:'Hai scelto il lato Intel', trigger: b => b.piattaforma === 'Intel' },
-  // CPU
-  'hunter_3d':      { icon:'🎮', title:'3D Hunter',      desc:'V-Cache: il segreto dei pro',  trigger: b => { const p=b.cpu&&PRODS.find(x=>x.k===b.cpu); return p&&p.d.toLowerCase().includes('x3d'); } },
-  'no_mercy':       { icon:'💀', title:'No Mercy',       desc:'Ryzen 9 — nessuno ti ferma',   trigger: b => { const p=b.cpu&&PRODS.find(x=>x.k===b.cpu); return p&&p.d.toLowerCase().includes('ryzen 9'); } },
-  'overclock_king': { icon:'⚡', title:'Overclock King', desc:'Intel i9 — potenza bruta',     trigger: b => { const p=b.cpu&&PRODS.find(x=>x.k===b.cpu); return p&&p.d.toLowerCase().includes('i9'); } },
+  'team_red':   { icon:'🔴', title:'Team Red',   desc:'Hai scelto il lato AMD',   trigger: b => b.piattaforma === 'AMD' },
+  'team_blue':  { icon:'🔵', title:'Team Blue',  desc:'Hai scelto il lato Intel', trigger: b => b.piattaforma === 'Intel' },
+  // CPU — usa PRODS.find() perché b.cpu è una chiave stringa
+  'hunter_3d':      { icon:'🎮', title:'3D Hunter',      desc:'V-Cache: il segreto dei pro',  trigger: b => { const p = b.cpu && PRODS.find(x=>x.k===b.cpu); return p && p.d.toLowerCase().includes('x3d'); } },
+  'no_mercy':       { icon:'💀', title:'No Mercy',       desc:'Ryzen 9 — nessuno ti ferma',   trigger: b => { const p = b.cpu && PRODS.find(x=>x.k===b.cpu); return p && p.d.toLowerCase().includes('ryzen 9'); } },
+  'overclock_king': { icon:'⚡', title:'Overclock King', desc:'Intel i9 — potenza bruta',     trigger: b => { const p = b.cpu && PRODS.find(x=>x.k===b.cpu); return p && p.d.toLowerCase().includes('i9'); } },
   'il_cervello':    { icon:'🧠', title:'Il Cervello',    desc:'CPU installata nella build',   trigger: b => !!b.cpu },
   // Mobo
-  'premium_board': { icon:'👑', title:'Premium Board', desc:'X870/Z790 — solo il meglio', trigger: b => { const p=b.mobo&&PRODS.find(x=>x.k===b.mobo); return p&&(p.d.toLowerCase().includes('x870')||p.d.toLowerCase().includes('z790')); } },
+  'premium_board': { icon:'👑', title:'Premium Board', desc:'X870/Z790 — solo il meglio', trigger: b => { const p = b.mobo && PRODS.find(x=>x.k===b.mobo); return p && (p.d.toLowerCase().includes('x870') || p.d.toLowerCase().includes('z790')); } },
   'connesso':      { icon:'🔌', title:'Connesso',      desc:'Scheda madre installata',    trigger: b => !!b.mobo },
   // Case
-  'the_castle':  { icon:'🏰', title:'The Castle',       desc:'Full Tower — grande e maestoso', trigger: b => { const p=b.case&&PRODS.find(x=>x.k===b.case); return p&&p.d.toLowerCase().includes('full'); } },
-  'small_deadly':{ icon:'💎', title:'Small but Deadly', desc:'ITX — piccolo e letale',         trigger: b => { const p=b.case&&PRODS.find(x=>x.k===b.case); return p&&p.d.toLowerCase().includes('itx'); } },
+  'the_castle':  { icon:'🏰', title:'The Castle',       desc:'Full Tower — grande e maestoso', trigger: b => { const p = b.case && PRODS.find(x=>x.k===b.case); return p && p.d.toLowerCase().includes('full'); } },
+  'small_deadly':{ icon:'💎', title:'Small but Deadly', desc:'ITX — piccolo e letale',         trigger: b => { const p = b.case && PRODS.find(x=>x.k===b.case); return p && p.d.toLowerCase().includes('itx'); } },
   'casa_dolce':  { icon:'🏠', title:'Casa Dolce Casa',  desc:'Il tuo PC ha trovato dimora',    trigger: b => !!b.case },
   // RAM
-  'speed_demon': { icon:'🚀', title:'Speed Demon', desc:'DDR5-6000+ — oltre i limiti', trigger: b => { const p=b.ram&&PRODS.find(x=>x.k===b.ram); return p&&(p.d.includes('6000')||p.d.includes('6400')||p.d.includes('6600')||p.d.includes('7200')); } },
-  'elefante':    { icon:'🐘', title:'Elefante',    desc:'64GB+ — memoria infinita',    trigger: b => { const p=b.ram&&PRODS.find(x=>x.k===b.ram); return p&&(p.d.toLowerCase().includes('64gb')||p.d.toLowerCase().includes('128gb')||p.d.toLowerCase().includes('64 gb')); } },
+  'speed_demon': { icon:'🚀', title:'Speed Demon', desc:'DDR5-6000+ — oltre i limiti', trigger: b => { const p = b.ram && PRODS.find(x=>x.k===b.ram); return p && (p.d.includes('6000')||p.d.includes('6400')||p.d.includes('6600')||p.d.includes('7200')); } },
+  'elefante':    { icon:'🐘', title:'Elefante',    desc:'64GB+ — memoria infinita',    trigger: b => { const p = b.ram && PRODS.find(x=>x.k===b.ram); return p && (p.d.toLowerCase().includes('64gb')||p.d.toLowerCase().includes('128gb')||p.d.toLowerCase().includes('64 gb')); } },
   'il_dna':      { icon:'🧬', title:'Il DNA',      desc:'RAM installata nella build',  trigger: b => !!b.ram },
   // GPU
-  'vulcano':    { icon:'🌋', title:'Vulcano',    desc:'RTX 5080+ — potenza eruttiva',        trigger: b => { const p=b.gpu&&PRODS.find(x=>x.k===b.gpu); return p&&(p.d.toLowerCase().includes('5080')||p.d.toLowerCase().includes('5090')); } },
-  'high_roller':{ icon:'🔥', title:'High Roller',desc:'GPU top-tier senza compromessi',      trigger: b => { const p=b.gpu&&PRODS.find(x=>x.k===b.gpu); return p&&(p.d.toLowerCase().includes('5070 ti')||p.d.toLowerCase().includes('9070 xt')||p.d.toLowerCase().includes('4090')); } },
-  'sweet_spot': { icon:'🎯', title:'Sweet Spot', desc:'Massimo valore per ogni euro',         trigger: b => { const p=b.gpu&&PRODS.find(x=>x.k===b.gpu); return p&&(p.d.toLowerCase().includes('5060')||p.d.toLowerCase().includes('4070')||p.d.toLowerCase().includes('9060')); } },
-  'la_visione': { icon:'👁️', title:'La Visione', desc:'GPU installata nella build',          trigger: b => !!b.gpu },
+  'vulcano':    { icon:'🌋', title:'Vulcano',    desc:'RTX 5080+ — potenza eruttiva',       trigger: b => { const p = b.gpu && PRODS.find(x=>x.k===b.gpu); return p && (p.d.toLowerCase().includes('5080')||p.d.toLowerCase().includes('5090')); } },
+  'high_roller':{ icon:'🔥', title:'High Roller',desc:'GPU top-tier senza compromessi',     trigger: b => { const p = b.gpu && PRODS.find(x=>x.k===b.gpu); return p && (p.d.toLowerCase().includes('5070 ti')||p.d.toLowerCase().includes('9070 xt')||p.d.toLowerCase().includes('4090')); } },
+  'sweet_spot': { icon:'🎯', title:'Sweet Spot', desc:'Massimo valore per ogni euro',        trigger: b => { const p = b.gpu && PRODS.find(x=>x.k===b.gpu); return p && (p.d.toLowerCase().includes('5060')||p.d.toLowerCase().includes('4070')||p.d.toLowerCase().includes('9060')); } },
+  'la_visione': { icon:'👁️', title:'La Visione', desc:'GPU installata nella build',         trigger: b => !!b.gpu },
   // SSD
-  'ludicrous':  { icon:'💨', title:'Ludicrous Speed', desc:'Gen 5 — Spaceballs approved',     trigger: b => { const p=b.ssd&&PRODS.find(x=>x.k===b.ssd); return p&&(p._tipo==='NVMe Gen 5'||p.d.toLowerCase().includes('gen 5')||p.d.toLowerCase().includes('gen5')); } },
-  'flash':      { icon:'⚡', title:'Flash',           desc:'Gen 4 — caricamenti? cosa sono?', trigger: b => { const p=b.ssd&&PRODS.find(x=>x.k===b.ssd); return p&&(p._tipo==='NVMe Gen 4'||p.d.toLowerCase().includes('gen 4')||p.d.toLowerCase().includes('gen4')); } },
-  'archiviato': { icon:'💾', title:'Archiviato',      desc:'SSD installato nella build',      trigger: b => !!b.ssd },
+  'ludicrous':   { icon:'💨', title:'Ludicrous Speed', desc:'Gen 5 — Spaceballs approved',    trigger: b => { const p = b.ssd && PRODS.find(x=>x.k===b.ssd); return p && (p._tipo==='NVMe Gen 5'||p.d.toLowerCase().includes('gen 5')||p.d.toLowerCase().includes('gen5')); } },
+  'flash':       { icon:'⚡', title:'Flash',           desc:'Gen 4 — caricamenti? cosa sono?',trigger: b => { const p = b.ssd && PRODS.find(x=>x.k===b.ssd); return p && (p._tipo==='NVMe Gen 4'||p.d.toLowerCase().includes('gen 4')||p.d.toLowerCase().includes('gen4')); } },
+  'archiviato':  { icon:'💾', title:'Archiviato',      desc:'SSD installato nella build',     trigger: b => !!b.ssd },
   // PSU
-  'nuclear_power': { icon:'☢️', title:'Nuclear Power', desc:'1000W+ — centrale elettrica', trigger: b => { const p=b.psu&&PRODS.find(x=>x.k===b.psu); return p&&getPSUWatt(p.d)>=1000; } },
+  'nuclear_power': { icon:'☢️', title:'Nuclear Power', desc:'1000W+ — centrale elettrica', trigger: b => { const p = b.psu && PRODS.find(x=>x.k===b.psu); return p && getPSUWatt(p.d) >= 1000; } },
   'equilibrio':    { icon:'✅', title:'Equilibrio Perfetto', desc:'PSU perfettamente dimensionata', trigger: b => {
-    const p=b.psu&&PRODS.find(x=>x.k===b.psu); if(!p) return false;
-    const w=getPSUWatt(p.d); const {minPSU}=calcBuildTDP();
-    return w>=minPSU && w<=minPSU+150;
+    const p = b.psu && PRODS.find(x=>x.k===b.psu);
+    if(!p) return false;
+    const w = getPSUWatt(p.d);
+    const {minPSU} = calcBuildTDP();
+    return w >= minPSU && w <= minPSU + 150;
   }},
   'alimentato': { icon:'🔋', title:'Alimentato', desc:'PSU installata nella build', trigger: b => !!b.psu },
   // Dissipatore
-  'arctic_circle':  { icon:'❄️', title:'Arctic Circle',  desc:'AIO 360mm — freddo polare',       trigger: b => { const p=b.cooler&&PRODS.find(x=>x.k===b.cooler); return p&&p.d.toLowerCase().includes('360'); } },
-  'silent_thunder': { icon:'🌬️', title:'Silent Thunder', desc:'Dual tower — silenzioso ma letale', trigger: b => { const p=b.cooler&&PRODS.find(x=>x.k===b.cooler); return p&&p.d.toLowerCase().includes('dual'); } },
-  'sotto_controllo':{ icon:'🌡️', title:'Sotto Controllo',desc:'Dissipatore installato',            trigger: b => !!b.cooler },
+  'arctic_circle':  { icon:'❄️', title:'Arctic Circle',  desc:'AIO 360mm — freddo polare',      trigger: b => { const p = b.cooler && PRODS.find(x=>x.k===b.cooler); return p && p.d.toLowerCase().includes('360'); } },
+  'silent_thunder': { icon:'🌬️', title:'Silent Thunder', desc:'Dual tower — silenzioso ma letale',trigger: b => { const p = b.cooler && PRODS.find(x=>x.k===b.cooler); return p && p.d.toLowerCase().includes('dual'); } },
+  'sotto_controllo':{ icon:'🌡️', title:'Sotto Controllo',desc:'Dissipatore installato',           trigger: b => !!b.cooler },
   // Build completa
   'build_complete': { icon:'🏆', title:'Build Complete', desc:'Sei ufficialmente un PC Builder', trigger: b => Object.keys(b).filter(k => b[k]).length >= 8 },
   'no_budget': { icon:'💸', title:'No Budget No Party', desc:'Build da oltre €3.000', trigger: b => {
-    const tot = Object.values(b).filter(Boolean).reduce((s,p)=>s+calcP(p.p),0);
+    const tot = Object.values(b).filter(Boolean).reduce((s,k) => { const p=PRODS.find(x=>x.k===k); return s+(p?calcP(p.p):0); }, 0);
     return tot > 3000;
   }},
   'budget_master': { icon:'🧠', title:'Budget Master', desc:'Build completa sotto €1.200', trigger: b => {
-    const done = Object.values(b).filter(Boolean).length;
-    const tot = Object.values(b).filter(Boolean).reduce((s,p)=>s+calcP(p.p),0);
-    return done >= 8 && tot < 1200;
+    const vals = Object.values(b).filter(Boolean);
+    const tot = vals.reduce((s,k) => { const p=PRODS.find(x=>x.k===k); return s+(p?calcP(p.p):0); }, 0);
+    return vals.length >= 8 && tot < 1200;
   }},
   'perfectly_balanced': { icon:'⚖️', title:'Perfectly Balanced', desc:'Nessun bottleneck rilevato', trigger: b => {
     const alert = getResocontoAlerts();
@@ -2371,9 +2393,15 @@ function playSound(type) {
 function getResocontoAlerts() {
   const b = state.build;
   const alerts = [];
+  // Helper: risolve chiave stringa → oggetto prodotto
   const _p = k => k ? PRODS.find(x=>x.k===k) : null;
-  const pCPU=_p(b.cpu), pGPU=_p(b.gpu), pPSU=_p(b.psu);
-  const pRAM=_p(b.ram), pMobo=_p(b.mobo), pSSD=_p(b.ssd), pCooler=_p(b.cooler);
+  const pCPU    = _p(b.cpu);
+  const pGPU    = _p(b.gpu);
+  const pPSU    = _p(b.psu);
+  const pRAM    = _p(b.ram);
+  const pMobo   = _p(b.mobo);
+  const pSSD    = _p(b.ssd);
+  const pCooler = _p(b.cooler);
 
   // 1. PSU check
   if(pPSU && (b.cpu || b.gpu)) {
@@ -2500,9 +2528,9 @@ function getResocontoAlerts() {
   }
 
   // 6. Upgrade consigliato SSD
-  if(b.ssd && pSSD.d) {
+  if(pSSD) {
     const ssdName = pSSD.d.toLowerCase();
-    if((ssdName.includes('gen 3') || ssdName.includes('gen3')) && b.mobo && (pMobo.d.toLowerCase().includes('b650') || pMobo.d.toLowerCase().includes('x870') || pMobo.d.toLowerCase().includes('b850'))) {
+    if((ssdName.includes('gen 3') || ssdName.includes('gen3')) && pMobo && (pMobo.d.toLowerCase().includes('b650') || pMobo.d.toLowerCase().includes('x870') || pMobo.d.toLowerCase().includes('b850'))) {
       alerts.push({
         level: 'info',
         icon: '💡',
@@ -2555,220 +2583,6 @@ function updateAllExtras() {
   renderResoconto();
 }
 
-
-// ══ CHECKOUT ═════════════════════════════════════════════
-function openCheckout() {
-  document.getElementById('modalOverlay').classList.add('open');
-}
-function closeCheckout() {
-  document.getElementById('modalOverlay').classList.remove('open');
-}
-function closeCheckoutIfOutside(e) {
-  if (e.target === document.getElementById('modalOverlay')) closeCheckout();
-}
-function openWhatsApp() {
-  const msg = buildMsg('','','','');
-  window.open(`https://wa.me/393477133866?text=${encodeURIComponent('Ciao! Sono interessato al configuratore PC.')}`, '_blank');
-}
-function buildMsg(name, email, phone, note) {
-  const LABELS = {case:'Case',cpu:'CPU',mobo:'Mobo',ram:'RAM',gpu:'GPU',ssd:'SSD',psu:'PSU',cooler:'Cooler',ventole:'Ventole'};
-  let totalForn = 0;
-  let lines = `*Configuratore PC — Minimal Gamers*\n`;
-  if (name) lines += `*Cliente:* ${name}\n`;
-  if (email) lines += `*Email:* ${email}\n`;
-  if (phone) lines += `*Tel:* ${phone}\n`;
-  lines += '\n*Build:*\n';
-  Object.entries(state.build).forEach(([sid,key]) => {
-    if (!key) return;
-    const p = PRODS.find(x=>x.k===key);
-    if (!p) return;
-    totalForn += p.p;
-    lines += `• ${LABELS[sid]||sid}: ${p.d} — ${fmt(p.p*IVA)}\n`;
-  });
-  const totalComp = totalForn * IVA;
-  const impl = calcImpl(totalComp);
-  lines += `
-*Totale:* ${fmt(totalComp + impl)}`;
-  if (note) lines += `
-*Note:* ${note}`;
-  return lines;
-}
-function submitOrder() {
-  const name  = document.getElementById('ord-name')?.value || '';
-  const email = document.getElementById('ord-email')?.value || '';
-  const phone = document.getElementById('ord-phone')?.value || '';
-  const note  = document.getElementById('ord-note')?.value  || '';
-  if (!name || !email || !phone) { showToast('Compila tutti i campi obbligatori'); return; }
-  const msg = buildMsg(name, email, phone, note);
-  const url = `https://wa.me/393477133866?text=${encodeURIComponent(msg)}`;
-  window.open(url, '_blank');
-  closeCheckout();
-}
-function shareLink() {
-  const p = new URLSearchParams();
-  if (state.piattaforma) p.set('pf', state.piattaforma);
-  if (state.socket)      p.set('sk', state.socket);
-  Object.entries(state.build).forEach(([k,v]) => { if(v) p.set(k,v); });
-  const url = location.href.split('?')[0] + '?' + p.toString();
-  navigator.clipboard.writeText(url).then(() => showToast('Link copiato!'));
-}
-
-// ══ TOAST ════════════════════════════════════════════════
-function showToast(msg) {
-  const t = document.getElementById('toast');
-  if (!t) return;
-  t.textContent = msg;
-  t.classList.add('show');
-  setTimeout(() => t.classList.remove('show'), 2500);
-}
-
-// ══ SUONI ════════════════════════════════════════════════
-function playClick() {
-  if (!soundEnabled) return;
-  try {
-    const ctx = new (window.AudioContext || window.webkitAudioContext)();
-    const osc = ctx.createOscillator();
-    const gain = ctx.createGain();
-    osc.connect(gain); gain.connect(ctx.destination);
-    osc.frequency.setValueAtTime(800, ctx.currentTime);
-    osc.frequency.exponentialRampToValueAtTime(400, ctx.currentTime + 0.1);
-    gain.gain.setValueAtTime(0.08, ctx.currentTime);
-    gain.gain.exponentialRampToValueAtTime(0.001, ctx.currentTime + 0.1);
-    osc.start(); osc.stop(ctx.currentTime + 0.1);
-  } catch(e) {}
-}
-function playWhoosh() {
-  if (!soundEnabled) return;
-  try {
-    const ctx = new (window.AudioContext || window.webkitAudioContext)();
-    const osc = ctx.createOscillator();
-    const gain = ctx.createGain();
-    osc.connect(gain); gain.connect(ctx.destination);
-    osc.frequency.setValueAtTime(200, ctx.currentTime);
-    osc.frequency.exponentialRampToValueAtTime(800, ctx.currentTime + 0.15);
-    gain.gain.setValueAtTime(0.06, ctx.currentTime);
-    gain.gain.exponentialRampToValueAtTime(0.001, ctx.currentTime + 0.15);
-    osc.start(); osc.stop(ctx.currentTime + 0.15);
-  } catch(e) {}
-}
-
-// ══ SPARK EFFECT ═════════════════════════════════════════
-function sparkEffect(e) {
-  if (!e || !e.currentTarget) return;
-  const rect = e.currentTarget.getBoundingClientRect();
-  const x = e.clientX - rect.left;
-  const y = e.clientY - rect.top;
-  for (let i = 0; i < 8; i++) {
-    const spark = document.createElement('div');
-    const angle = (Math.PI * 2 / 8) * i;
-    const distance = 30 + Math.random() * 20;
-    const dx = Math.cos(angle) * distance;
-    const dy = Math.sin(angle) * distance;
-    spark.style.cssText = `
-      position:absolute;width:4px;height:4px;border-radius:50%;
-      background:${Math.random()>.5?'var(--teal)':'var(--punch)'};
-      pointer-events:none;z-index:9999;
-      left:${e.clientX}px;top:${e.clientY}px;
-      transform:translate(-50%,-50%);
-      transition:all .4s ease-out;opacity:1;\n    `;
-    document.body.appendChild(spark);
-    requestAnimationFrame(() => {
-      spark.style.transform = `translate(calc(-50% + ${dx}px), calc(-50% + ${dy}px))`;
-      spark.style.opacity = '0';
-    });
-    setTimeout(() => spark.remove(), 400);
-  }
-}
-
-// ══ CANVAS PARTICELLE ════════════════════════════════════
-(function initParticles() {
-  const canvas = document.getElementById('particleCanvas');
-  if (!canvas) return;
-  const ctx = canvas.getContext('2d');
-  let W, H, particles = [];
-  
-  function resize() {
-    W = canvas.width = window.innerWidth;
-    H = canvas.height = window.innerHeight;
-  }
-  resize();
-  window.addEventListener('resize', resize);
-
-  const COLORS = ['rgba(45,212,191,', 'rgba(217,70,168,', 'rgba(255,255,255,'];
-  
-  for (let i = 0; i < 80; i++) {
-    particles.push({
-      x: Math.random() * window.innerWidth,
-      y: Math.random() * window.innerHeight,
-      r: Math.random() * 1.5 + .5,
-      vx: (Math.random()-.5) * .4,
-      vy: -(Math.random() * .6 + .2),
-      color: COLORS[Math.floor(Math.random()*COLORS.length)],
-      alpha: Math.random() * .6 + .2,
-      phase: Math.random() * Math.PI * 2,
-    });
-  }
-
-  function draw() {
-    ctx.clearRect(0, 0, W, H);
-    particles.forEach((p, i) => {
-      p.x += p.vx + Math.sin(Date.now()*.001 + p.phase) * .3;
-      p.y += p.vy;
-      if (p.y < -10) { p.y = H + 10; p.x = Math.random() * W; }
-      if (p.x < -10) p.x = W + 10;
-      if (p.x > W + 10) p.x = -10;
-
-      // Glow
-      const grad = ctx.createRadialGradient(p.x, p.y, 0, p.x, p.y, p.r * 4);
-      grad.addColorStop(0, p.color + p.alpha + ')');
-      grad.addColorStop(1, p.color + '0)');
-      ctx.beginPath();
-      ctx.arc(p.x, p.y, p.r * 4, 0, Math.PI * 2);
-      ctx.fillStyle = grad;
-      ctx.fill();
-
-      // Nucleo
-      ctx.beginPath();
-      ctx.arc(p.x, p.y, p.r, 0, Math.PI * 2);
-      ctx.fillStyle = p.color + (p.alpha * 1.5).toFixed(2) + ')';
-      ctx.fill();
-
-      // Connessioni
-      for (let j = i + 1; j < Math.min(i + 6, particles.length); j++) {
-        const p2 = particles[j];
-        const dx = p.x - p2.x, dy = p.y - p2.y;
-        const dist = Math.sqrt(dx*dx + dy*dy);
-        if (dist < 100) {
-          ctx.beginPath();
-          ctx.moveTo(p.x, p.y);
-          ctx.lineTo(p2.x, p2.y);
-          ctx.strokeStyle = `rgba(45,212,191,${(.15 * (1 - dist/100)).toFixed(3)})`;
-          ctx.lineWidth = .5;
-          ctx.stroke();
-        }
-      }
-    });
-    requestAnimationFrame(draw);
-  }
-  draw();
-})();
-
-// ══ URL PARAMS ═══════════════════════════════════════════
-function loadFromUrl() {
-  const p = new URLSearchParams(location.search);
-  if (p.get('pf')) state.piattaforma = p.get('pf');
-  if (p.get('sk')) state.socket = p.get('sk');
-  Object.keys(state.build).forEach(k => { if(p.get(k)) state.build[k] = p.get(k); });
-}
-
-// ══ ALIAS COMPATIBILITÀ ═══════════════════════════════════
-function buildResoconto() {
-  if (typeof getResocontoAlerts === 'function') return getResocontoAlerts();
-  return [];
-}
-function checkAndUnlockAchievement(sid, key) {
-  if (typeof checkAchievements === 'function') checkAchievements(sid, key);
-}
 
 // ══ CHECKOUT ═════════════════════════════════════════════
 function openCheckout() {

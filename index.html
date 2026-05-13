@@ -937,7 +937,7 @@ function isCompat(stepId, p) {
   const pi = state.piattaforma;
   const sk = state.socket;
 
-  // ── CPU ──────────────────────────────────────────────────
+  // ── CPU ───────────────────────────────────────────────────
   if (stepId === 'cpu') {
     if (sk && p.socket !== sk) return false;
     if (!sk) {
@@ -947,57 +947,59 @@ function isCompat(stepId, p) {
     return true;
   }
 
-  // ── SCHEDA MADRE ─────────────────────────────────────────
+  // ── SCHEDA MADRE ──────────────────────────────────────────
   if (stepId === 'mobo') {
     if (sk && p.socket !== sk) return false;
     return true;
   }
 
-  // ── RAM ──────────────────────────────────────────────────
-  if (stepId === 'ram') {
-    const mobo = b.mobo ? PRODS.find(x=>x.k===b.mobo) : null;
-    const cpu  = b.cpu  ? PRODS.find(x=>x.k===b.cpu)  : null;
-    const ddr  = (mobo||cpu)?.ddr;
-    if (ddr && p.ddr && p.ddr !== ddr) return false;
-    return true;
-  }
-
-  // ── CASE: compatibile col form factor della mobo ─────────
+  // ── CASE: deve supportare il form factor della mobo ───────
   if (stepId === 'case') {
     const mobo = b.mobo ? PRODS.find(x=>x.k===b.mobo) : null;
     if (mobo && mobo._form_factor && p._form_factor) {
-      const ORDER = { 'Mini-ITX':1, 'Micro-ATX':2, 'ATX':3, 'E-ATX':4 };
-      const moboRank = ORDER[mobo._form_factor] || 3;
-      const caseRank = ORDER[p._form_factor]    || 3;
-      // Il case deve supportare almeno il form factor della mobo
-      // Mini-ITX case → solo Mini-ITX mobo
-      // Micro-ATX case → Mini-ITX e Micro-ATX
-      // ATX case → Mini-ITX, Micro-ATX, ATX
-      // E-ATX case → tutto
+      // Gerarchia: Mini-ITX=1, Micro-ATX=2, ATX=3, E-ATX=4
+      // Un case supporta SEMPRE i form factor UGUALI O INFERIORI al suo
+      // Es: case ATX → accetta mobo ATX, Micro-ATX, Mini-ITX
+      // Es: case Micro-ATX → accetta mobo Micro-ATX, Mini-ITX
+      // Es: case Mini-ITX → solo mobo Mini-ITX
+      const RANK = {'Mini-ITX':1,'Micro-ATX':2,'ATX':3,'E-ATX':4};
+      const moboRank = RANK[mobo._form_factor] || 3;
+      const caseRank = RANK[p._form_factor]    || 3;
       if (caseRank < moboRank) return false;
     }
     return true;
   }
 
-  // ── PSU: form factor + wattaggio adeguato ────────────────
+  // ── RAM: compatibile col tipo DDR della mobo/cpu ──────────
+  if (stepId === 'ram') {
+    const mobo = b.mobo ? PRODS.find(x=>x.k===b.mobo) : null;
+    const cpu  = b.cpu  ? PRODS.find(x=>x.k===b.cpu)  : null;
+    const ddr  = (mobo || cpu) ? (mobo || cpu).ddr : null;
+    if (ddr && p.ddr && p.ddr !== ddr) return false;
+    return true;
+  }
+
+  // ── PSU: form factor compatibile col case ─────────────────
   if (stepId === 'psu') {
-    // Form factor: il case determina quale PSU accetta
-    const selectedCase = b.case ? PRODS.find(x=>x.k===b.case) : null;
-    if (selectedCase && selectedCase._psu_form && p._psu_form) {
-      const casePSU = selectedCase._psu_form;
+    const selCase = b.case ? PRODS.find(x=>x.k===b.case) : null;
+    if (selCase && selCase._psu_form && p._psu_form) {
+      const casePSU = selCase._psu_form;
       const psuForm = p._psu_form;
-      // SFX case accetta SFX e SFX-L, ATX case accetta ATX
+      // Case SFX → accetta solo SFX e SFX-L
+      // Case ATX → accetta ATX (e TFX ma sono rari)
       if (casePSU === 'SFX' && psuForm === 'ATX') return false;
       if (casePSU === 'SFX-L' && psuForm === 'ATX') return false;
+      if (casePSU === 'ATX' && psuForm === 'SFX') return false;
+      if (casePSU === 'ATX' && psuForm === 'SFX-L') return false;
     }
     return true;
   }
 
-  // ── DISSIPATORE: altezza compatibile col case ─────────────
+  // ── DISSIPATORE: altezza max compatibile col case ─────────
   if (stepId === 'cooler') {
-    const selectedCase = b.case ? PRODS.find(x=>x.k===b.case) : null;
-    if (selectedCase && selectedCase._max_cooler_h && p._cooler_h && p._cooler_h > 0) {
-      if (p._cooler_h > selectedCase._max_cooler_h) return false;
+    const selCase = b.case ? PRODS.find(x=>x.k===b.case) : null;
+    if (selCase && selCase._max_cooler_h && p._cooler_h && p._cooler_h > 0) {
+      if (p._cooler_h > selCase._max_cooler_h) return false;
     }
     return true;
   }

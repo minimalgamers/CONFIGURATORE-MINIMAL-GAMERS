@@ -1615,12 +1615,24 @@ function renderSubcatSelector(sid, allProds) {
 
   if (!cats.length) return null;
 
+  // Pre-filtra prodotti per piattaforma e socket scelti (per CPU/Mobo)
+  // così le subcat mostrano SOLO i prodotti compatibili con la scelta a monte
+  let baseProds = allProds;
+  if (sid === 'cpu' || sid === 'mobo') {
+    if (state.socket) {
+      baseProds = baseProds.filter(p => p.socket === state.socket);
+    } else if (state.piattaforma) {
+      const want = state.piattaforma === 'amd' ? 'AMD' : 'INTEL';
+      baseProds = baseProds.filter(p => p.platform === want);
+    }
+  }
+
   const counts = {};
   cats.forEach(c => {
-    counts[c.val] = allProds.filter(p => p[sc.field] === c.val).length;
+    counts[c.val] = baseProds.filter(p => p[sc.field] === c.val).length;
   });
 
-  const visible = allProds.length > 0 ? cats.filter(c => counts[c.val] > 0) : cats;
+  const visible = baseProds.length > 0 ? cats.filter(c => counts[c.val] > 0) : cats;
   if (!visible.length) return null;
 
   const active = state.filters[sid];

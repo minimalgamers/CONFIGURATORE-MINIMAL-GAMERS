@@ -1216,6 +1216,10 @@ function isCompat(stepId, p) {
   return true;
 }
 
+// ─── Fornitori ammessi per CPU ──────────────────────────
+// Caseking esclusa per le CPU (prezzi meno competitivi)
+const ALLOWED_CPU_SUPPLIERS = ['ACTION','TIER ONE'];
+
 function getProds(sid) {
   const CAT_MAP = {
     cpu:'CPU', mobo:'Scheda Madre', case:'Case',
@@ -1225,6 +1229,8 @@ function getProds(sid) {
   const cat = CAT_MAP[sid];
   if (!cat) return [];
   let list = PRODS.filter(p => p.c === cat);
+  // ── CPU ── solo da fornitori ACTION e TIER ONE
+  if (sid === 'cpu') list = list.filter(p => ALLOWED_CPU_SUPPLIERS.includes(p.s));
   // ── CASE ── non-PC esclusi + brand premium + solo ATX/E-ATX universali
   if (sid === 'case') {
     list = list.filter(p => isValidPCCase(p.d));
@@ -1682,12 +1688,29 @@ function renderCard(p, sid, isSelected, isIncompat) {
   if (p.b && !['AMD','Intel','INTEL'].includes(p.b))
     badges.push(`<span class="product-badge">${p.b}</span>`);
 
-  const stockTxt = p.stock > 50 ? ''
-    : p.stock > 0 ? `<div class="product-stock">Ultime ${p.stock} unità</div>`
-    : p.incoming  ? `<div class="product-stock" style="color:#f59e0b">🕐 In arrivo</div>`
-    : `<div class="product-stock" style="color:#ef4444">Esaurito</div>`;
-
-  const isEsaurito = (p.stock === 0 || p.stock === null) && !p.incoming;
+  // Logica disponibilità:
+  // - TIER ONE non comunica stock: disponibile se non c'è "incoming"
+  // - Altri fornitori: disponibile se stock > 0
+  const isTierOne = (p.s === 'TIER ONE');
+  let stockTxt = '';
+  let isEsaurito = false;
+  if (isTierOne) {
+    if (p.incoming) {
+      stockTxt = `<div class="product-stock" style="color:#f59e0b">🕐 In arrivo ${p.incoming}</div>`;
+    }
+    // se incoming null → disponibile (nessun badge stock)
+  } else {
+    if (p.stock > 50) {
+      stockTxt = '';
+    } else if (p.stock > 0) {
+      stockTxt = `<div class="product-stock">Ultime ${p.stock} unità</div>`;
+    } else if (p.incoming) {
+      stockTxt = `<div class="product-stock" style="color:#f59e0b">🕐 In arrivo</div>`;
+    } else {
+      stockTxt = `<div class="product-stock" style="color:#ef4444">Esaurito</div>`;
+      isEsaurito = true;
+    }
+  }
   const reason = isIncompat ? incompatReason(sid, p) : null;
   const isBlocked = !isSelected && (isEsaurito || isIncompat);
 
@@ -1734,11 +1757,17 @@ function renderProds(sid) {
     p.d.toLowerCase().includes(search) || (p.b||'').toLowerCase().includes(search));
 
   // Sort: selezionato primo, esauriti in fondo, poi prezzo
+  const isEsauritoP = (p) => {
+    // TIER ONE: esaurito solo se incoming (in arrivo a una data)
+    if (p.s === 'TIER ONE') return !!p.incoming;
+    // Altri: stock null/0 e nessun incoming = esaurito
+    return (p.stock === 0 || p.stock === null) && !p.incoming;
+  };
   const sortFn = (a, b) => {
     if (a.k === selKey) return -1;
     if (b.k === selKey) return 1;
-    const aE = (a.stock === 0 || a.stock === null) && !a.incoming;
-    const bE = (b.stock === 0 || b.stock === null) && !b.incoming;
+    const aE = isEsauritoP(a);
+    const bE = isEsauritoP(b);
     if (aE && !bE) return 1;
     if (!aE && bE) return -1;
     return a.p - b.p;
@@ -1842,11 +1871,15 @@ function doSearch(sid, val) {
   if (val) filtered = filtered.filter(p =>
     p.d.toLowerCase().includes(val.toLowerCase()) || (p.b||'').toLowerCase().includes(val.toLowerCase()));
 
+  const isEsauritoP = (p) => {
+    if (p.s === 'TIER ONE') return !!p.incoming;
+    return (p.stock === 0 || p.stock === null) && !p.incoming;
+  };
   const sortFn = (a, b) => {
     if (a.k === selKey) return -1;
     if (b.k === selKey) return 1;
-    const aE = (a.stock===0||a.stock===null) && !a.incoming;
-    const bE = (b.stock===0||b.stock===null) && !b.incoming;
+    const aE = isEsauritoP(a);
+    const bE = isEsauritoP(b);
     if (aE && !bE) return 1;
     if (!aE && bE) return -1;
     return a.p - b.p;

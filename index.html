@@ -1239,7 +1239,25 @@ function getProds(sid) {
       const ff = deduceCaseFormFactor(p.d);
       return ff === 'ATX' || ff === 'E-ATX';
     });
+    // Esclusione modelli specifici inadatti (slim desktop ecc.)
+    list = list.filter(p => {
+      const dn = (p.d || '').toUpperCase();
+      if (/DEEPCOOL\s+WAVE\s+V2/.test(dn)) return false;
+      return true;
+    });
   }
+  // ── MOBO ── esclude schede workstation extreme (TRX50/WRX80/W680/W790 ecc.)
+  if (sid === 'mobo') {
+    list = list.filter(p => {
+      const dn = (p.d || '').toUpperCase();
+      if (/TRX50|TRX40|WRX80|WRX90|W680|W690|W790|W880|SP3|SP5/.test(dn)) return false;
+      if (/SUPERMICRO|TYAN|\bN100\b|\bN200\b|\bN305\b|FANLESS|INDUSTRIAL/.test(dn)) return false;
+      if (/MINING|BTC|\bRIG\b/.test(dn)) return false;
+      if (/SERVER GRADE|RACKMOUNT|IPMI/.test(dn)) return false;
+      return true;
+    });
+  }
+
   // ── PSU ── solo brand premium + esclude prodotti misclassificati come PSU
   if (sid === 'psu') {
     list = list.filter(p => brandAllowed(p.b, ALLOWED_PSU_BRANDS));
@@ -1462,10 +1480,25 @@ function renderProgress() {
 }
 
 function goStep(i) {
-  if (i >= 0 && i < STEPS.length) {
-    state.step = i;
-    render();
+  if (i < 0 || i >= STEPS.length) return;
+  // Validazione prerequisiti: non permettere di saltare avanti senza piattaforma+socket
+  if (i >= 1) {
+    if (!state.piattaforma) {
+      state.step = 0;  // forza ritorno a piattaforma
+      render();
+      showToast && showToast('Scegli prima la piattaforma');
+      return;
+    }
+    if (!state.socket) {
+      state.step = 0;
+      render();
+      showToast && showToast('Scegli prima il socket');
+      return;
+    }
   }
+  state.step = i;
+  render();
+  window.scrollTo({top: 0, behavior: 'smooth'});
 }
 
 // ══ RENDER SIDEBAR ════════════════════════════════════════
@@ -1674,8 +1707,11 @@ function selectSubcatEl(el) {
 
 function selectSubcat(sid, val) {
   state.filters[sid] = val;
+  // Quando torni alle categorie (val=''), resetta anche la ricerca
+  if (!val) state.search[sid] = '';
   playClick();
   render();
+  window.scrollTo({top:0, behavior:'smooth'});
 }
 
 // ══ RENDER PRODUCTS ══════════════════════════════════════
@@ -1752,14 +1788,26 @@ function renderCard(p, sid, isSelected, isIncompat) {
 function renderProds(sid) {
   const allProds = getProds(sid);
   const sc = SUBCATS[sid];
-  const active = state.filters[sid];
+  let active = state.filters[sid];
   const search = (state.search[sid] || '').toLowerCase();
   const selKey = state.build[sid];
+
+  // SANITY: se il filtro sottocategoria attivo non produce alcun prodotto valido,
+  // resettalo automaticamente — evita che torni indietro e trovi la lista vuota
+  if (sc && active) {
+    const checkExists = allProds.some(p => p[sc.field] === active);
+    if (!checkExists) {
+      state.filters[sid] = null;
+      active = null;
+    }
+  }
 
   // Se ha sottocategorie e nessuna selezionata, mostra le card sottocategorie
   if (sc && !active) {
     const subcatHtml = renderSubcatSelector(sid, allProds, () => {});
     if (subcatHtml) return subcatHtml;
+    // Se renderSubcatSelector ritorna null (zero subcat con prodotti),
+    // mostra direttamente tutti i prodotti (fallback)
   }
 
   // Filtra per sottocategoria e ricerca
@@ -1926,12 +1974,12 @@ function doSearch(sid, val) {
 }
 
 // ══ SELEZIONE PRODOTTO ═══════════════════════════════════
-function selProd(sid, key) {
+function selProd(sid, key, evt) {
   const prev = state.build[sid];
   state.build[sid] = prev === key ? null : key;
   if (state.build[sid]) {
     playClick();
-    sparkEffect(event);
+    if (typeof sparkEffect === 'function' && evt) sparkEffect(evt);
   }
   renderSidebar();
   render();
@@ -1950,6 +1998,18 @@ function selProdEl(el, evt) {
 
 // ══ NAVIGAZIONE ══════════════════════════════════════════
 function nextStep() {
+  // Validazione: se sei sullo step piattaforma, serve piattaforma+socket per avanzare
+  const curStep = STEPS[state.step];
+  if (curStep && curStep.id === 'piattaforma') {
+    if (!state.piattaforma) {
+      showToast && showToast('Scegli prima la piattaforma');
+      return;
+    }
+    if (!state.socket) {
+      showToast && showToast('Scegli prima il socket (AM5/AM4 o LGA)');
+      return;
+    }
+  }
   if (state.step < STEPS.length - 1) {
     state.step++;
     playWhoosh();
@@ -1959,8 +2019,21 @@ function nextStep() {
 }
 
 function prevStep() {
+  // Context-aware: se sei dentro una sottocategoria (es. "Ryzen 9" in CPU),
+  // il primo click su Indietro torna al selettore sottocategorie.
+  // Il secondo click va effettivamente allo step precedente.
+  const curStep = STEPS[state.step];
+  if (curStep && SUBCATS[curStep.id] && state.filters[curStep.id]) {
+    state.filters[curStep.id] = null;
+    state.search[curStep.id] = '';
+    render();
+    window.scrollTo({top:0, behavior:'smooth'});
+    return;
+  }
+  // Altrimenti torna allo step precedente
   if (state.step > 0) {
     state.step--;
+    playWhoosh && playWhoosh();
     render();
     window.scrollTo({top:0, behavior:'smooth'});
   }

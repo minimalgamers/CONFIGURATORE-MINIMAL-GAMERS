@@ -945,18 +945,29 @@ function fmtR(tot){ return fmt(tot / 36); }
 
 
 
-// ─── Marchi case ammessi nel configuratore ──────────────
+// ─── Marchi ammessi nel configuratore ──────────────────
 // Solo brand premium/affidabili — esclude rebranded, no-name, industriali
 const ALLOWED_CASE_BRANDS = [
-  'Fractal Design',
-  'Lian Li',
-  'PHANTEKS',
-  'Corsair',
-  'Hyte',
-  'NZXT',
-  'Raijintek',
-  'Antec'
+  'Fractal Design','Lian Li','PHANTEKS','Corsair','Hyte','NZXT','Raijintek','Antec',
+  'MSI','ASUS','DEEPCOOL','Thermaltake'
 ];
+
+const ALLOWED_PSU_BRANDS = [
+  'Corsair','Seasonic','be quiet!','ASUS','MSI','Lian Li','NZXT','PHANTEKS',
+  'Super Flower','Silverstone','Thermaltake','Cooler Master','Chieftec','Gigabyte','ADATA'
+];
+
+const ALLOWED_COOLER_BRANDS = [
+  'Noctua','be quiet!','Thermalright','Arctic','Corsair','NZXT','Lian Li',
+  'ASUS','MSI','PHANTEKS','DEEPCOOL','Thermaltake','Cooler Master'
+];
+
+// Helper: confronto brand case-insensitive (il json ha PHANTEKS, Phanteks, be quiet!, BE QUIET! ecc.)
+function brandAllowed(brand, allowedList) {
+  if (!brand) return false;
+  const b = brand.toLowerCase().trim();
+  return allowedList.some(a => a.toLowerCase().trim() === b);
+}
 
 // ─── Filtra case NON adatti a build PC standard ──────────
 // Esclude case per Raspberry Pi, NUC, UCFF, server rack, mini-PC industriali
@@ -1214,10 +1225,28 @@ function getProds(sid) {
   const cat = CAT_MAP[sid];
   if (!cat) return [];
   let list = PRODS.filter(p => p.c === cat);
-  // Filtra case non adatti a PC standard + solo brand ammessi
+  // ── CASE ── non-PC esclusi + brand premium + solo ATX/E-ATX universali
   if (sid === 'case') {
     list = list.filter(p => isValidPCCase(p.d));
-    list = list.filter(p => ALLOWED_CASE_BRANDS.includes(p.b));
+    list = list.filter(p => brandAllowed(p.b, ALLOWED_CASE_BRANDS));
+    list = list.filter(p => {
+      const ff = deduceCaseFormFactor(p.d);
+      return ff === 'ATX' || ff === 'E-ATX';
+    });
+  }
+  // ── PSU ── solo brand premium + esclude prodotti misclassificati come PSU
+  if (sid === 'psu') {
+    list = list.filter(p => brandAllowed(p.b, ALLOWED_PSU_BRANDS));
+    // Esclude case erroneamente classificati come PSU (es. Thermaltake Tower 500)
+    list = list.filter(p => {
+      const dn = (p.d || '').toUpperCase();
+      const isLikelyCase = /\b(MIDI TOWER|MID TOWER|MIDI-TOWER|MID-TOWER|FULL TOWER|FULL-TOWER|GEHÄUSE|CHASSIS)\b/.test(dn);
+      return !isLikelyCase;
+    });
+  }
+  // ── DISSIPATORE ── solo brand premium (esclude watercooling custom)
+  if (sid === 'cooler') {
+    list = list.filter(p => brandAllowed(p.b, ALLOWED_COOLER_BRANDS));
   }
   return list;
 }

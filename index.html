@@ -943,6 +943,43 @@ function fmtR(tot){ return fmt(tot / 36); }
 
 // ══ COMPATIBILITÀ ════════════════════════════════════════
 
+
+
+// ─── Marchi case ammessi nel configuratore ──────────────
+// Solo brand premium/affidabili — esclude rebranded, no-name, industriali
+const ALLOWED_CASE_BRANDS = [
+  'Fractal Design',
+  'Lian Li',
+  'PHANTEKS',
+  'Corsair',
+  'Hyte',
+  'NZXT',
+  'Raijintek',
+  'Antec'
+];
+
+// ─── Filtra case NON adatti a build PC standard ──────────
+// Esclude case per Raspberry Pi, NUC, UCFF, server rack, mini-PC industriali
+function isValidPCCase(d) {
+  if (!d) return true;
+  const dn = d.toUpperCase();
+  // Case per microcomputer/SBC
+  if (/RASPBERRY|TINKER BOARD|BANANA PI|ORANGE PI|ROCK PI|ARDUINO/.test(dn)) return false;
+  if (/\bPI\s*[345][\s\-]*[A-Z]?\b/.test(dn)) return false;
+  // NUC / UCFF / mini-PC industriali
+  if (/INTEL NUC|ASUS NUC|UCFF|NUC\s*1[1234]|NUC PRO/.test(dn)) return false;
+  // ASUS mini-PC modelli specifici
+  if (/PN5[234]|PN6[4]/.test(dn)) return false;
+  // Server rack
+  if (/RACKMOUNT|SERVERGEHÄUSE|RACK SERVER/.test(dn)) return false;
+  if (/\b[12345]U\b/.test(dn)) return false;
+  // Thin Mini-ITX = industrial slim, non standard
+  if (/THIN[\s\-]?MINI[\s\-]?ITX/.test(dn)) return false;
+  // Specifici noti
+  if (/ARK GEHÄUSE/.test(dn)) return false;
+  return true;
+}
+
 // ─── Deduzione form factor MOBO dal nome del prodotto ───
 // Fallback usato quando il json non ha _form_factor precomputato
 function deduceMoboFormFactor(d) {
@@ -1176,7 +1213,13 @@ function getProds(sid) {
   };
   const cat = CAT_MAP[sid];
   if (!cat) return [];
-  return PRODS.filter(p => p.c === cat);
+  let list = PRODS.filter(p => p.c === cat);
+  // Filtra case non adatti a PC standard + solo brand ammessi
+  if (sid === 'case') {
+    list = list.filter(p => isValidPCCase(p.d));
+    list = list.filter(p => ALLOWED_CASE_BRANDS.includes(p.b));
+  }
+  return list;
 }
 
 // ══ SOTTOCATEGORIE ════════════════════════════════════════

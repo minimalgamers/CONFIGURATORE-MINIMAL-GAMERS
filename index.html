@@ -909,6 +909,7 @@ const state = {
   build: {
     case: null, cpu: null, mobo: null, ram: null,
     gpu: null, ssd: null, psu: null, cooler: null, ventole: null,
+    monitor: null, mouse: null, keyboard: null, headset: null,
   },
   filters: {},
   search: {},
@@ -927,7 +928,11 @@ const STEPS = [
   { id: 'ssd',        label: 'SSD' },
   { id: 'psu',        label: 'Alimentatore' },
   { id: 'cooler',     label: 'Dissipatore' },
-  { id: 'ventole',    label: 'Ventole (opz.)' },
+  { id: 'ventole',    label: 'Archiviazione (opz.)' },
+  { id: 'monitor',    label: 'Monitor (opz.)' },
+  { id: 'mouse',      label: 'Mouse (opz.)' },
+  { id: 'keyboard',   label: 'Tastiera (opz.)' },
+  { id: 'headset',    label: 'Cuffie (opz.)' },
   { id: 'riepilogo',  label: 'Riepilogo' },
 ];
 
@@ -960,6 +965,24 @@ const ALLOWED_PSU_BRANDS = [
 const ALLOWED_COOLER_BRANDS = [
   'Noctua','be quiet!','Thermalright','Arctic','Corsair','NZXT','Lian Li',
   'ASUS','MSI','PHANTEKS','DEEPCOOL','Thermaltake','Cooler Master'
+];
+
+// Periferiche gaming: brand selezionati in base alla disponibilità ACTION
+// I confronti sono case-insensitive in brandAllowed()
+const ALLOWED_MOUSE_BRANDS = [
+  'Logitech','Razer','Corsair','SteelSeries','MSI',
+  'ENDORFY','HAVIT','Trust'
+];
+const ALLOWED_KEYBOARD_BRANDS = [
+  'Logitech','Trust','HAVIT','SAVIO','ENDORFY'
+];
+const ALLOWED_HEADSET_BRANDS = [
+  'Logitech','Razer','ASUS','Trust','HAVIT'
+];
+// Monitor: brand professionali, Xiaomi escluso per scelta
+const ALLOWED_MONITOR_BRANDS = [
+  'ASUS','MSI','LG','Samsung','Gigabyte','AOC','Acer','Alienware','Dell',
+  'BenQ','Philips','Iiyama','IIYAMA','HP','Hewlett-Packard','Lenovo','Sony','LG Electronics'
 ];
 
 // Helper: confronto brand case-insensitive (il json ha PHANTEKS, Phanteks, be quiet!, BE QUIET! ecc.)
@@ -1224,7 +1247,8 @@ function getProds(sid) {
   const CAT_MAP = {
     cpu:'CPU', mobo:'Scheda Madre', case:'Case',
     ram:'RAM', gpu:'GPU', ssd:'SSD',
-    psu:'PSU', cooler:'Dissipatore', ventole:'Extra'
+    psu:'PSU', cooler:'Dissipatore', ventole:'Extra',
+    monitor:'Monitor', mouse:'Mouse', keyboard:'Tastiera', headset:'Cuffie'
   };
   const cat = CAT_MAP[sid];
   if (!cat) return [];
@@ -1239,13 +1263,37 @@ function getProds(sid) {
       const ff = deduceCaseFormFactor(p.d);
       return ff === 'ATX' || ff === 'E-ATX';
     });
-    // Esclusione modelli specifici inadatti (slim desktop ecc.)
+    // Esclusione modelli specifici inadatti (slim desktop, NAS, console)
     list = list.filter(p => {
       const dn = (p.d || '').toUpperCase();
       if (/DEEPCOOL\s+WAVE\s+V2/.test(dn)) return false;
+      if (/\bNAS\b|\bNAS-?GEHÄUSE\b/.test(dn)) return false;
+      if (/\bPS[345]\b|\bXBOX\b|\bSWITCH\b|\bPLAYSTATION\b/.test(dn)) return false;
       return true;
     });
   }
+  // ── SSD ── esclude schede madri con M.2 nel nome
+  if (sid === 'ssd') {
+    list = list.filter(p => {
+      const dn = (p.d || '').toUpperCase();
+      if (/\bMAINBOARD\b|\bMOTHERBOARD\b|\bMOBO\b/.test(dn)) return false;
+      if (/MICRO[\s-]?ATX/.test(dn)) return false;
+      if (/\bSOCKE?L\s*1[278]\d\d\b|\bLGA\s*1[278]\d\d\b/.test(dn)) return false;
+      if (/\bH[3-9][1-9]0M?\b|\bB[3-9][1-9]0[A-Z]?\b|\bZ[5-9][7-9]0[A-Z]?\b|\bX[5-9]70[A-Z]?\b/.test(dn)) return false;
+      return true;
+    });
+  }
+  // ── RAM ── esclude SO-DIMM (laptop) e ECC/RDIMM (server)
+  if (sid === 'ram') {
+    list = list.filter(p => {
+      const dn = (p.d || '').toUpperCase();
+      if (/\bSO-?DIMM\b/.test(dn)) return false;            // RAM laptop
+      if (/\bRDIMM\b|\bLRDIMM\b/.test(dn)) return false;  // RAM server
+      if (/\bECC\s+REG\b|\bECC\s+REGISTERED\b/.test(dn)) return false;
+      return true;
+    });
+  }
+
   // ── MOBO ── esclude schede workstation extreme (TRX50/WRX80/W680/W790 ecc.)
   if (sid === 'mobo') {
     list = list.filter(p => {
@@ -1254,6 +1302,23 @@ function getProds(sid) {
       if (/SUPERMICRO|TYAN|\bN100\b|\bN200\b|\bN305\b|FANLESS|INDUSTRIAL/.test(dn)) return false;
       if (/MINING|BTC|\bRIG\b/.test(dn)) return false;
       if (/SERVER GRADE|RACKMOUNT|IPMI/.test(dn)) return false;
+      return true;
+    });
+  }
+
+  // ── GPU ── esclude riser, accessori, supporti
+  if (sid === 'gpu') {
+    list = list.filter(p => {
+      const dn = (p.d || '').toUpperCase();
+      const bd = (p.b || '').toLowerCase();
+      // Riser/Cavi PCIe
+      if (/\bRISER\b|\bRISER\s+KABEL\b|\bRISER\s+CABLE\b/.test(dn)) return false;
+      // Supporti GPU
+      if (/\bGPU\s+SUPPORT\b|\bGPU\s+HOLDER\b|\bGPU\s+BRACKET\b|\bGPU\s+STAND\b/.test(dn)) return false;
+      // Accessori Thermal Grizzly per GPU (WireView, GPU Guard)
+      if (bd.includes('thermal grizzly') || bd.includes('thermalright')) return false;
+      // Watercool
+      if (/\bWATERCOOL\b|\bHEATKILLER\b/.test(dn)) return false;
       return true;
     });
   }
@@ -1272,6 +1337,61 @@ function getProds(sid) {
   if (sid === 'cooler') {
     list = list.filter(p => brandAllowed(p.b, ALLOWED_COOLER_BRANDS));
   }
+
+  // ── MONITOR ── solo monitor gaming ≥144Hz, esclude accessori
+  if (sid === 'monitor') {
+    list = list.filter(p => brandAllowed(p.b, ALLOWED_MONITOR_BRANDS));
+    list = list.filter(p => {
+      const dn = (p.d || '').toUpperCase();
+      // Esclude staffe, cavi, accessori
+      if (/\bMOUNT\b|\bSTAND\b|\bBRACKET\b|\bARM\b|\bSTAFFA\b/.test(dn)) return false;
+      if (/\bCABLE\b|\bKABEL\b|\bADAPTER\b|\bHDMI CABLE\b/.test(dn)) return false;
+      if (/\bCOVER\b|\bSLEEVE\b|\bSCREEN PROTECTOR\b/.test(dn)) return false;
+      if (/\bPRIVACY FILTER\b|\bSCREEN FILTER\b/.test(dn)) return false;
+      // Esclude TV (non monitor gaming)
+      if (/\bTV\b|\bSMART TV\b/.test(dn)) return false;
+      return true;
+    });
+    // Filtra solo monitor con refresh ≥144Hz
+    list = list.filter(p => !p._hz || p._hz >= 144);
+  }
+
+  // ── MOUSE ── solo brand premium gaming
+  if (sid === 'mouse') {
+    list = list.filter(p => brandAllowed(p.b, ALLOWED_MOUSE_BRANDS));
+    list = list.filter(p => {
+      const dn = (p.d || '').toUpperCase();
+      // Esclude accessori mouse
+      if (/MOUSE\s*PAD|MOUSEPAD|MOUSE\s*MAT|MOUSE\s*TRAY|BUNGEE|GLIDES|FEET|GRIPS|SOFTWARE|REPLACEMENT/.test(dn)) return false;
+      return true;
+    });
+  }
+
+  // ── TASTIERA ── solo meccaniche premium
+  if (sid === 'keyboard') {
+    list = list.filter(p => brandAllowed(p.b, ALLOWED_KEYBOARD_BRANDS));
+    list = list.filter(p => {
+      const dn = (p.d || '').toUpperCase();
+      // Esclude accessori
+      if (/KEYCAP|KEY CAP|SWITCH SET|KEY PULLER|PALM REST|WRIST REST|COVER|BUNDLE/.test(dn)) return false;
+      // Solo meccaniche (esclude membrana esplicita)
+      if (/MEMBRANE\s+KEYBOARD/.test(dn)) return false;
+      return true;
+    });
+  }
+
+  // ── CUFFIE ── solo brand premium gaming
+  if (sid === 'headset') {
+    list = list.filter(p => brandAllowed(p.b, ALLOWED_HEADSET_BRANDS));
+    list = list.filter(p => {
+      const dn = (p.d || '').toUpperCase();
+      // Esclude accessori cuffie
+      if (/STAND|HOOK|HOLDER|EAR\s*PAD|EARPAD|EAR\s*CUSHION|REPLACEMENT/.test(dn)) return false;
+      if (/MIC\s+ONLY|MICROPHONE\s+STAND|BOOM\s+ARM/.test(dn)) return false;
+      return true;
+    });
+  }
+
   return list;
 }
 
@@ -1434,14 +1554,63 @@ const SUBCATS = {
 
   // \u2500\u2500 RAM: generazione DDR \u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500
   ram: {
-    label: 'Generazione RAM',
-    desc:  'La generazione \u00e8 determinata dalla tua scheda madre. AM5/LGA1851 \u2192 DDR5. AM4 \u2192 DDR4.',
-    field: 'ddr',
-    groups: [
-      { group: 'Tipo memoria', items: [
-        { val:'DDR5', icon:'\ud83c\udd95', note:'Standard attuale: velocit\u00e0 fino a 8000 MHz, lower latency XMP. Richiesto su AM5 e LGA1851', tag:'Attuale' },
-        { val:'DDR4', icon:'\u2705', note:'Piattaforma AM4: matura, economica, velocit\u00e0 fino a 4266 MHz. Ottimo per build budget',     tag:'Budget' },
-      ]},
+    label: 'Capacit\u00e0 RAM',
+    desc:  'La generazione DDR \u00e8 gi\u00e0 fissata dalla scheda madre. Scegli la capacit\u00e0 totale.',
+    field: '_ram_fascia',
+    all: [
+      { val:'8GB',   icon:'\ud83d\udcbc', note:'Budget - office, web, gaming basic 1080p',     tag:'Budget' },
+      { val:'16GB',  icon:'\ud83c\udfae', note:'Standard gaming 1080p/1440p, multitasking leggero', tag:'Standard' },
+      { val:'32GB',  icon:'\u26a1',       note:'Sweet spot gaming 1440p/4K, streaming, content creation', tag:'Consigliato' },
+      { val:'64GB+', icon:'\ud83d\ude80', note:'Workstation, rendering 3D, VM, AI/ML',         tag:'Pro' },
+    ]
+  },
+
+  // ── MONITOR: per refresh rate ────────────────────────────
+  monitor: {
+    label: 'Refresh rate',
+    desc:  'Scegli la frequenza di aggiornamento. Pi\u00f9 \u00e8 alta, pi\u00f9 fluido sar\u00e0 il gaming.',
+    field: '_hz_fascia',
+    all: [
+      { val:'144Hz',  icon:'\ud83c\udfae', note:'Gaming standard - perfetto per la maggior parte dei giochi', tag:'Standard' },
+      { val:'165Hz',  icon:'\u26a1',       note:'Sweet spot - fluidit\u00e0 ottima',                            tag:'Consigliato' },
+      { val:'240Hz',  icon:'\ud83d\udd25', note:'Gaming competitivo - FPS, esports',                        tag:'Pro' },
+      { val:'360Hz+', icon:'\ud83d\ude80', note:'Top performance - massima reattivit\u00e0',                  tag:'Top' },
+    ]
+  },
+
+  // ── MOUSE: cablato vs wireless ───────────────────────────
+  mouse: {
+    label: 'Tipo connessione',
+    desc:  'Wireless per libert\u00e0 di movimento, cablato per zero latenza.',
+    field: '_wireless',
+    all: [
+      { val:false, icon:'\ud83d\udd0c', note:'Cablato - zero latenza, no batteria da caricare',  tag:'Cablato', name:'Cablato' },
+      { val:true,  icon:'\ud83d\udce1', note:'Wireless - libert\u00e0 di movimento, ricarica USB-C', tag:'Wireless', name:'Wireless' },
+    ]
+  },
+
+  // ── TASTIERA: layout ─────────────────────────────────────
+  keyboard: {
+    label: 'Layout',
+    desc:  'Scegli il formato della tastiera in base allo spazio e alle esigenze.',
+    field: '_layout',
+    all: [
+      { val:'Full Size', icon:'\u2328\ufe0f', note:'Tastiera completa con tastierino numerico', tag:'Full' },
+      { val:'TKL',       icon:'\u2702\ufe0f', note:'Tenkeyless - senza tastierino numerico, pi\u00f9 spazio per il mouse', tag:'TKL' },
+      { val:'75%',       icon:'\ud83d\udcd0', note:'Compatta con frecce, sweet spot gaming',  tag:'Compact' },
+      { val:'65%',       icon:'\ud83d\udd39', note:'Ultra-compatta',                          tag:'Mini' },
+      { val:'60%',       icon:'\ud83d\udd38', note:'Solo lettere + modificatori',             tag:'Mini' },
+    ]
+  },
+
+  // ── CUFFIE: cablate vs wireless ──────────────────────────
+  headset: {
+    label: 'Tipo connessione',
+    desc:  'Wireless per libert\u00e0, cablate per qualit\u00e0 audio garantita.',
+    field: '_wireless',
+    all: [
+      { val:false, icon:'\ud83d\udd0c', note:'Cablate - qualit\u00e0 audio garantita, no batteria', tag:'Cablate', name:'Cablate' },
+      { val:true,  icon:'\ud83d\udce1', note:'Wireless - libert\u00e0 di movimento, ricarica USB-C', tag:'Wireless', name:'Wireless' },
     ]
   },
 };
@@ -1457,6 +1626,10 @@ const ICONS = {
   psu: `<svg viewBox="0 0 24 24" fill="none" stroke="var(--teal)" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="5" width="20" height="14" rx="2"/><polyline points="8,2 8,5"/><polyline points="16,2 16,5"/><line x1="12" y1="9" x2="12" y2="15"/><line x1="9" y1="12" x2="15" y2="12"/></svg>`,
   cooler: `<svg viewBox="0 0 24 24" fill="none" stroke="var(--teal)" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><circle cx="12" cy="12" r="3"/><line x1="12" y1="3" x2="12" y2="7"/><line x1="12" y1="17" x2="12" y2="21"/><line x1="3" y1="12" x2="7" y2="12"/><line x1="17" y1="12" x2="21" y2="12"/></svg>`,
   ventole: `<svg viewBox="0 0 24 24" fill="none" stroke="var(--teal)" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M12 12c2-2 2.5-5 1-7s-5-2-7 1c2 0 4 1 6 6z"/><path d="M12 12c2 2 5 2.5 7 1s2-5-1-7c0 2-1 4-6 6z"/><path d="M12 12c-2 2-2.5 5-1 7s5 2 7-1c-2 0-4-1-6-6z"/><path d="M12 12c-2-2-5-2.5-7-1s-2 5 1 7c0-2 1-4 6-6z"/><circle cx="12" cy="12" r="2"/></svg>`,
+  monitor: `<svg viewBox="0 0 24 24" fill="none" stroke="var(--teal)" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="3" width="20" height="14" rx="2"/><line x1="8" y1="21" x2="16" y2="21"/><line x1="12" y1="17" x2="12" y2="21"/></svg>`,
+  mouse: `<svg viewBox="0 0 24 24" fill="none" stroke="var(--teal)" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="6" y="2" width="12" height="20" rx="6"/><line x1="12" y1="2" x2="12" y2="10"/></svg>`,
+  keyboard: `<svg viewBox="0 0 24 24" fill="none" stroke="var(--teal)" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="6" width="20" height="12" rx="2"/><line x1="6" y1="10" x2="6" y2="10"/><line x1="10" y1="10" x2="10" y2="10"/><line x1="14" y1="10" x2="14" y2="10"/><line x1="18" y1="10" x2="18" y2="10"/><line x1="6" y1="14" x2="18" y2="14"/></svg>`,
+  headset: `<svg viewBox="0 0 24 24" fill="none" stroke="var(--teal)" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M3 13v-1a9 9 0 0 1 18 0v1"/><rect x="3" y="13" width="4" height="7" rx="1"/><rect x="17" y="13" width="4" height="7" rx="1"/></svg>`,
 };
 
 // ══ RENDER PROGRESS STRIP ════════════════════════════════
@@ -1505,7 +1678,8 @@ function goStep(i) {
 function renderSidebar() {
   const STEP_LABELS = {
     case:'Case', cpu:'CPU', mobo:'Mobo', ram:'RAM',
-    gpu:'GPU', ssd:'SSD', psu:'PSU', cooler:'Cooler', ventole:'Extra'
+    gpu:'GPU', ssd:'SSD', psu:'PSU', cooler:'Cooler', ventole:'HDD',
+    monitor:'Monitor', mouse:'Mouse', keyboard:'Tastiera', headset:'Cuffie'
   };
   let rows = '';
   let pieces = 0;
@@ -1725,6 +1899,19 @@ function renderCard(p, sid, isSelected, isIncompat) {
   if (p._fascia_w)  badges.push(`<span class="product-badge punch">${p._fascia_w}</span>`);
   if (p._cert)      badges.push(`<span class="product-badge ok">${p._cert}</span>`);
   if (p._tipo_cool) badges.push(`<span class="product-badge">${p._tipo_cool}</span>`);
+  if (p._ram_label) badges.push(`<span class="product-badge punch">${p._ram_label}</span>`);
+  if (sid === 'ram' && p.ddr) badges.push(`<span class="product-badge">${p.ddr}</span>`);
+  // ── Monitor ─
+  if (p._hz)      badges.push(`<span class="product-badge punch">${p._hz}Hz</span>`);
+  if (p._pollici) badges.push(`<span class="product-badge">${p._pollici}"</span>`);
+  if (p._res)     badges.push(`<span class="product-badge ok">${p._res}</span>`);
+  if (p._panel)   badges.push(`<span class="product-badge">${p._panel}</span>`);
+  // ── Mouse/Tastiera/Cuffie ─
+  if (p._wireless === true) badges.push(`<span class="product-badge">Wireless</span>`);
+  if (p._dpi)     badges.push(`<span class="product-badge">${p._dpi.toLocaleString()} DPI</span>`);
+  if (p._switch)  badges.push(`<span class="product-badge">${p._switch}</span>`);
+  if (p._layout && sid === 'keyboard') badges.push(`<span class="product-badge">${p._layout}</span>`);
+  if (p._surround) badges.push(`<span class="product-badge ok">Surround</span>`);
   // Badge form factor per mobo e case (anche se non in json, calcolato al volo)
   if (sid === 'mobo') {
     const ff = getFormFactor(p, 'mobo');
@@ -2167,7 +2354,8 @@ function renderRiepilogo() {
   const LABELS = {
     case:'Case', cpu:'CPU', mobo:'Scheda Madre', ram:'RAM',
     gpu:'Scheda Video', ssd:'SSD', psu:'Alimentatore',
-    cooler:'Dissipatore', ventole:'Ventole'
+    cooler:'Dissipatore', ventole:'Archiviazione',
+    monitor:'Monitor', mouse:'Mouse', keyboard:'Tastiera', headset:'Cuffie'
   };
   let totalForn = 0;
   let rows = '';
@@ -2789,7 +2977,7 @@ function openWhatsApp() {
   window.open(`https://wa.me/393477133866?text=${encodeURIComponent('Ciao! Sono interessato al configuratore PC.')}`, '_blank');
 }
 function buildMsg(name, email, phone, note) {
-  const LABELS = {case:'Case',cpu:'CPU',mobo:'Mobo',ram:'RAM',gpu:'GPU',ssd:'SSD',psu:'PSU',cooler:'Cooler',ventole:'Ventole'};
+  const LABELS = {case:'Case',cpu:'CPU',mobo:'Mobo',ram:'RAM',gpu:'GPU',ssd:'SSD',psu:'PSU',cooler:'Cooler',ventole:'Archiviazione',monitor:'Monitor',mouse:'Mouse',keyboard:'Tastiera',headset:'Cuffie'};
   let totalForn = 0;
   let lines = `*Configuratore PC — Minimal Gamers*\n`;
   if (name) lines += `*Cliente:* ${name}\n`;

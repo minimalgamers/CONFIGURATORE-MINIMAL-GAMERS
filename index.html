@@ -1361,10 +1361,11 @@ function getProds(sid) {
     list = list.filter(p => brandAllowed(p.b, ALLOWED_MOUSE_BRANDS));
     list = list.filter(p => {
       const dn = (p.d || '').toUpperCase();
-      // Esclude accessori mouse
       if (/MOUSE\s*PAD|MOUSEPAD|MOUSE\s*MAT|MOUSE\s*TRAY|BUNGEE|GLIDES|FEET|GRIPS|SOFTWARE|REPLACEMENT/.test(dn)) return false;
       return true;
     });
+    // Calcolo _conn (Cablato/Wireless) per filtro sottocategoria
+    list = list.map(p => ({...p, _conn: p._wireless ? 'Wireless' : 'Cablato'}));
   }
 
   // ── TASTIERA ── solo meccaniche premium
@@ -1385,11 +1386,11 @@ function getProds(sid) {
     list = list.filter(p => brandAllowed(p.b, ALLOWED_HEADSET_BRANDS));
     list = list.filter(p => {
       const dn = (p.d || '').toUpperCase();
-      // Esclude accessori cuffie
       if (/STAND|HOOK|HOLDER|EAR\s*PAD|EARPAD|EAR\s*CUSHION|REPLACEMENT/.test(dn)) return false;
       if (/MIC\s+ONLY|MICROPHONE\s+STAND|BOOM\s+ARM/.test(dn)) return false;
       return true;
     });
+    list = list.map(p => ({...p, _conn: p._wireless ? 'Wireless' : 'Cablato'}));
   }
 
   return list;
@@ -1578,16 +1579,6 @@ const SUBCATS = {
     ]
   },
 
-  // ── MOUSE: cablato vs wireless ───────────────────────────
-  mouse: {
-    label: 'Tipo connessione',
-    desc:  'Wireless per libert\u00e0 di movimento, cablato per zero latenza.',
-    field: '_wireless',
-    all: [
-      { val:false, icon:'\ud83d\udd0c', note:'Cablato - zero latenza, no batteria da caricare',  tag:'Cablato', name:'Cablato' },
-      { val:true,  icon:'\ud83d\udce1', note:'Wireless - libert\u00e0 di movimento, ricarica USB-C', tag:'Wireless', name:'Wireless' },
-    ]
-  },
 
   // ── TASTIERA: layout ─────────────────────────────────────
   keyboard: {
@@ -1603,16 +1594,6 @@ const SUBCATS = {
     ]
   },
 
-  // ── CUFFIE: cablate vs wireless ──────────────────────────
-  headset: {
-    label: 'Tipo connessione',
-    desc:  'Wireless per libert\u00e0, cablate per qualit\u00e0 audio garantita.',
-    field: '_wireless',
-    all: [
-      { val:false, icon:'\ud83d\udd0c', note:'Cablate - qualit\u00e0 audio garantita, no batteria', tag:'Cablate', name:'Cablate' },
-      { val:true,  icon:'\ud83d\udce1', note:'Wireless - libert\u00e0 di movimento, ricarica USB-C', tag:'Wireless', name:'Wireless' },
-    ]
-  },
 };
 
 // ══ SVG ICONE ════════════════════════════════════════════
@@ -2283,8 +2264,9 @@ function render() {
       ${renderProds(sid)}
       <div style="margin-top:20px;display:flex;gap:10px;align-items:center">
         <button onclick="prevStep()" style="padding:10px 18px;background:rgba(255,255,255,.05);border:1px solid rgba(255,255,255,.1);color:var(--ink2);font-family:var(--font);font-size:12px;font-weight:600;border-radius:var(--r-sm);cursor:pointer;transition:all .15s">← Indietro</button>
-        ${hasSel ? `<button id="btnNext" onclick="nextStep()" style="padding:11px 22px;background:linear-gradient(135deg,var(--teal),var(--teal-dark));color:#07050d;font-family:var(--font);font-size:13px;font-weight:700;border:none;border-radius:var(--r-sm);cursor:pointer;transition:all .15s">Continua →</button>` : `<button id="btnNext" onclick="nextStep()" style="padding:11px 22px;background:rgba(255,255,255,.04);color:var(--ink4);font-family:var(--font);font-size:12px;font-weight:600;border:1px solid rgba(255,255,255,.08);border-radius:var(--r-sm);cursor:pointer">Salta →</button>`}
-      </div>\n    `;
+        ${hasSel ? `<button id="btnNext" onclick="nextStep()" style="padding:11px 22px;background:linear-gradient(135deg,var(--teal),var(--teal-dark));color:#07050d;font-family:var(--font);font-size:13px;font-weight:700;border:none;border-radius:var(--r-sm);cursor:pointer;transition:all .15s">Continua →</button>` : (['ventole','monitor','mouse','keyboard','headset'].includes(sid) ? `<button id="btnNext" onclick="nextStep()" style="padding:11px 22px;background:rgba(45,212,191,.15);color:var(--teal);font-family:var(--font);font-size:13px;font-weight:700;border:1px solid rgba(45,212,191,.4);border-radius:var(--r-sm);cursor:pointer;transition:all .15s">Salta (opzionale) →</button>` : `<button id="btnNext" onclick="nextStep()" style="padding:11px 22px;background:rgba(255,255,255,.04);color:var(--ink4);font-family:var(--font);font-size:12px;font-weight:600;border:1px solid rgba(255,255,255,.08);border-radius:var(--r-sm);cursor:pointer">Salta →</button>`)}
+      </div>
+    `;
   }
 }
 

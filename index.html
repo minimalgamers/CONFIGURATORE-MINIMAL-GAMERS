@@ -2255,11 +2255,17 @@ function render() {
     const selKey = state.build[sid];
     const hasSel = !!selKey;
 
+    const isOptional = ['ventole','monitor','mouse','keyboard','headset'].includes(sid);
+    const skipTopBtn = isOptional ? `<button onclick="nextStep()" style="padding:8px 16px;background:rgba(45,212,191,.12);color:var(--teal);font-family:var(--font);font-size:11px;font-weight:700;border:1px solid rgba(45,212,191,.35);border-radius:var(--r-sm);cursor:pointer;transition:all .15s;letter-spacing:.04em">Salta questo step →</button>` : '';
+
     mc.innerHTML = `
-      <div class="step-header">
-        <div class="step-num">Step ${String(stepN).padStart(2,'0')}</div>
-        <div class="step-title">${s.label}</div>
-        <div class="step-subtitle">Scegli il componente. I prezzi includono IVA 22%.</div>
+      <div class="step-header" style="display:flex;justify-content:space-between;align-items:flex-end;gap:16px;flex-wrap:wrap">
+        <div>
+          <div class="step-num">Step ${String(stepN).padStart(2,'0')}</div>
+          <div class="step-title">${s.label}</div>
+          <div class="step-subtitle">${isOptional ? 'Categoria opzionale — puoi saltarla se non ti serve.' : 'Scegli il componente. I prezzi includono IVA 22%.'}</div>
+        </div>
+        ${skipTopBtn}
       </div>
       ${renderProds(sid)}
       <div style="margin-top:20px;display:flex;gap:10px;align-items:center">

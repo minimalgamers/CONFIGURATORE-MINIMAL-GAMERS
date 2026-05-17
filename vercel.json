@@ -2,7 +2,8 @@
   "version": 2,
   "builds": [
     { "src": "index.html", "use": "@vercel/static" },
-    { "src": "prodotti.json", "use": "@vercel/static" }
+    { "src": "prodotti.json", "use": "@vercel/static" },
+    { "src": "foto/**", "use": "@vercel/static" }
   ],
   "routes": [
     { "src": "/(.*)", "dest": "/$1" }
@@ -12,6 +13,13 @@
       "source": "/prodotti.json",
       "headers": [
         { "key": "Cache-Control", "value": "public, max-age=3600, stale-while-revalidate=86400" },
+        { "key": "Access-Control-Allow-Origin", "value": "*" }
+      ]
+    },
+    {
+      "source": "/foto/(.*)",
+      "headers": [
+        { "key": "Cache-Control", "value": "public, max-age=86400, stale-while-revalidate=604800" },
         { "key": "Access-Control-Allow-Origin", "value": "*" }
       ]
     }

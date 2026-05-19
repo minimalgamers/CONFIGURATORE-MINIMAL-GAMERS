@@ -264,12 +264,14 @@ html,body{background:var(--bg);color:var(--ink);font-family:var(--font);min-heig
 
 /* Card prodotto */
 .product-card{
-  padding:14px;border-radius:var(--r-sm);cursor:pointer;position:relative;
+  padding:0;border-radius:var(--r-sm);cursor:pointer;position:relative;
   background:rgba(255,255,255,.03);border:1px solid rgba(255,255,255,.06);
   transition:all .2s;overflow:hidden;
 }
 .product-card:hover{border-color:rgba(45,212,191,.25);transform:translateY(-1px);background:rgba(255,255,255,.04)}
 .product-card.selected{border-color:var(--teal);background:rgba(45,212,191,.06)}
+/* contenitore della parte testuale sotto la foto (bicolore) */
+.product-body{padding:12px 14px 14px}
 .compat-banner{
   font-size:11px;color:rgba(45,212,191,.8);
   background:rgba(45,212,191,.07);
@@ -290,7 +292,7 @@ html,body{background:var(--bg);color:var(--ink);font-family:var(--font);min-heig
   width:18px;height:18px;border-radius:50%;
   background:var(--teal);color:#07050d;
   font-size:10px;font-weight:800;display:flex;align-items:center;justify-content:center;
-  line-height:18px;text-align:center;
+  line-height:18px;text-align:center;z-index:2;
 }
 .product-name{font-size:12px;font-weight:600;line-height:1.3;margin-bottom:6px;color:var(--ink2)}
 .product-price{font-size:16px;font-weight:800;color:var(--punch);letter-spacing:-.02em}
@@ -310,17 +312,20 @@ html,body{background:var(--bg);color:var(--ink);font-family:var(--font);min-heig
 .product-incompat .product-price{color:var(--ink4)!important}
 .product-incompat-reason{font-size:9px;color:rgba(255,160,60,.8);margin-top:6px;line-height:1.4;font-weight:600}
 
-/* === Foto prodotto in card === */
+/* === Foto prodotto in card === bicolore: sfondo chiaro per valorizzare la foto */
 .product-photo{
   width:100%;height:140px;
   display:flex;align-items:center;justify-content:center;
-  margin:-4px -4px 12px;padding:10px;
-  border-radius:8px;overflow:hidden;
-  background:transparent;position:relative;
+  margin:0;padding:14px;
+  border-radius:0;overflow:hidden;
+  background:linear-gradient(180deg,#f5f5f7 0%,#e8e8ec 100%);
+  position:relative;
+  border-bottom:1px solid rgba(0,0,0,.05);
 }
 .product-photo img{
   max-width:100%;max-height:100%;object-fit:contain;
   transition:transform .25s ease;
+  mix-blend-mode:multiply;
 }
 .product-card:hover .product-photo img,
 .product-card:hover .product-photo .photo-fallback{
@@ -328,7 +333,7 @@ html,body{background:var(--bg);color:var(--ink);font-family:var(--font);min-heig
 }
 .photo-fallback{
   font-size:24px;font-weight:900;
-  color:rgba(255,255,255,.18);
+  color:rgba(7,5,13,.22);
   letter-spacing:-.5px;text-align:center;line-height:1.1;
   text-transform:uppercase;
   transition:transform .25s ease;
@@ -337,8 +342,9 @@ html,body{background:var(--bg);color:var(--ink);font-family:var(--font);min-heig
   align-items:center;justify-content:center;
 }
 @media (max-width:600px){
-  .product-photo{height:110px;padding:8px;margin-bottom:10px}
+  .product-photo{height:110px;padding:10px}
   .photo-fallback{font-size:20px}
+  .product-body{padding:10px 11px 12px}
 }
 
 .incompat-divider{display:flex;align-items:center;gap:10px;margin:20px 0 10px;font-size:11px;color:rgba(255,160,60,.7);font-weight:600}
@@ -1988,11 +1994,13 @@ function renderCard(p, sid, isSelected, isIncompat) {
 
   return `<div class="${classes}" ${clickAttr} ${reason ? `title="${reason}"` : ''}>
     ${photoHtml}
-    <div class="product-name">${p.d}</div>
-    <div class="product-price">${fmt(pc)}</div>
-    <div class="product-meta">${badges.join('')}</div>
-    ${reasonHtml}
-    ${stockTxt}
+    <div class="product-body">
+      <div class="product-name">${p.d}</div>
+      <div class="product-price">${fmt(pc)}</div>
+      <div class="product-meta">${badges.join('')}</div>
+      ${reasonHtml}
+      ${stockTxt}
+    </div>
   </div>`;
 }
 function renderProds(sid) {

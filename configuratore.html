@@ -1,0 +1,3334 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Configuratore PC Gaming — Minimal Gamers</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800;900&family=Barlow+Condensed:wght@600;700;800;900&display=swap" rel="stylesheet">
+<style>
+/* ── RESET & ROOT ────────────────────────────────────────── */
+*{box-sizing:border-box;margin:0;padding:0}
+:root{
+  --teal:#2dd4bf;--teal-dark:#0f766e;--teal-soft:rgba(45,212,191,.12);
+  --punch:#d946a8;--punch-dark:#b91c8a;--punch-soft:rgba(217,70,168,.12);
+  --bg:#07050d;--bg2:rgba(12,5,14,.85);--bg3:rgba(18,8,22,.9);
+  --ink:#fff;--ink2:rgba(255,255,255,.7);--ink3:rgba(255,255,255,.35);--ink4:rgba(255,255,255,.15);
+  --font:'Outfit',sans-serif;
+  --r:14px;--r-sm:9px;
+}
+html,body{background:var(--bg);color:var(--ink);font-family:var(--font);min-height:100vh;overflow-x:hidden}
+
+/* ── CANVAS PARTICELLE ──────────────────────────────────── */
+#particleCanvas{position:fixed;inset:0;z-index:0;pointer-events:none}
+
+/* ── GLOW BACKGROUND ────────────────────────────────────── */
+.bg-glow{position:fixed;inset:0;z-index:0;pointer-events:none;overflow:hidden}
+.bg-glow span{position:absolute;border-radius:50%;filter:blur(80px);opacity:.18;animation:drift 18s ease-in-out infinite}
+.bg-glow span:nth-child(1){width:600px;height:600px;background:var(--teal);top:-100px;left:-100px;animation-duration:20s}
+.bg-glow span:nth-child(2){width:500px;height:500px;background:var(--punch);bottom:-100px;right:-100px;animation-duration:25s;animation-delay:-8s}
+.bg-glow span:nth-child(3){width:400px;height:400px;background:var(--teal);top:40%;left:40%;animation-duration:15s;animation-delay:-4s}
+@keyframes drift{0%,100%{transform:translate(0,0) scale(1)}33%{transform:translate(40px,-30px) scale(1.05)}66%{transform:translate(-30px,40px) scale(.95)}}
+
+/* ── TOPBAR ─────────────────────────────────────────────── */
+.topbar{
+  position:sticky;top:0;z-index:100;
+  height:58px;
+  background:rgba(7,5,13,.82);
+  backdrop-filter:blur(24px);
+  -webkit-backdrop-filter:blur(24px);
+  border-bottom:1px solid rgba(45,212,191,.1);
+}
+.topbar::before{content:'';position:absolute;inset-x:0;top:0;height:2px;background:linear-gradient(90deg,var(--teal),var(--punch));opacity:.9}
+.topbar-inner{max-width:1400px;margin:0 auto;height:100%;display:flex;align-items:center;justify-content:space-between;padding:0 clamp(16px,3vw,32px)}
+.topbar-brand{display:flex;align-items:center;gap:10px}
+.topbar-brand img{height:34px;width:auto;object-fit:contain;filter:drop-shadow(0 0 8px rgba(45,212,191,.4))}
+.topbar-brand span{font-size:11px;font-weight:700;letter-spacing:.12em;text-transform:uppercase;color:var(--ink3)}
+.topbar-right{display:flex;align-items:center;gap:12px}
+.topbar-sounds{cursor:pointer;font-size:18px;background:none;border:none;color:var(--ink3);padding:6px;transition:color .2s}
+.topbar-sounds:hover{color:var(--teal)}
+
+/* ── SCALAPAY BAR ───────────────────────────────────────── */
+.scalapay-dynamic{
+  display:none;align-items:center;gap:16px;flex-wrap:wrap;
+  padding:7px clamp(16px,3vw,32px);
+  background:rgba(45,212,191,.05);
+  border-bottom:1px solid rgba(45,212,191,.08);
+  font-size:11px;color:var(--ink3);
+  position:sticky;top:58px;z-index:99;
+}
+.scalapay-dynamic.visible{display:flex}
+.sp-amount,.sp-rate{color:var(--teal);font-weight:700}
+
+/* ── PROGRESS STRIP ─────────────────────────────────────── */
+.progress-strip{
+  display:flex;align-items:center;
+  padding:0 clamp(12px,2vw,24px);
+  height:42px;
+  background:rgba(5,13,12,.7);
+  backdrop-filter:blur(10px);
+  border-bottom:1px solid rgba(45,212,191,.08);
+  overflow-x:auto;scrollbar-width:none;
+  position:sticky;top:58px;z-index:98;
+  gap:0;
+}
+.progress-strip::-webkit-scrollbar{display:none}
+.progress-dot{
+  flex-shrink:0;
+  display:flex;align-items:center;gap:6px;
+  font-size:10px;font-weight:600;letter-spacing:.04em;
+  color:var(--ink4);padding:0 10px;white-space:nowrap;cursor:pointer;
+  transition:color .2s;
+  position:relative;
+}
+.progress-dot::after{content:'›';margin-left:4px;opacity:.3}
+.progress-dot:last-child::after{display:none}
+.progress-dot.active{color:var(--teal)}
+.progress-dot.done{color:rgba(45,212,191,.5)}
+.progress-dot .dot-num{
+  width:18px;height:18px;border-radius:50%;
+  display:flex;align-items:center;justify-content:center;
+  font-size:9px;font-weight:800;
+  background:rgba(45,212,191,.1);border:1px solid rgba(45,212,191,.2);
+  transition:all .2s;
+}
+.progress-dot.active .dot-num{background:var(--teal);border-color:var(--teal);color:#07050d}
+.progress-dot.done .dot-num{background:rgba(45,212,191,.2);border-color:rgba(45,212,191,.4)}
+
+/* ── LAYOUT PRINCIPALE ──────────────────────────────────── */
+.main-wrap{
+  display:grid;
+  grid-template-columns:1fr 290px;
+  max-width:1400px;
+  margin:0 auto;
+  min-height:calc(100vh - 58px);
+  position:relative;z-index:1;
+}
+
+/* ── CONTENT ────────────────────────────────────────────── */
+.content{padding:clamp(16px,2vw,24px) clamp(16px,3vw,28px);min-height:0}
+
+/* ── STEP HEADER ────────────────────────────────────────── */
+.step-header{padding:20px 0 16px}
+.step-num{font-size:10px;font-weight:700;letter-spacing:.15em;text-transform:uppercase;color:var(--teal);opacity:.6;margin-bottom:6px}
+.step-title{
+  font-size:clamp(22px,3vw,32px);font-weight:900;letter-spacing:-.02em;line-height:1.1;
+  background:linear-gradient(90deg,#fff 0%,var(--teal) 40%,#fff 70%,var(--punch) 100%);
+  background-size:200% auto;
+  -webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;
+  animation:titleGrad 5s linear infinite;
+}
+@keyframes titleGrad{to{background-position:200%}}
+.step-subtitle{font-size:12px;color:var(--ink3);margin-top:4px;line-height:1.5}
+
+/* ── PIATTAFORMA ────────────────────────────────────────── */
+/* ── PIATTAFORMA (AMD/INTEL) ─────────────────────────── */
+.pf-brand-row{display:flex;gap:10px;margin-bottom:20px}
+.pf-brand{
+  flex:1;min-width:0;
+  padding:clamp(20px,3vw,32px) clamp(16px,2.5vw,28px);
+  border:1.5px solid rgba(255,255,255,.08);
+  background:rgba(255,255,255,.03);
+  cursor:pointer;transition:all .18s;text-align:center;
+  border-radius:var(--r);backdrop-filter:blur(10px);
+  position:relative;overflow:hidden;
+}
+.pf-brand::after{
+  content:'';position:absolute;bottom:0;left:0;right:0;height:2px;
+  background:linear-gradient(90deg,var(--teal),var(--punch));
+  opacity:0;transition:opacity .2s;
+}
+.pf-brand:hover{border-color:rgba(45,212,191,.3);background:rgba(45,212,191,.06);transform:translateY(-2px)}
+.pf-brand:hover::after{opacity:.6}
+.pf-brand.active{background:rgba(45,212,191,.08);border-color:var(--teal);box-shadow:0 0 0 1px var(--teal),0 4px 20px rgba(45,212,191,.18)}
+.pf-brand.active::after{opacity:1}
+.pf-brand-name{
+  display:block;
+  font-size:clamp(36px,6vw,52px);font-weight:900;
+  letter-spacing:-.04em;line-height:1;color:#fff;
+  margin-bottom:7px;
+}
+.pf-brand.active .pf-brand-name{color:var(--teal)}
+.pf-brand-sub{
+  display:block;font-size:10px;font-weight:700;
+  letter-spacing:.12em;text-transform:uppercase;
+  color:rgba(255,255,255,.25);
+}
+.pf-brand.active .pf-brand-sub{color:rgba(45,212,191,.5)}
+.pf-brand-badge{
+  display:inline-block;margin-top:10px;
+  padding:3px 10px;border-radius:20px;
+  font-size:8px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;
+  background:rgba(45,212,191,.06);color:rgba(45,212,191,.6);
+  border:1px solid rgba(45,212,191,.15);
+}
+/* ── SOCKET GRID ────────────────────────────────────────── */
+.pf-socket-section{margin-top:4px;margin-bottom:8px}
+.pf-socket-label{
+  font-size:9px;font-weight:700;letter-spacing:.2em;text-transform:uppercase;
+  color:rgba(45,212,191,.35);margin-bottom:10px;
+}
+.pf-socket-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(min(170px,100%),1fr));gap:8px}
+.pf-socket-card{
+  padding:clamp(12px,2vw,16px);
+  border:1.5px solid rgba(255,255,255,.08);background:rgba(255,255,255,.03);
+  cursor:pointer;transition:all .18s;text-align:left;
+  border-radius:var(--r);backdrop-filter:blur(10px);
+}
+.pf-socket-card:hover{border-color:rgba(45,212,191,.3);background:rgba(45,212,191,.05);transform:translateY(-2px)}
+.pf-socket-card.active{background:rgba(45,212,191,.08);border-color:var(--teal);box-shadow:0 0 0 1px var(--teal),0 4px 16px rgba(45,212,191,.15)}
+.pf-socket-badge-label{
+  font-size:8px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;
+  color:rgba(255,255,255,.2);margin-bottom:5px;
+}
+.pf-socket-card.active .pf-socket-badge-label{color:var(--teal)}
+.pf-socket-name{
+  font-size:clamp(18px,2.5vw,24px);font-weight:800;
+  letter-spacing:-.02em;line-height:1;margin-bottom:4px;color:#fff;
+}
+.pf-socket-card.active .pf-socket-name{color:var(--teal)}
+.pf-socket-cpu{font-size:10px;font-weight:500;color:rgba(255,255,255,.3);margin-bottom:5px}
+.pf-socket-ddr{
+  display:inline-block;font-size:9px;font-weight:700;letter-spacing:.08em;
+  padding:2px 8px;background:rgba(45,212,191,.06);color:rgba(45,212,191,.6);
+  border:1px solid rgba(45,212,191,.15);margin-bottom:5px;border-radius:var(--r-sm);
+}
+.pf-socket-note{font-size:11px;color:rgba(255,255,255,.25);line-height:1.4}
+
+/* ── SOCKET GRID ────────────────────────────────────────── */
+.socket-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(180px,1fr));gap:12px;margin-top:16px}
+.socket-card{
+  padding:20px 18px;border-radius:var(--r);cursor:pointer;
+  background:rgba(255,255,255,.03);border:1px solid rgba(255,255,255,.06);
+  transition:all .2s;
+}
+.socket-card:hover{border-color:rgba(45,212,191,.3);transform:translateY(-2px)}
+.socket-card.selected{border-color:var(--teal);background:rgba(45,212,191,.06)}
+.sock-name{font-size:16px;font-weight:800;letter-spacing:-.01em;margin-bottom:3px}
+.sock-desc{font-size:10px;color:var(--ink3)}
+.sock-badge{
+  display:inline-block;margin-top:8px;padding:2px 8px;border-radius:12px;
+  font-size:9px;font-weight:700;
+  background:var(--punch-soft);color:var(--punch);
+}
+
+/* ── SUBCAT GRID ─────────────────────────────────────────── */
+.subcat-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(200px,1fr));gap:12px;margin-top:4px}
+.subcat-back{
+  display:inline-flex;align-items:center;gap:6px;
+  font-size:11px;font-weight:600;color:var(--ink3);cursor:pointer;
+  padding:8px 0 12px;transition:color .2s;
+}
+.subcat-back:hover{color:var(--teal)}
+
+/* Card sottocategoria */
+.subcat-card{
+  padding:18px 16px 16px;border-radius:var(--r);cursor:pointer;position:relative;overflow:hidden;
+  background:linear-gradient(135deg,rgba(12,5,14,.9) 0%,rgba(20,8,24,.8) 100%);
+  border:1px solid rgba(45,212,191,.12);
+  transition:all .25s;
+}
+.subcat-card::before{
+  content:'';position:absolute;bottom:0;left:0;right:0;height:3px;
+  background:linear-gradient(90deg,var(--teal),var(--punch));
+  opacity:.6;transition:opacity .2s;
+}
+.subcat-card:hover{border-color:rgba(45,212,191,.35);transform:translateY(-3px);box-shadow:0 8px 32px rgba(45,212,191,.12)}
+.subcat-card:hover::before{opacity:1}
+.subcat-card.selected{border-color:var(--teal);background:linear-gradient(135deg,rgba(45,212,191,.08),rgba(217,70,168,.04))}
+.subcat-icon{
+  width:40px;height:40px;border-radius:10px;margin-bottom:12px;
+  display:flex;align-items:center;justify-content:center;
+  background:linear-gradient(135deg,rgba(45,212,191,.15),rgba(217,70,168,.1));
+}
+.subcat-icon svg{width:22px;height:22px}
+.subcat-name{
+  font-family:'Barlow Condensed',var(--font);font-size:14px;font-weight:800;
+  text-transform:uppercase;letter-spacing:.04em;
+  color:#fff;line-height:1.2;margin-bottom:4px;
+}
+.subcat-note{font-size:10px;color:var(--ink3);line-height:1.4;margin-bottom:8px}
+.subcat-count{
+  font-size:9px;font-weight:700;letter-spacing:.06em;
+  color:var(--teal);opacity:.7;
+}
+.subcat-tags{display:flex;flex-wrap:wrap;gap:4px;margin-top:6px}
+.subcat-tag{
+  font-size:9px;font-weight:600;padding:2px 7px;border-radius:8px;
+  background:rgba(45,212,191,.08);color:rgba(45,212,191,.7);border:1px solid rgba(45,212,191,.12);
+}
+
+/* ── PRODUCTS GRID ──────────────────────────────────────── */
+.products-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(min(185px,100%),1fr));gap:10px}
+
+/* Card prodotto */
+.product-card{
+  padding:0;border-radius:var(--r-sm);cursor:pointer;position:relative;
+  background:rgba(255,255,255,.03);border:1px solid rgba(255,255,255,.06);
+  transition:all .2s;overflow:hidden;
+}
+.product-card:hover{border-color:rgba(45,212,191,.25);transform:translateY(-1px);background:rgba(255,255,255,.04)}
+.product-card.selected{border-color:var(--teal);background:rgba(45,212,191,.06)}
+/* contenitore della parte testuale sotto la foto (bicolore) */
+.product-body{padding:12px 14px 14px}
+.compat-banner{
+  font-size:11px;color:rgba(45,212,191,.8);
+  background:rgba(45,212,191,.07);
+  border:1px solid rgba(45,212,191,.2);
+  border-radius:8px;padding:8px 12px;margin-bottom:12px;
+  line-height:1.5;
+}
+.compat-banner strong{color:var(--teal)}
+.product-esaurito{
+  opacity:.38;
+  filter:grayscale(.6);
+  cursor:not-allowed;
+  pointer-events:none;
+}
+.product-esaurito .product-price{color:var(--ink4)!important}
+.product-card.selected::after{
+  content:'✓';position:absolute;top:8px;right:8px;
+  width:18px;height:18px;border-radius:50%;
+  background:var(--teal);color:#07050d;
+  font-size:10px;font-weight:800;display:flex;align-items:center;justify-content:center;
+  line-height:18px;text-align:center;z-index:2;
+}
+.product-name{font-size:12px;font-weight:600;line-height:1.3;margin-bottom:6px;color:var(--ink2)}
+.product-price{font-size:16px;font-weight:800;color:var(--punch);letter-spacing:-.02em}
+.product-price-sub{font-size:9px;color:var(--ink4);margin-top:1px}
+.product-meta{display:flex;flex-wrap:wrap;gap:4px;margin-top:8px}
+.product-badge{
+  font-size:8px;font-weight:700;padding:2px 6px;border-radius:6px;
+  background:rgba(45,212,191,.08);color:var(--teal);border:1px solid rgba(45,212,191,.12);
+  text-transform:uppercase;letter-spacing:.04em;
+}
+.product-badge.punch{background:rgba(217,70,168,.08);color:var(--punch);border-color:rgba(217,70,168,.12)}
+.product-badge.ok{background:rgba(45,212,191,.1);color:var(--teal)}
+.product-badge.warn{background:rgba(245,158,11,.08);color:#f59e0b;border-color:rgba(245,158,11,.12)}
+.product-badge.danger{background:rgba(239,68,68,.08);color:#ef4444;border-color:rgba(239,68,68,.12)}
+.product-stock{font-size:9px;color:var(--ink4);margin-top:4px}
+.product-incompat{opacity:.32;filter:grayscale(.5);pointer-events:none;position:relative}
+.product-incompat .product-price{color:var(--ink4)!important}
+.product-incompat-reason{font-size:9px;color:rgba(255,160,60,.8);margin-top:6px;line-height:1.4;font-weight:600}
+
+/* === PSU insufficiente: blocco visivo distintivo === */
+.product-psu-insufficient{
+  opacity:.35;
+  filter:grayscale(.7);
+  cursor:not-allowed;
+  pointer-events:none;
+  position:relative;
+}
+.product-psu-insufficient .product-price{color:var(--ink4)!important}
+.product-psu-insufficient::before{
+  content:'INSUFFICIENTE';
+  position:absolute;
+  top:50%;left:50%;
+  transform:translate(-50%,-50%) rotate(-8deg);
+  background:rgba(220,30,30,0.92);
+  color:#fff;
+  padding:8px 14px;
+  border-radius:6px;
+  font-weight:800;
+  font-size:11px;
+  letter-spacing:2px;
+  white-space:nowrap;
+  z-index:10;
+  box-shadow:0 4px 20px rgba(0,0,0,.4), 0 0 0 1px rgba(255,255,255,.1);
+  pointer-events:none;
+}
+
+/* === Foto prodotto in card === bicolore: sfondo chiaro per valorizzare la foto */
+.product-photo{
+  width:100%;height:140px;
+  display:flex;align-items:center;justify-content:center;
+  margin:0;padding:14px;
+  border-radius:0;overflow:hidden;
+  background:linear-gradient(180deg,#f5f5f7 0%,#e8e8ec 100%);
+  position:relative;
+  border-bottom:1px solid rgba(0,0,0,.05);
+}
+.product-photo img{
+  max-width:100%;max-height:100%;object-fit:contain;
+  transition:transform .25s ease;
+  mix-blend-mode:multiply;
+}
+.product-card:hover .product-photo img,
+.product-card:hover .product-photo .photo-fallback{
+  transform:scale(1.06);
+}
+.photo-fallback{
+  font-size:24px;font-weight:900;
+  color:rgba(7,5,13,.22);
+  letter-spacing:-.5px;text-align:center;line-height:1.1;
+  text-transform:uppercase;
+  transition:transform .25s ease;
+  padding:0 8px;
+  width:100%;height:100%;
+  align-items:center;justify-content:center;
+}
+@media (max-width:600px){
+  .product-photo{height:110px;padding:10px}
+  .photo-fallback{font-size:20px}
+  .product-body{padding:10px 11px 12px}
+}
+
+.incompat-divider{display:flex;align-items:center;gap:10px;margin:20px 0 10px;font-size:11px;color:rgba(255,160,60,.7);font-weight:600}
+.incompat-divider span{flex:1}
+.incompat-divider::before{content:'';display:block;height:1px;width:24px;background:rgba(255,160,60,.3);flex-shrink:0}
+.incompat-toggle{font-size:10px;font-weight:700;padding:3px 10px;border-radius:20px;border:1px solid rgba(255,160,60,.4);background:rgba(255,160,60,.08);color:rgba(255,160,60,.8);cursor:pointer;transition:all .15s;font-family:inherit}
+.incompat-toggle:hover{background:rgba(255,160,60,.15)}
+.incompat-section{animation:fadeIn .2s ease}
+.compat-banner{font-size:11px;color:rgba(45,212,191,.8);background:rgba(45,212,191,.07);border:1px solid rgba(45,212,191,.2);border-radius:8px;padding:8px 12px;margin-bottom:12px;line-height:1.5}
+.compat-banner strong{color:var(--teal)}
+
+/* Search */
+.search-wrap{margin-bottom:14px}
+.search-input{
+  width:100%;padding:10px 14px;background:rgba(255,255,255,.04);
+  border:1px solid rgba(255,255,255,.08);border-radius:var(--r-sm);
+  color:#fff;font-family:var(--font);font-size:13px;outline:none;
+  transition:border-color .2s;
+}
+.search-input::placeholder{color:var(--ink4)}
+.search-input:focus{border-color:rgba(45,212,191,.3)}
+
+/* ── SIDEBAR ─────────────────────────────────────────────── */
+.sidebar{
+  background:rgba(12,5,14,.85);
+  border-left:1px solid rgba(217,70,168,.1);
+  display:flex;flex-direction:column;
+  position:sticky;top:58px;height:calc(100vh - 58px);
+  overflow-y:auto;scrollbar-width:thin;scrollbar-color:rgba(45,212,191,.2) transparent;
+}
+.sidebar-title{
+  padding:14px 16px 12px;
+  font-size:9px;font-weight:700;letter-spacing:.15em;text-transform:uppercase;
+  color:rgba(45,212,191,.5);border-bottom:1px solid rgba(45,212,191,.06);
+}
+.sidebar-total-wrap{padding:12px 16px}
+#sidebarTotal{
+  font-size:22px;font-weight:800;letter-spacing:-.02em;
+  background:linear-gradient(135deg,var(--punch),#e879c8);
+  -webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;
+  filter:drop-shadow(0 0 12px rgba(217,70,168,.3));
+}
+#sidebarRata{font-size:10px;color:rgba(217,70,168,.5);margin-top:2px;font-weight:500}
+
+/* Build health */
+.build-health-wrap{padding:4px 16px 12px}
+.build-health-label{font-size:9px;color:var(--ink4);font-weight:600;letter-spacing:.04em;text-transform:uppercase;margin-bottom:4px;display:flex;justify-content:space-between}
+.build-health-bar{height:4px;border-radius:2px;background:rgba(255,255,255,.06);overflow:hidden}
+#buildHealthFill{height:100%;width:0%;background:var(--teal);transition:width .4s,background .4s;border-radius:2px}
+
+/* Sidebar items */
+#sidebarBody{padding:0 16px 8px}
+.sb-row{
+  display:flex;align-items:flex-start;gap:8px;padding:8px 0;
+  border-bottom:1px solid rgba(255,255,255,.04);
+}
+.sb-row:last-child{border-bottom:none}
+.sb-step{font-size:9px;font-weight:600;color:var(--teal);opacity:.6;flex-shrink:0;width:28px;padding-top:2px}
+.sb-name{font-size:11px;font-weight:600;color:var(--ink2);flex:1;line-height:1.3}
+.sb-price{font-size:11px;font-weight:700;color:var(--punch);flex-shrink:0}
+.sb-empty{font-size:10px;color:var(--ink4);font-style:italic}
+#piecesCount{font-size:10px;color:var(--ink4);text-align:right;padding:4px 0 8px}
+
+/* Risparmio */
+#risparmioWrap{
+  margin:0 16px 12px;padding:8px 12px;
+  background:rgba(45,212,191,.05);border:1px solid rgba(45,212,191,.12);border-radius:var(--r-sm);
+  display:none;
+}
+.risp-label{font-size:9px;color:var(--teal);font-weight:700;letter-spacing:.06em;text-transform:uppercase}
+.risp-val{font-size:14px;font-weight:800;color:var(--teal)}
+
+/* Pagamenti */
+.sp-sidebar{
+  display:flex;flex-direction:column;gap:6px;
+  padding:10px 16px 12px;border-bottom:1px solid rgba(255,255,255,.04);
+}
+.sp-sidebar-title{font-size:9px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:rgba(255,255,255,.25);margin-bottom:2px}
+.sp-method{
+  display:flex;align-items:center;gap:10px;
+  padding:7px 10px;border-radius:8px;
+  background:rgba(255,255,255,.03);
+  border:1px solid rgba(255,255,255,.06);
+  transition:background .15s;
+}
+.sp-method:hover{background:rgba(45,212,191,.05);border-color:rgba(45,212,191,.15)}
+.sp-logo2{
+  font-size:10px;font-weight:900;letter-spacing:.02em;
+  color:#07050d;background:var(--teal);
+  padding:3px 7px;border-radius:4px;
+  flex-shrink:0;min-width:56px;text-align:center;
+}
+.sp-logo2.klarna{background:#ffb3c7;color:#1a1a2e}
+.sp-logo2.paypal{background:#003087;color:#fff}
+.sp-txt{font-size:10px;color:rgba(255,255,255,.45);line-height:1.3;flex:1}
+.sp-rate{color:var(--teal);font-weight:700}
+.sp-rate.klarna{color:#ffb3c7}
+.sp-rate.paypal{color:#60a5fa}
+.sp-months{font-size:13px;font-weight:800;color:var(--ink2);margin-left:auto;letter-spacing:-.02em}
+
+/* CTA group */
+.cta-group{padding:12px 16px;display:none;flex-direction:column;gap:7px}
+#buildIncompleteMsg{font-size:10px;color:rgba(255,255,255,.25);text-align:center;padding:4px 0 8px;letter-spacing:.02em}
+.cta-primary{
+  padding:13px 16px;
+  background:linear-gradient(135deg,var(--punch),var(--punch-dark));
+  color:#fff;font-family:var(--font);font-size:13px;font-weight:700;
+  border:none;cursor:pointer;transition:all .15s;border-radius:var(--r-sm);
+  display:none;
+}
+.cta-primary:hover{opacity:.9;transform:translateY(-1px)}
+.cta-wa{
+  padding:9px 16px;
+  background:rgba(37,211,102,.08);border:1px solid rgba(37,211,102,.2);
+  color:#25d366;font-family:var(--font);font-size:11px;font-weight:600;
+  cursor:pointer;border-radius:var(--r-sm);transition:all .15s;
+  display:flex;align-items:center;justify-content:center;gap:6px;
+}
+.cta-wa:hover{background:rgba(37,211,102,.14)}
+.cta-secondary{
+  background:none;border:none;color:var(--ink4);font-size:10px;font-weight:500;
+  cursor:pointer;text-decoration:underline;padding:4px;font-family:var(--font);
+  transition:color .15s;
+}
+.cta-secondary:hover{color:var(--ink3)}
+
+/* ── MODAL ───────────────────────────────────────────────── */
+.modal-overlay{
+  position:fixed;inset:0;z-index:500;
+  background:rgba(0,0,0,.7);backdrop-filter:blur(8px);
+  display:none;align-items:center;justify-content:center;padding:20px;
+}
+.modal-overlay.open{display:flex}
+.modal{
+  background:rgba(12,5,14,.97);
+  border:1px solid rgba(45,212,191,.2);border-radius:16px;
+  width:100%;max-width:480px;overflow:hidden;
+}
+.modal-header{
+  display:flex;align-items:center;justify-content:space-between;
+  padding:18px 20px 14px;border-bottom:1px solid rgba(255,255,255,.06);
+}
+.modal-title{font-size:18px;font-weight:800;letter-spacing:-.01em}
+.modal-close{
+  background:rgba(255,255,255,.06);border:none;color:var(--ink3);
+  cursor:pointer;width:28px;height:28px;border-radius:50%;
+  font-size:12px;transition:all .15s;
+}
+.modal-close:hover{background:rgba(255,255,255,.12);color:#fff}
+.modal-body{padding:18px 20px 22px}
+.modal-subtitle{font-size:12px;color:var(--ink3);line-height:1.5;margin-bottom:16px}
+.form-group{margin-bottom:14px}
+.form-label{font-size:10px;font-weight:700;letter-spacing:.06em;text-transform:uppercase;color:var(--ink3);display:block;margin-bottom:6px}
+.form-input{
+  width:100%;padding:10px 13px;
+  background:rgba(255,255,255,.04);border:1px solid rgba(255,255,255,.1);
+  border-radius:var(--r-sm);color:#fff;font-family:var(--font);font-size:14px;outline:none;
+  transition:border-color .2s;
+}
+.form-input:focus{border-color:rgba(45,212,191,.4)}
+.form-input::placeholder{color:var(--ink4)}
+.modal-sp-note{
+  display:flex;align-items:center;gap:6px;
+  font-size:11px;color:rgba(45,212,191,.6);
+  margin:12px 0;padding:8px 10px;
+  background:rgba(45,212,191,.05);border:1px solid rgba(45,212,191,.1);border-radius:8px;
+}
+.modal-pay-row{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:16px}
+.modal-pay-pill{
+  font-size:10px;font-weight:700;color:var(--teal);
+  padding:3px 8px;border:1px solid rgba(45,212,191,.2);
+  border-radius:20px;background:rgba(45,212,191,.05);
+}
+.modal-submit{
+  width:100%;padding:14px;
+  background:linear-gradient(135deg,#25D366,#128C7E);
+  color:#fff;font-family:var(--font);font-size:14px;font-weight:700;
+  border:none;cursor:pointer;border-radius:var(--r-sm);
+  display:flex;align-items:center;justify-content:center;gap:6px;
+  transition:opacity .15s;
+}
+.modal-submit:hover{opacity:.9}
+
+/* ── TOAST ───────────────────────────────────────────────── */
+#toast{
+  position:fixed;bottom:24px;left:50%;transform:translateX(-50%) translateY(80px);
+  background:rgba(10,8,20,.95);color:#fff;padding:12px 22px;
+  font-size:10px;font-weight:600;letter-spacing:.08em;z-index:9999;
+  transition:transform .25s ease;border:1px solid rgba(45,212,191,.2);
+  box-shadow:0 8px 24px rgba(0,0,0,.4);white-space:nowrap;
+  border-radius:var(--r-sm);backdrop-filter:blur(20px);
+}
+#toast.show{transform:translateX(-50%) translateY(0)}
+
+/* ── RESOCONTO FINALE ────────────────────────────────────── */
+.resoconto-box{
+  background:rgba(12,5,14,.9);border:1px solid rgba(45,212,191,.15);
+  border-radius:var(--r);padding:20px;margin-bottom:20px;
+}
+.resoconto-title{font-size:16px;font-weight:800;margin-bottom:16px;
+  background:linear-gradient(90deg,var(--teal),var(--punch));
+  -webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text}
+.alert-item{
+  display:flex;align-items:flex-start;gap:10px;padding:10px 14px;
+  border-radius:var(--r-sm);margin-bottom:8px;cursor:pointer;transition:opacity .2s;
+}
+.alert-item:hover{opacity:.85}
+.alert-item.red{background:rgba(239,68,68,.08);border:1px solid rgba(239,68,68,.2)}
+.alert-item.yellow{background:rgba(245,158,11,.08);border:1px solid rgba(245,158,11,.2)}
+.alert-item.info{background:rgba(45,212,191,.06);border:1px solid rgba(45,212,191,.15)}
+.alert-icon{font-size:16px;flex-shrink:0}
+.alert-text{flex:1;font-size:11px;line-height:1.4;color:var(--ink2)}
+.alert-fix{font-size:10px;font-weight:700;color:var(--teal);flex-shrink:0;margin-top:1px}
+.riep-row{display:flex;justify-content:space-between;padding:8px 0;border-bottom:1px solid rgba(255,255,255,.04);font-size:13px}
+.riep-row:last-child{border-bottom:none}
+.riep-label{color:var(--ink3)}
+.riep-val{font-weight:700;color:#fff}
+.riep-total{font-size:16px;font-weight:800;color:var(--punch)}
+.riep-impl{font-size:11px;color:var(--ink4);padding:4px 0 8px;border-bottom:1px solid rgba(255,255,255,.04);margin-bottom:4px}
+
+/* ── FOOTER ──────────────────────────────────────────────── */
+.site-footer{
+  background:rgba(7,5,13,.95);border-top:1px solid rgba(45,212,191,.08);
+  position:relative;z-index:1;
+}
+.footer-inner{
+  max-width:1400px;margin:0 auto;
+  padding:24px clamp(16px,3vw,32px);
+  display:flex;flex-wrap:wrap;gap:20px;align-items:center;justify-content:space-between;
+}
+.footer-brand{display:flex;flex-direction:column;gap:2px}
+.footer-name{font-size:13px;font-weight:700;color:#fff}
+.footer-url{font-size:10px;color:var(--ink4)}
+.footer-feats{display:flex;gap:20px;flex-wrap:wrap}
+.footer-feat{display:flex;align-items:center;gap:8px}
+.footer-feat-icon{
+  width:32px;height:32px;border-radius:8px;
+  display:flex;align-items:center;justify-content:center;
+  background:rgba(45,212,191,.06);border:1px solid rgba(45,212,191,.1);
+  flex-shrink:0;
+}
+.footer-feat-t{font-size:11px;font-weight:700;color:var(--ink2)}
+.footer-feat-s{font-size:9px;color:var(--ink4)}
+.footer-cta{display:flex;flex-direction:column;align-items:flex-end;gap:6px}
+.footer-wa-btn{
+  display:inline-flex;align-items:center;gap:8px;
+  padding:9px 16px;background:#25D366;color:#fff;
+  font-size:12px;font-weight:700;border-radius:9px;text-decoration:none;
+  font-family:var(--font);transition:opacity .15s;
+}
+.footer-wa-btn:hover{opacity:.88}
+.footer-hours{font-size:10px;color:rgba(255,255,255,.2)}
+
+/* ── ACHIEVEMENT ────────────────────────────────────────── */
+#achievementContainer{position:fixed;bottom:24px;right:24px;z-index:9999;display:flex;flex-direction:column;gap:10px;pointer-events:none}
+.achievement-popup{
+  display:flex;align-items:center;gap:12px;
+  padding:14px 18px;background:rgba(10,8,20,.95);
+  border:1px solid rgba(45,212,191,.3);border-left:3px solid var(--teal);
+  border-radius:12px;box-shadow:0 8px 32px rgba(0,0,0,.4),0 0 20px rgba(45,212,191,.15);
+  backdrop-filter:blur(20px);min-width:260px;max-width:320px;
+  transform:translateX(120%);transition:transform .4s cubic-bezier(.34,1.56,.64,1),opacity .4s ease;
+  opacity:0;pointer-events:none;position:relative;overflow:hidden;
+}
+.achievement-popup.visible{transform:translateX(0);opacity:1}
+.achievement-popup.hiding{transform:translateX(120%);opacity:0}
+.ach-icon{font-size:28px;flex-shrink:0;filter:drop-shadow(0 0 8px rgba(45,212,191,.5))}
+.ach-body{flex:1}
+.ach-label{font-size:8px;font-weight:700;letter-spacing:.15em;text-transform:uppercase;color:rgba(45,212,191,.6);margin-bottom:2px}
+.ach-title{font-size:14px;font-weight:800;color:#fff;letter-spacing:-.01em;margin-bottom:2px}
+.ach-desc{font-size:10px;color:rgba(255,255,255,.4);line-height:1.4}
+.ach-shine{position:absolute;top:0;left:-100%;width:60%;height:100%;background:linear-gradient(90deg,transparent,rgba(255,255,255,.06),transparent);animation:achShine 2s ease-in-out .3s forwards}
+@keyframes achShine{to{left:150%}}
+
+/* ── SOUND TOGGLE ────────────────────────────────────────── */
+#soundToggle{
+  position:fixed;bottom:20px;left:20px;z-index:9998;
+  width:40px;height:40px;border-radius:50%;
+  background:rgba(12,5,14,.9);border:1px solid rgba(45,212,191,.2);
+  display:flex;align-items:center;justify-content:center;
+  cursor:pointer;font-size:16px;transition:all .2s;
+  backdrop-filter:blur(10px);
+}
+#soundToggle:hover{border-color:var(--teal)}
+
+/* ── MOBILE BOTTOM BAR ───────────────────────────────────── */
+.mbb-bar{
+  display:none;position:fixed;bottom:0;left:0;right:0;z-index:200;
+  background:rgba(7,5,13,.95);backdrop-filter:blur(20px);
+  border-top:1px solid rgba(217,70,168,.2);
+  padding:10px 16px 20px;
+  align-items:center;justify-content:space-between;gap:12px;
+}
+.mbb-info{display:flex;flex-direction:column;gap:2px}
+.mbb-total{font-size:18px;font-weight:800;background:linear-gradient(135deg,var(--punch),#e879c8);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text}
+.mbb-rata{font-size:9px;color:rgba(45,212,191,.6);font-weight:600}
+.mbb-btn{
+  padding:11px 20px;background:linear-gradient(135deg,var(--punch),var(--punch-dark));
+  color:#fff;font-family:var(--font);font-size:13px;font-weight:700;
+  border:none;cursor:pointer;border-radius:10px;white-space:nowrap;
+  opacity:.3;pointer-events:none;transition:opacity .3s;
+}
+
+/* ── RESPONSIVE MOBILE ───────────────────────────────────── */
+@media(max-width:768px){
+  /* ── Layout base ── */
+  .main-wrap{display:block;padding-bottom:88px}
+  .sidebar{display:none!important}
+
+  /* ── Topbar ── */
+  .topbar{height:52px}
+  .topbar-sounds{display:none}
+  .topbar-brand{gap:8px}
+  .topbar-logo{width:28px;height:28px}
+  .topbar-name{font-size:13px}
+
+  /* ── Progress strip ── */
+  .progress-strip{top:52px;height:36px;gap:0}
+  .step-pill{padding:0 8px;font-size:9px;gap:4px}
+  .step-pill-num{width:16px;height:16px;font-size:7px}
+  .scalapay-dynamic{top:52px;font-size:10px;padding:6px 16px}
+
+  /* ── Content padding ── */
+  .content{padding:14px 14px}
+
+  /* ── Step header ── */
+  .step-header{padding:14px 0 12px}
+  .step-title{font-size:clamp(20px,6vw,26px)}
+  .step-subtitle{font-size:11px}
+
+  /* ── Piattaforma ── */
+  .pf-brand-row{flex-direction:row;gap:8px}
+  .pf-brand{padding:18px 12px}
+  .pf-brand-name{font-size:clamp(28px,10vw,40px)}
+  .pf-brand-sub{font-size:9px}
+  .pf-brand-badge{font-size:7px;padding:2px 7px;margin-top:7px}
+  .pf-socket-grid{grid-template-columns:1fr 1fr}
+  .pf-socket-card{padding:10px 12px}
+
+  /* ── Subcategorie: 1 colonna su mobile stretto, 2 su largo ── */
+  .subcat-grid{grid-template-columns:1fr 1fr;gap:8px}
+  .subcat-card{padding:14px 12px 12px}
+  .subcat-icon{width:32px;height:32px;margin-bottom:8px;border-radius:8px}
+  .subcat-icon svg{width:16px;height:16px}
+  .subcat-name{font-size:12px}
+  .subcat-note{font-size:9px}
+
+  /* ── Prodotti: griglia adattiva ── */
+  .products-grid{grid-template-columns:1fr 1fr;gap:8px}
+  .product-card{padding:11px 10px}
+  .product-name{font-size:11px;margin-bottom:4px}
+  .product-price{font-size:14px}
+  .product-meta{gap:3px;margin-top:6px}
+  .product-badge{font-size:7px;padding:1px 5px}
+
+  /* ── Search ── */
+  .search-input{font-size:16px;padding:9px 12px}
+
+  /* ── Footer ── */
+  .footer-inner{
+    flex-direction:column;align-items:flex-start;gap:16px;
+    padding:20px 16px 24px;
+  }
+  .footer-feats{gap:12px}
+  .footer-feat{gap:6px}
+  .footer-feat-icon{width:28px;height:28px;border-radius:6px}
+  .footer-feat-t{font-size:10px}
+  .footer-feat-s{font-size:8px}
+  .footer-cta{align-items:flex-start;width:100%}
+  .footer-wa-btn{width:100%;justify-content:center}
+
+  /* ── Achievement ── */
+  #achievementContainer{bottom:96px;right:12px;left:12px}
+  .achievement-popup{min-width:0;width:100%}
+
+  /* ── Modal bottom sheet ── */
+  .modal-overlay{align-items:flex-end;padding:0}
+  .modal{
+    width:100%;max-width:100%;
+    border-radius:20px 20px 0 0;
+    max-height:92vh;overflow-y:auto;
+    border-left:none;border-right:none;border-bottom:none;
+  }
+  .form-input{font-size:16px}
+
+  /* ── Mobile bottom bar ── */
+  .mbb-bar{display:flex}
+}
+
+/* Extra stretto: sotto 380px tutto su 1 colonna */
+@media(max-width:380px){
+  .pf-brand-row{gap:6px}
+  .subcat-grid{grid-template-columns:1fr}
+  .products-grid{grid-template-columns:1fr}
+  .pf-socket-grid{grid-template-columns:1fr 1fr}
+}
+@media(min-width:769px){.mbb-bar{display:none!important}}
+</style>
+</head>
+<body>
+
+<!-- GLOW -->
+<div class="bg-glow"><span></span><span></span><span></span></div>
+<canvas id="particleCanvas"></canvas>
+
+<!-- TOPBAR -->
+<div class="topbar">
+  <div class="topbar-inner">
+    <a href="home.html" class="topbar-brand" title="Torna alla home" style="text-decoration:none;color:inherit;display:flex;align-items:center;gap:10px;cursor:pointer">
+      <img src="data:image/png;base64,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" alt="Minimal Gamers">
+      <span>Configuratore PC Gaming</span>
+    </a>
+    <div class="topbar-right">
+      <div id="stepCounter" style="font-size:10px;color:rgba(45,212,191,.5);font-weight:600"></div>
+      <button class="topbar-sounds" id="soundBtn" onclick="soundEnabled=!soundEnabled;this.textContent=soundEnabled?'🔊':'🔇'" title="Suoni UI">🔊</button>
+    </div>
+  </div>
+</div>
+
+<!-- SCALAPAY BAR -->
+<div class="scalapay-dynamic" id="scalaPayBar">
+  <span>Build: <span class="sp-amount" id="spTotal">€ 0,00</span></span>
+  <span>Scalapay: <span class="sp-rate" id="spRate">€ 0,00/mese</span> × 36 rate</span>
+</div>
+
+<!-- PROGRESS STRIP -->
+<div class="progress-strip" id="progressStrip"></div>
+
+<!-- MAIN -->
+<div class="main-wrap">
+  <main class="content" id="mainContent"></main>
+  <aside class="sidebar">
+    <div class="sidebar-title">La tua build</div>
+    <div class="sidebar-total-wrap">
+      <div id="sidebarTotal">€ 0,00</div>
+      <div id="sidebarRata"></div>
+    </div>
+    <div class="build-health-wrap">
+      <div class="build-health-label">
+        <span>Build Health</span>
+        <span id="buildHealthPct">0%</span>
+      </div>
+      <div class="build-health-bar"><div id="buildHealthFill"></div></div>
+    </div>
+    <div id="sidebarBody"></div>
+    <div id="piecesCount" style="padding:0 16px 4px;font-size:10px;color:rgba(255,255,255,.2);text-align:right"></div>
+    <div id="risparmioWrap">
+      <div class="risp-label">💰 Risparmi vs Amazon</div>
+      <div class="risp-val" id="risparmioVal"></div>
+    </div>
+    <div class="sp-sidebar">
+      <div class="sp-sidebar-title">Pagamento rateale</div>
+      <div class="sp-method">
+        <div class="sp-logo2">Scalapay</div>
+        <div class="sp-txt">Paga in <span class="sp-rate">36 rate</span><br>Prima rata tra 30gg</div>
+        <div class="sp-months">×36</div>
+      </div>
+      <div class="sp-method">
+        <div class="sp-logo2 klarna">Klarna</div>
+        <div class="sp-txt">Paga in <span class="sp-rate klarna">12 rate</span><br>Prima rata tra 30gg</div>
+        <div class="sp-months">×12</div>
+      </div>
+      <div class="sp-method">
+        <div class="sp-logo2 paypal">PayPal</div>
+        <div class="sp-txt">Paga in <span class="sp-rate paypal">24 rate</span><br>Prima rata tra 30gg</div>
+        <div class="sp-months">×24</div>
+      </div>
+    </div>
+    <div class="cta-group" id="ctaGroup">
+      <div id="buildIncompleteMsg">Completa la build per ordinare</div>
+      <button class="cta-primary" id="btnCheckout" onclick="openCheckout()">Procedi all'ordine →</button>
+      <button class="cta-wa" onclick="openWhatsApp()">
+        <svg width="15" height="15" viewBox="0 0 24 24" fill="currentColor"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413z"/><path d="M12 0C5.373 0 0 5.373 0 12c0 2.104.549 4.076 1.502 5.789L.057 23.761a.5.5 0 0 0 .608.65l6.101-1.596A11.945 11.945 0 0 0 12 24c6.627 0 12-5.373 12-12S18.627 0 12 0zm0 22a9.932 9.932 0 0 1-5.042-1.369l-.361-.214-3.741.979.998-3.648-.235-.374A9.953 9.953 0 0 1 2 12C2 6.477 6.477 2 12 2s10 4.477 10 10-4.477 10-10 10z"/></svg>
+        Chiedici su WhatsApp
+      </button>
+      <button class="cta-secondary" onclick="shareLink()">Condividi build</button>
+    </div>
+  </aside>
+</div>
+
+<!-- FOOTER -->
+<footer class="site-footer">
+  <div class="footer-inner">
+    <div class="footer-brand">
+      <span class="footer-name">Minimal Gamers</span>
+      <span class="footer-url">minimalgamers.it · Napoli</span>
+    </div>
+    <div class="footer-feats">
+      <div class="footer-feat">
+        <div class="footer-feat-icon"><svg viewBox="0 0 24 24" fill="none" stroke="rgba(255,255,255,.5)" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" width="16" height="16"><rect x="1" y="4" width="22" height="16" rx="2"/><line x1="1" y1="10" x2="23" y2="10"/></svg></div>
+        <div><div class="footer-feat-t" style="color:var(--teal)">Scalapay</div><div class="footer-feat-s">36 rate</div></div>
+      </div>
+      <div class="footer-feat">
+        <div class="footer-feat-icon"><svg viewBox="0 0 24 24" fill="none" stroke="rgba(255,255,255,.5)" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" width="16" height="16"><rect x="1" y="4" width="22" height="16" rx="2"/><line x1="1" y1="10" x2="23" y2="10"/></svg></div>
+        <div><div class="footer-feat-t" style="color:#ffb3c7">Klarna</div><div class="footer-feat-s">12 rate</div></div>
+      </div>
+      <div class="footer-feat">
+        <div class="footer-feat-icon"><svg viewBox="0 0 24 24" fill="none" stroke="rgba(255,255,255,.5)" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" width="16" height="16"><rect x="1" y="4" width="22" height="16" rx="2"/><line x1="1" y1="10" x2="23" y2="10"/></svg></div>
+        <div><div class="footer-feat-t" style="color:#60a5fa">PayPal</div><div class="footer-feat-s">24 rate</div></div>
+      </div>
+      <div class="footer-feat">
+        <div class="footer-feat-icon"><svg viewBox="0 0 32 32" fill="none" width="16" height="16" xmlns="http://www.w3.org/2000/svg">
+          <!-- furgone corriere -->
+          <rect x="1" y="10" width="19" height="13" rx="1.5" fill="none" stroke="rgba(255,255,255,.5)" stroke-width="1.6"/>
+          <path d="M20 14h5.5l3.5 4.5V23h-9V14z" fill="none" stroke="rgba(255,255,255,.5)" stroke-width="1.6" stroke-linejoin="round"/>
+          <!-- ruote -->
+          <circle cx="7" cy="23" r="2.2" fill="none" stroke="rgba(255,255,255,.5)" stroke-width="1.6"/>
+          <circle cx="24" cy="23" r="2.2" fill="none" stroke="rgba(255,255,255,.5)" stroke-width="1.6"/>
+          <!-- stelle Europa (3 stilizzate) -->
+          <circle cx="10" cy="16" r=".9" fill="rgba(255,255,255,.45)"/>
+          <circle cx="13" cy="14.2" r=".9" fill="rgba(255,255,255,.45)"/>
+          <circle cx="16" cy="16" r=".9" fill="rgba(255,255,255,.45)"/>
+        </svg></div>
+        <div><div class="footer-feat-t">Spedizione</div><div class="footer-feat-s">In tutta Europa</div></div>
+      </div>
+      <div class="footer-feat">
+        <div class="footer-feat-icon"><svg viewBox="0 0 24 24" fill="none" stroke="rgba(255,255,255,.5)" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" width="16" height="16"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg></div>
+        <div><div class="footer-feat-t">Garanzia</div><div class="footer-feat-s">Assistenza diretta</div></div>
+      </div>
+    </div>
+    <div class="footer-cta">
+      <a class="footer-wa-btn" href="https://wa.me/393477133866" target="_blank" rel="noopener">
+        <svg viewBox="0 0 24 24" fill="#fff" width="15" height="15"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413z"/><path d="M12 0C5.373 0 0 5.373 0 12c0 2.104.549 4.076 1.502 5.789L.057 23.761a.5.5 0 0 0 .608.65l6.101-1.596A11.945 11.945 0 0 0 12 24c6.627 0 12-5.373 12-12S18.627 0 12 0zm0 22a9.932 9.932 0 0 1-5.042-1.369l-.361-.214-3.741.979.998-3.648-.235-.374A9.953 9.953 0 0 1 2 12C2 6.477 6.477 2 12 2s10 4.477 10 10-4.477 10-10 10z"/></svg>
+        Scrivici su WhatsApp
+      </a>
+      <div class="footer-hours">+39 347 713 3866 · Lun–Ven 9:00–18:00</div>
+    </div>
+  </div>
+</footer>
+
+<!-- MODAL CHECKOUT -->
+<div class="modal-overlay" id="modalOverlay" onclick="closeCheckoutIfOutside(event)">
+  <div class="modal">
+    <div class="modal-header">
+      <div class="modal-title">Concludi il tuo ordine</div>
+      <button class="modal-close" onclick="closeCheckout()">✕</button>
+    </div>
+    <div class="modal-body">
+      <p class="modal-subtitle">Inserisci i tuoi dati — ti mandiamo il riepilogo su WhatsApp e creiamo la tua build su Shopify per completare l'acquisto.</p>
+      <div class="form-group">
+        <label class="form-label">Nome e cognome *</label>
+        <input class="form-input" type="text" id="ord-name" placeholder="Mario Rossi">
+      </div>
+      <div class="form-group">
+        <label class="form-label">Email *</label>
+        <input class="form-input" type="email" id="ord-email" placeholder="mario@email.com">
+      </div>
+      <div class="form-group">
+        <label class="form-label">Telefono *</label>
+        <input class="form-input" type="tel" id="ord-phone" placeholder="+39 333 123 4567">
+      </div>
+      <div class="form-group">
+        <label class="form-label">Note (opzionale)</label>
+        <textarea class="form-input" id="ord-note" placeholder="Preferenze colore, periodo consegna..." style="height:72px;resize:none"></textarea>
+      </div>
+      <div class="modal-sp-note">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="#25D366"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413z"/><path d="M12 0C5.373 0 0 5.373 0 12c0 2.104.549 4.076 1.502 5.789L.057 23.761a.5.5 0 0 0 .608.65l6.101-1.596A11.945 11.945 0 0 0 12 24c6.627 0 12-5.373 12-12S18.627 0 12 0zm0 22a9.932 9.932 0 0 1-5.042-1.369l-.361-.214-3.741.979.998-3.648-.235-.374A9.953 9.953 0 0 1 2 12C2 6.477 6.477 2 12 2s10 4.477 10 10-4.477 10-10 10z"/></svg>
+        Riceverai il link per completare l'acquisto su WhatsApp
+      </div>
+      <div class="modal-pay-row">
+        <span class="modal-pay-pill">Scalapay 36 rate</span>
+        <span class="modal-pay-pill">Klarna 12 rate</span>
+        <span class="modal-pay-pill">PayPal 24 rate</span>
+      </div>
+      <button class="modal-submit" onclick="submitOrder()">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="#fff"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413z"/><path d="M12 0C5.373 0 0 5.373 0 12c0 2.104.549 4.076 1.502 5.789L.057 23.761a.5.5 0 0 0 .608.65l6.101-1.596A11.945 11.945 0 0 0 12 24c6.627 0 12-5.373 12-12S18.627 0 12 0zm0 22a9.932 9.932 0 0 1-5.042-1.369l-.361-.214-3.741.979.998-3.648-.235-.374A9.953 9.953 0 0 1 2 12C2 6.477 6.477 2 12 2s10 4.477 10 10-4.477 10-10 10z"/></svg>
+        Invia su WhatsApp →
+      </button>
+    </div>
+  </div>
+</div>
+
+<!-- TOAST -->
+<div id="toast"></div>
+
+<!-- ACHIEVEMENTS -->
+<div id="achievementContainer"></div>
+
+<!-- SOUND TOGGLE -->
+<div id="soundToggle" onclick="soundEnabled=!soundEnabled;this.textContent=soundEnabled?'🔊':'🔇'" title="Suoni UI">🔊</div>
+
+<!-- MOBILE BOTTOM BAR -->
+<div class="mbb-bar" id="mbbBar">
+  <div class="mbb-info">
+    <div class="mbb-total" id="mbbTotal">€ 0,00</div>
+    <div class="mbb-rata" id="mbbRata"></div>
+  </div>
+  <button class="mbb-btn" id="mbbBtn" onclick="openCheckout()">Ordina →</button>
+</div>
+
+<script>
+// ══ PRODOTTI ══════════════════════════════════════════════
+let PRODS = [];
+
+// ══ STATO ════════════════════════════════════════════════
+const state = {
+  step: 0,
+  piattaforma: null,
+  socket: null,
+  build: {
+    case: null, cpu: null, mobo: null, ram: null,
+    gpu: null, ssd: null, psu: null, cooler: null, ventole: null,
+    monitor: null, mouse: null, keyboard: null, headset: null,
+  },
+  filters: {},
+  search: {},
+};
+
+let soundEnabled = true;
+
+// ══ STEPS ════════════════════════════════════════════════
+const STEPS = [
+  { id: 'piattaforma', label: 'Piattaforma' },
+  { id: 'cpu',        label: 'Processore' },
+  { id: 'mobo',       label: 'Scheda Madre' },
+  { id: 'case',       label: 'Case' },
+  { id: 'ram',        label: 'RAM' },
+  { id: 'gpu',        label: 'Scheda Video' },
+  { id: 'ssd',        label: 'SSD' },
+  { id: 'psu',        label: 'Alimentatore' },
+  { id: 'cooler',     label: 'Dissipatore' },
+  { id: 'ventole',    label: 'Archiviazione (opz.)' },
+  { id: 'monitor',    label: 'Monitor (opz.)' },
+  { id: 'mouse',      label: 'Mouse (opz.)' },
+  { id: 'keyboard',   label: 'Tastiera (opz.)' },
+  { id: 'headset',    label: 'Cuffie (opz.)' },
+  { id: 'riepilogo',  label: 'Riepilogo' },
+];
+
+// ══ PREZZI ═══════════════════════════════════════════════
+const IVA = 1.22;
+const MARKUP = 1.30;
+function prezzoCliente(p){ return p * IVA; }
+
+const calcP = p => p * IVA; // alias usato dal new_logic
+function calcImpl(tot){ return tot * (MARKUP - 1); }
+function fmt(x){ return '€ ' + x.toFixed(2).replace('.',','); }
+function fmtR(tot){ return fmt(tot / 36); }
+
+// ══ COMPATIBILITÀ ════════════════════════════════════════
+
+
+
+// ─── Marchi ammessi nel configuratore ──────────────────
+// Solo brand premium/affidabili — esclude rebranded, no-name, industriali
+const ALLOWED_CASE_BRANDS = [
+  'Fractal Design','Lian Li','PHANTEKS','Corsair','Hyte','NZXT','Raijintek','Antec',
+  'MSI','ASUS','DEEPCOOL','Thermaltake'
+];
+
+const ALLOWED_PSU_BRANDS = [
+  'Corsair','Seasonic','be quiet!','ASUS','MSI','Lian Li','NZXT','PHANTEKS',
+  'Super Flower','Silverstone','Thermaltake','Cooler Master','Chieftec','Gigabyte','ADATA'
+];
+
+const ALLOWED_COOLER_BRANDS = [
+  'Noctua','be quiet!','Thermalright','Arctic','Corsair','NZXT','Lian Li',
+  'ASUS','MSI','PHANTEKS','DEEPCOOL','Thermaltake','Cooler Master'
+];
+
+// Periferiche gaming: brand selezionati in base alla disponibilità ACTION
+// I confronti sono case-insensitive in brandAllowed()
+const ALLOWED_MOUSE_BRANDS = [
+  'Logitech','Razer','Corsair','SteelSeries','MSI',
+  'ENDORFY','HAVIT','Trust'
+];
+const ALLOWED_KEYBOARD_BRANDS = [
+  'Logitech','Trust','HAVIT','SAVIO','ENDORFY'
+];
+const ALLOWED_HEADSET_BRANDS = [
+  'Logitech','Razer','ASUS','Trust','HAVIT'
+];
+// Monitor: brand professionali, Xiaomi escluso per scelta
+const ALLOWED_MONITOR_BRANDS = [
+  'ASUS','MSI','LG','Samsung','Gigabyte','AOC','Acer','Alienware','Dell',
+  'BenQ','Philips','Iiyama','IIYAMA','HP','Hewlett-Packard','Lenovo','Sony','LG Electronics'
+];
+
+// Helper: confronto brand case-insensitive (il json ha PHANTEKS, Phanteks, be quiet!, BE QUIET! ecc.)
+function brandAllowed(brand, allowedList) {
+  if (!brand) return false;
+  const b = brand.toLowerCase().trim();
+  return allowedList.some(a => a.toLowerCase().trim() === b);
+}
+
+// ─── Filtra case NON adatti a build PC standard ──────────
+// Esclude case per Raspberry Pi, NUC, UCFF, server rack, mini-PC industriali
+function isValidPCCase(d) {
+  if (!d) return true;
+  const dn = d.toUpperCase();
+  // Case per microcomputer/SBC
+  if (/RASPBERRY|TINKER BOARD|BANANA PI|ORANGE PI|ROCK PI|ARDUINO/.test(dn)) return false;
+  if (/\bPI\s*[345][\s\-]*[A-Z]?\b/.test(dn)) return false;
+  // NUC / UCFF / mini-PC industriali
+  if (/INTEL NUC|ASUS NUC|UCFF|NUC\s*1[1234]|NUC PRO/.test(dn)) return false;
+  // ASUS mini-PC modelli specifici
+  if (/PN5[234]|PN6[4]/.test(dn)) return false;
+  // Server rack
+  if (/RACKMOUNT|SERVERGEHÄUSE|RACK SERVER/.test(dn)) return false;
+  if (/\b[12345]U\b/.test(dn)) return false;
+  // Thin Mini-ITX = industrial slim, non standard
+  if (/THIN[\s\-]?MINI[\s\-]?ITX/.test(dn)) return false;
+  // Specifici noti
+  if (/ARK GEHÄUSE/.test(dn)) return false;
+  return true;
+}
+
+// ─── Deduzione form factor MOBO dal nome del prodotto ───
+// Fallback usato quando il json non ha _form_factor precomputato
+function deduceMoboFormFactor(d) {
+  if (!d) return 'ATX';
+  const dn = d.toUpperCase();
+  // 1. Esplicito
+  if (/(MINI-ITX|MINI ITX|M-ITX)/.test(dn)) return 'Mini-ITX';
+  if (/(E-ATX|EATX|XL-ATX|EXTENDED ATX)/.test(dn)) return 'E-ATX';
+  if (/(MICRO-ATX|MICROATX|M-ATX)/.test(dn)) return 'Micro-ATX';
+  if (/\bMATX\b/.test(dn)) return 'Micro-ATX';
+  // 2. Suffisso ITX nel chipset (B650I, B650E-I, Z790I, X870I)
+  if (/\b[A-Z]\d{3,4}[A-Z]?[-]?I\b/.test(dn)) return 'Mini-ITX';
+  if (/\bITX\b/.test(dn)) return 'Mini-ITX';
+  // 3. Suffisso M nel chipset (B550M, B650M, A620M, H610M, B760M, A620AM)
+  if (/\b[A-Z]\d{3,4}M\b/.test(dn))  return 'Micro-ATX';
+  if (/\b[A-Z]\d{3,4}M-/.test(dn))    return 'Micro-ATX';
+  if (/\b[A-Z]\d{3,4}AM\b/.test(dn)) return 'Micro-ATX';
+  if (/\b[A-Z]\d{3,4}AM-/.test(dn))   return 'Micro-ATX';
+  // 4. ATX esplicito
+  if (/\bATX\b/.test(dn)) return 'ATX';
+  // 5. Workstation extreme
+  if (/(WRX80|TRX40|SWRX|TR4|TRX)/.test(dn)) return 'E-ATX';
+  // 6. Default ATX (la maggior parte delle mobo senza suffisso è ATX)
+  return 'ATX';
+}
+
+// ─── Deduzione form factor CASE dal nome ────────────────
+function deduceCaseFormFactor(d) {
+  if (!d) return 'ATX';
+  const dn = d.toUpperCase();
+  // Un case supporta il form factor PIÙ GRANDE che riesce a ospitare.
+  // Il json elenca i FF supportati nel nome (es. "Mini-Gehäuse, mATX, ATX").
+  // Quindi cerco prima il più grande: E-ATX → ATX → Micro-ATX → Mini-ITX.
+
+  // 1. E-ATX / Full Tower (supporta tutto)
+  if (/(E-ATX|EATX|XL-ATX|FULL-TOWER|FULL TOWER|FULLTOWER|BIG TOWER|BIG-TOWER|SUPER TOWER|SUPER-TOWER)/.test(dn)) return 'E-ATX';
+
+  // 2. ATX (Midi/Mid Tower, o ATX esplicito non preceduto da Micro/M-)
+  if (/(MIDI-TOWER|MIDI TOWER|MID-TOWER|MID TOWER|MIDTOWER)/.test(dn)) return 'ATX';
+  // ATX da solo: cerca "ATX" come parola intera ma escludi se preceduto da MATX o MICRO-ATX
+  // Es: "Mini-Gehäuse, mATX, ATX" → trova ATX standalone → ATX
+  const hasAtxStandalone = /(?:^|[^A-Z])(ATX)(?:[^A-Z]|$)/.test(dn) && !/[^ ]M[-]?ATX/.test(dn.replace(/MATX/g,'_MATX_'));
+  // Semplifico: se contiene "ATX" e NON è solo "mATX/MICRO-ATX", è ATX
+  const hasOnlyMicroATX = /(MICRO-ATX|MICROATX|M-ATX|\bMATX\b)/.test(dn) && !/[^M\-]ATX|^ATX/.test(dn.replace(/M-ATX/g,'').replace(/MATX/g,'').replace(/MICRO-ATX/g,'').replace(/MICROATX/g,''));
+  if (/\bATX\b/.test(dn) && !hasOnlyMicroATX) return 'ATX';
+
+  // 3. Micro-ATX (compatto)
+  if (/(MICRO-ATX|MICROATX|M-ATX|MATX)/.test(dn)) return 'Micro-ATX';
+  if (/(SLIM TOWER|SLIM-TOWER|MICRO TOWER|MICRO-TOWER|MICRO-CASE|MICRO CASE)/.test(dn)) return 'Micro-ATX';
+
+  // 4. Mini-ITX
+  if (/(MINI-ITX|MINI ITX|M-ITX)/.test(dn)) return 'Mini-ITX';
+  if (/\bITX\b/.test(dn)) return 'Mini-ITX';
+  if (/(NUC|UCFF|HTPC|SUGO|MINI-PC|MINI PC|\bSFF\b|MINI-DTX|MINI DTX)/.test(dn)) return 'Mini-ITX';
+  if (/(MINI-GEHÄUSE|MINI GEHÄUSE|MINI TOWER|MINI-TOWER)/.test(dn)) return 'Mini-ITX';
+
+  // 5. Tower generico → ATX
+  if (/\bTOWER\b/.test(dn)) return 'ATX';
+  // 6. Rackmount → ATX
+  if (/(RACKMOUNT|RACK MOUNT|\b\dU\b)/.test(dn)) return 'ATX';
+  // 7. Default
+  return 'ATX';
+}
+
+// ─── Deduzione PSU form factor ─────────────────────────
+function deducePsuForm(d) {
+  if (!d) return 'ATX';
+  const dn = d.toUpperCase();
+  if (dn.includes('SFX-L')) return 'SFX-L';
+  if (dn.includes('SFX'))   return 'SFX';
+  if (dn.includes('TFX'))   return 'TFX';
+  return 'ATX';
+}
+
+// ─── Helper: prendi form factor del prodotto, dal campo precomputato o calcolato ───
+function getFormFactor(p, category) {
+  if (!p) return null;
+  if (p._form_factor) return p._form_factor;
+  if (category === 'mobo' || category === 'case') {
+    return category === 'mobo' ? deduceMoboFormFactor(p.d) : deduceCaseFormFactor(p.d);
+  }
+  return null;
+}
+function getPsuForm(p) {
+  if (!p) return 'ATX';
+  if (p._psu_form) return p._psu_form;
+  return deducePsuForm(p.d);
+}
+
+// ─── Motivo incompatibilità per tooltip ─────────────────
+function incompatReason(stepId, p) {
+  const b  = state.build;
+  const sk = state.socket;
+  const RANK = {'Mini-ITX':1,'Micro-ATX':2,'ATX':3,'E-ATX':4};
+
+  if (stepId === 'cpu' || stepId === 'mobo') {
+    if (sk && (!p.socket || p.socket !== sk))
+      return `Socket ${p.socket || '?'} non compatibile con ${sk}`;
+  }
+  if (stepId === 'case') {
+    const mobo = b.mobo ? PRODS.find(x=>x.k===b.mobo) : null;
+    if (mobo) {
+      const mff = getFormFactor(mobo,'mobo');
+      const cff = getFormFactor(p,'case');
+      if (mff && cff && (RANK[cff]||3) < (RANK[mff]||3))
+        return `Case ${cff} troppo piccolo per mobo ${mff}`;
+    }
+  }
+  if (stepId === 'ram') {
+    const mobo = b.mobo ? PRODS.find(x=>x.k===b.mobo) : null;
+    const cpu  = b.cpu  ? PRODS.find(x=>x.k===b.cpu)  : null;
+    const ddr  = (mobo||cpu) ? (mobo||cpu).ddr : null;
+    if (ddr && p.ddr && p.ddr !== ddr)
+      return `RAM ${p.ddr} non compatibile — richiesta ${ddr}`;
+  }
+  if (stepId === 'psu') {
+    const sc = b.case ? PRODS.find(x=>x.k===b.case) : null;
+    if (sc) {
+      const caseForm = getPsuForm(sc); // form PSU che il case accetta
+      const psuForm  = getPsuForm(p);
+      if (caseForm !== psuForm) {
+        if (caseForm === 'ATX' && (psuForm === 'SFX' || psuForm === 'SFX-L'))
+          return `PSU ${psuForm} troppo piccola per case ATX`;
+        if ((caseForm === 'SFX' || caseForm === 'SFX-L') && psuForm === 'ATX')
+          return `PSU ATX non entra in un case ${caseForm}`;
+      }
+    }
+  }
+  if (stepId === 'cooler') {
+    const cpu = b.cpu ? PRODS.find(x=>x.k===b.cpu) : null;
+    if (cpu) {
+      const tdp = getCPUPeak(cpu.d);
+      const tc  = (p._tipo_cool||'').toLowerCase();
+      if (tdp > 170 && !tc.includes('aio'))
+        return `CPU da ${tdp}W richiede AIO`;
+      if (tdp > 125 && tc.includes('low'))
+        return `CPU da ${tdp}W troppo potente per low-profile`;
+    }
+  }
+  return null;
+}
+
+// ─── Funzione principale di compatibilità ──────────────
+function isCompat(stepId, p) {
+  const b  = state.build;
+  const pi = state.piattaforma;
+  const sk = state.socket;
+  const RANK = {'Mini-ITX':1,'Micro-ATX':2,'ATX':3,'E-ATX':4};
+
+  // ── CPU ──────────────────────────────────────────────
+  if (stepId === 'cpu') {
+    if (sk) {
+      // Socket scelto → match esatto richiesto, prodotti senza socket esclusi
+      if (!p.socket || p.socket !== sk) return false;
+    } else if (pi) {
+      // Solo piattaforma → match piattaforma
+      if (pi === 'amd'   && p.platform !== 'AMD')   return false;
+      if (pi === 'intel' && p.platform !== 'INTEL') return false;
+    }
+    return true;
+  }
+
+  // ── MOBO ─────────────────────────────────────────────
+  if (stepId === 'mobo') {
+    if (sk) {
+      if (!p.socket || p.socket !== sk) return false;
+    }
+    return true;
+  }
+
+  // ── CASE ─────────────────────────────────────────────
+  if (stepId === 'case') {
+    const mobo = b.mobo ? PRODS.find(x=>x.k===b.mobo) : null;
+    if (mobo) {
+      const mff = getFormFactor(mobo,'mobo');
+      const cff = getFormFactor(p,'case');
+      if (mff && cff) {
+        const mr = RANK[mff] || 3;
+        const cr = RANK[cff] || 3;
+        if (cr < mr) return false;
+      }
+    }
+    return true;
+  }
+
+  // ── RAM ──────────────────────────────────────────────
+  if (stepId === 'ram') {
+    const mobo = b.mobo ? PRODS.find(x=>x.k===b.mobo) : null;
+    const cpu  = b.cpu  ? PRODS.find(x=>x.k===b.cpu)  : null;
+    const ddr  = (mobo||cpu) ? (mobo||cpu).ddr : null;
+    if (ddr && p.ddr && p.ddr !== ddr) return false;
+    return true;
+  }
+
+  // ── PSU ──────────────────────────────────────────────
+  if (stepId === 'psu') {
+    const sc = b.case ? PRODS.find(x=>x.k===b.case) : null;
+    if (sc) {
+      const caseForm = getPsuForm(sc);
+      const psuForm  = getPsuForm(p);
+      // Case ATX → accetta solo PSU ATX
+      // Case SFX/SFX-L → accetta SFX e SFX-L
+      if (caseForm === 'ATX' && (psuForm === 'SFX' || psuForm === 'SFX-L')) return false;
+      if ((caseForm === 'SFX' || caseForm === 'SFX-L') && psuForm === 'ATX') return false;
+    }
+    return true;
+  }
+
+  // ── DISSIPATORE ──────────────────────────────────────
+  if (stepId === 'cooler') {
+    const cpu = b.cpu ? PRODS.find(x=>x.k===b.cpu) : null;
+    if (cpu) {
+      const tdp = getCPUPeak(cpu.d);
+      const tc  = (p._tipo_cool||'').toLowerCase();
+      const isAIO = tc.includes('aio');
+      const isLow = tc.includes('low');
+      if (tdp > 170 && !isAIO) return false;
+      if (tdp > 125 && isLow)  return false;
+    }
+    return true;
+  }
+
+  return true;
+}
+
+// ─── Fornitori ammessi per CPU ──────────────────────────
+// Caseking esclusa per le CPU (prezzi meno competitivi)
+const ALLOWED_CPU_SUPPLIERS = ['ACTION','TIER ONE'];
+
+function getProds(sid) {
+  const CAT_MAP = {
+    cpu:'CPU', mobo:'Scheda Madre', case:'Case',
+    ram:'RAM', gpu:'GPU', ssd:'SSD',
+    psu:'PSU', cooler:'Dissipatore', ventole:'Extra',
+    monitor:'Monitor', mouse:'Mouse', keyboard:'Tastiera', headset:'Cuffie'
+  };
+  const cat = CAT_MAP[sid];
+  if (!cat) return [];
+  let list = PRODS.filter(p => p.c === cat);
+  // ── CPU ── solo da fornitori ACTION e TIER ONE
+  if (sid === 'cpu') list = list.filter(p => ALLOWED_CPU_SUPPLIERS.includes(p.s));
+  // ── CASE ── non-PC esclusi + brand premium + solo ATX/E-ATX universali
+  if (sid === 'case') {
+    list = list.filter(p => isValidPCCase(p.d));
+    list = list.filter(p => brandAllowed(p.b, ALLOWED_CASE_BRANDS));
+    list = list.filter(p => {
+      const ff = deduceCaseFormFactor(p.d);
+      return ff === 'ATX' || ff === 'E-ATX';
+    });
+    // Esclusione modelli specifici inadatti (slim desktop, NAS, console)
+    list = list.filter(p => {
+      const dn = (p.d || '').toUpperCase();
+      if (/DEEPCOOL\s+WAVE\s+V2/.test(dn)) return false;
+      if (/\bNAS\b|\bNAS-?GEHÄUSE\b/.test(dn)) return false;
+      if (/\bPS[345]\b|\bXBOX\b|\bSWITCH\b|\bPLAYSTATION\b/.test(dn)) return false;
+      return true;
+    });
+  }
+  // ── SSD ── esclude schede madri con M.2 nel nome
+  if (sid === 'ssd') {
+    list = list.filter(p => {
+      const dn = (p.d || '').toUpperCase();
+      if (/\bMAINBOARD\b|\bMOTHERBOARD\b|\bMOBO\b/.test(dn)) return false;
+      if (/MICRO[\s-]?ATX/.test(dn)) return false;
+      if (/\bSOCKE?L\s*1[278]\d\d\b|\bLGA\s*1[278]\d\d\b/.test(dn)) return false;
+      if (/\bH[3-9][1-9]0M?\b|\bB[3-9][1-9]0[A-Z]?\b|\bZ[5-9][7-9]0[A-Z]?\b|\bX[5-9]70[A-Z]?\b/.test(dn)) return false;
+      return true;
+    });
+  }
+  // ── RAM ── esclude SO-DIMM (laptop) e ECC/RDIMM (server)
+  if (sid === 'ram') {
+    list = list.filter(p => {
+      const dn = (p.d || '').toUpperCase();
+      if (/\bSO-?DIMM\b/.test(dn)) return false;            // RAM laptop
+      if (/\bRDIMM\b|\bLRDIMM\b/.test(dn)) return false;  // RAM server
+      if (/\bECC\s+REG\b|\bECC\s+REGISTERED\b/.test(dn)) return false;
+      return true;
+    });
+  }
+
+  // ── MOBO ── esclude schede workstation extreme (TRX50/WRX80/W680/W790 ecc.)
+  if (sid === 'mobo') {
+    list = list.filter(p => {
+      const dn = (p.d || '').toUpperCase();
+      if (/TRX50|TRX40|WRX80|WRX90|W680|W690|W790|W880|SP3|SP5/.test(dn)) return false;
+      if (/SUPERMICRO|TYAN|\bN100\b|\bN200\b|\bN305\b|FANLESS|INDUSTRIAL/.test(dn)) return false;
+      if (/MINING|BTC|\bRIG\b/.test(dn)) return false;
+      if (/SERVER GRADE|RACKMOUNT|IPMI/.test(dn)) return false;
+      return true;
+    });
+  }
+
+  // ── GPU ── esclude riser, accessori, supporti
+  if (sid === 'gpu') {
+    list = list.filter(p => {
+      const dn = (p.d || '').toUpperCase();
+      const bd = (p.b || '').toLowerCase();
+      // Riser/Cavi PCIe
+      if (/\bRISER\b|\bRISER\s+KABEL\b|\bRISER\s+CABLE\b/.test(dn)) return false;
+      // Supporti GPU
+      if (/\bGPU\s+SUPPORT\b|\bGPU\s+HOLDER\b|\bGPU\s+BRACKET\b|\bGPU\s+STAND\b/.test(dn)) return false;
+      // Accessori Thermal Grizzly per GPU (WireView, GPU Guard)
+      if (bd.includes('thermal grizzly') || bd.includes('thermalright')) return false;
+      // Watercool
+      if (/\bWATERCOOL\b|\bHEATKILLER\b/.test(dn)) return false;
+      return true;
+    });
+  }
+
+  // ── PSU ── solo brand premium + esclude prodotti misclassificati come PSU
+  if (sid === 'psu') {
+    list = list.filter(p => brandAllowed(p.b, ALLOWED_PSU_BRANDS));
+    // Esclude case erroneamente classificati come PSU (es. Thermaltake Tower 500)
+    list = list.filter(p => {
+      const dn = (p.d || '').toUpperCase();
+      const isLikelyCase = /\b(MIDI TOWER|MID TOWER|MIDI-TOWER|MID-TOWER|FULL TOWER|FULL-TOWER|GEHÄUSE|CHASSIS)\b/.test(dn);
+      return !isLikelyCase;
+    });
+  }
+  // ── DISSIPATORE ── solo brand premium (esclude watercooling custom)
+  if (sid === 'cooler') {
+    list = list.filter(p => brandAllowed(p.b, ALLOWED_COOLER_BRANDS));
+  }
+
+  // ── MONITOR ── solo monitor gaming ≥144Hz, esclude accessori
+  if (sid === 'monitor') {
+    list = list.filter(p => brandAllowed(p.b, ALLOWED_MONITOR_BRANDS));
+    list = list.filter(p => {
+      const dn = (p.d || '').toUpperCase();
+      // Esclude staffe, cavi, accessori
+      if (/\bMOUNT\b|\bSTAND\b|\bBRACKET\b|\bARM\b|\bSTAFFA\b/.test(dn)) return false;
+      if (/\bCABLE\b|\bKABEL\b|\bADAPTER\b|\bHDMI CABLE\b/.test(dn)) return false;
+      if (/\bCOVER\b|\bSLEEVE\b|\bSCREEN PROTECTOR\b/.test(dn)) return false;
+      if (/\bPRIVACY FILTER\b|\bSCREEN FILTER\b/.test(dn)) return false;
+      // Esclude TV (non monitor gaming)
+      if (/\bTV\b|\bSMART TV\b/.test(dn)) return false;
+      return true;
+    });
+    // Filtra solo monitor con refresh ≥144Hz
+    list = list.filter(p => !p._hz || p._hz >= 144);
+  }
+
+  // ── MOUSE ── solo brand premium gaming
+  if (sid === 'mouse') {
+    list = list.filter(p => brandAllowed(p.b, ALLOWED_MOUSE_BRANDS));
+    list = list.filter(p => {
+      const dn = (p.d || '').toUpperCase();
+      if (/MOUSE\s*PAD|MOUSEPAD|MOUSE\s*MAT|MOUSE\s*TRAY|BUNGEE|GLIDES|FEET|GRIPS|SOFTWARE|REPLACEMENT/.test(dn)) return false;
+      return true;
+    });
+    // Calcolo _conn (Cablato/Wireless) per filtro sottocategoria
+    list = list.map(p => ({...p, _conn: p._wireless ? 'Wireless' : 'Cablato'}));
+  }
+
+  // ── TASTIERA ── solo meccaniche premium
+  if (sid === 'keyboard') {
+    list = list.filter(p => brandAllowed(p.b, ALLOWED_KEYBOARD_BRANDS));
+    list = list.filter(p => {
+      const dn = (p.d || '').toUpperCase();
+      // Esclude accessori
+      if (/KEYCAP|KEY CAP|SWITCH SET|KEY PULLER|PALM REST|WRIST REST|COVER|BUNDLE/.test(dn)) return false;
+      // Solo meccaniche (esclude membrana esplicita)
+      if (/MEMBRANE\s+KEYBOARD/.test(dn)) return false;
+      return true;
+    });
+  }
+
+  // ── CUFFIE ── solo brand premium gaming
+  if (sid === 'headset') {
+    list = list.filter(p => brandAllowed(p.b, ALLOWED_HEADSET_BRANDS));
+    list = list.filter(p => {
+      const dn = (p.d || '').toUpperCase();
+      if (/STAND|HOOK|HOLDER|EAR\s*PAD|EARPAD|EAR\s*CUSHION|REPLACEMENT/.test(dn)) return false;
+      if (/MIC\s+ONLY|MICROPHONE\s+STAND|BOOM\s+ARM/.test(dn)) return false;
+      return true;
+    });
+    list = list.map(p => ({...p, _conn: p._wireless ? 'Wireless' : 'Cablato'}));
+  }
+
+  return list;
+}
+
+// ══ SOTTOCATEGORIE ════════════════════════════════════════
+const SUBCATS = {
+
+  // \u2500\u2500 CPU: linea processore \u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500
+  cpu: {
+    label: 'Linea processore',
+    desc:  'Scegli la linea di processori. Puoi tornare indietro in qualsiasi momento.',
+    field: '_linea',
+    groups: [
+      { group: 'AMD Ryzen', items: [
+        { val:'Ryzen 9', icon:'\ud83d\udd34', note:'Massime prestazioni gaming e produttivit\u00e0', tag:'High-End' },
+        { val:'Ryzen 7', icon:'\ud83d\udd34', note:'Ottimo bilanciamento prestazioni/prezzo',   tag:'Mid-High' },
+        { val:'Ryzen 5', icon:'\ud83d\udd34', note:'Gaming ottimale al miglior prezzo',         tag:'Mid' },
+        { val:'Ryzen 3', icon:'\ud83d\udd34', note:'Entry level, build budget',                 tag:'Entry' },
+      ]},
+      { group: 'Intel Core Ultra (LGA1851)', items: [
+        { val:'Core Ultra 9', icon:'\ud83d\udd35', note:'Flagship Intel, AI e prestazioni al top', tag:'Flagship' },
+        { val:'Core Ultra 7', icon:'\ud83d\udd35', note:'High-end con NPU integrata',              tag:'High-End' },
+        { val:'Core Ultra 5', icon:'\ud83d\udd35', note:'Mid-range con architettura moderna',       tag:'Mid' },
+      ]},
+      { group: 'Intel Core i (LGA1700)', items: [
+        { val:'Core i9', icon:'\ud83d\udd35', note:'Massimo overclock Intel, top gaming',       tag:'High-End' },
+        { val:'Core i7', icon:'\ud83d\udd35', note:'Potente per gaming e content creation',     tag:'Mid-High' },
+        { val:'Core i5', icon:'\ud83d\udd35', note:'Il sweet spot Intel per il gaming',         tag:'Mid' },
+        { val:'Core i3', icon:'\ud83d\udd35', note:'Budget Intel, buon gaming 1080p',           tag:'Budget' },
+      ]},
+    ]
+  },
+
+  // \u2500\u2500 MOBO: chipset \u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500
+  mobo: {
+    label: 'Chipset',
+    desc:  'Il chipset determina le funzionalit\u00e0 della scheda madre. Solo chipset compatibili con la tua CPU.',
+    field: '_chipset',
+    // I gruppi vengono generati dinamicamente in base al socket CPU scelto
+    // Vedi renderSubcatSelector() per la logica
+    dynamic: true,
+    all_groups: {
+      'AM5': [
+        { val:'X870E', tag:'Flagship',  note:'PCIe 5.0 su CPU+mobo, USB4, Wi-Fi 7 obbligatorio, overclocking estremo' },
+        { val:'X870',  tag:'High-End',  note:'PCIe 5.0, USB4, Wi-Fi 7 obbligatorio, ottimo OC' },
+        { val:'B850',  tag:'Mid-High',  note:'PCIe 5.0 M.2, buon OC, Wi-Fi opzionale \u2014 sweet spot AM5' },
+        { val:'B650E', tag:'Mid',       note:'PCIe 5.0 GPU, buone feature a prezzo contenuto' },
+        { val:'B650',  tag:'Mid',       note:'Entry AM5, buon punto di partenza per Ryzen 7000/9000' },
+        { val:'B840',  tag:'Entry',     note:'Budget AM5, funzioni base, no OC CPU' },
+        { val:'A620',  tag:'Budget',    note:'Entry AMD, no overclocking, ideale per build economiche' },
+      ],
+      'AM4': [
+        { val:'X570', tag:'High-End', note:'Top AM4: PCIe 4.0, VRM robusto, piattaforma matura' },
+        { val:'B550', tag:'Mid',      note:'Sweet spot AM4: PCIe 4.0, ottimo per Ryzen 5000' },
+        { val:'B450', tag:'Budget',   note:'Budget AM4, supporta Ryzen 5000 con BIOS update' },
+        { val:'A520', tag:'Entry',    note:'Entry AM4, no OC, funzioni base' },
+      ],
+      'LGA1851': [
+        { val:'Z890', tag:'High-End',  note:'Top Arrow Lake: OC completo, PCIe 5.0, DDR5-8000+' },
+        { val:'B860', tag:'Mid',       note:'Mid-range LGA1851, no CPU OC, buon valore' },
+        { val:'H810', tag:'Budget',    note:'Entry LGA1851, funzioni base, no OC' },
+      ],
+      'LGA1700': [
+        { val:'Z790', tag:'High-End', note:'Overclocking completo, PCIe 5.0, massima connettivit\u00e0' },
+        { val:'B760', tag:'Mid',      note:'Sweet spot Intel: buone feature, no CPU OC' },
+        { val:'Z690', tag:'Mid',      note:'Generazione precedente Z, ancora ottima piattaforma' },
+        { val:'H770', tag:'Mid',      note:'Pi\u00f9 feature del B760 senza OC CPU' },
+        { val:'H610', tag:'Budget',   note:'Entry Intel, funzioni base' },
+      ],
+      'LGA1200': [
+        { val:'Z590', tag:'Mid',   note:'Top LGA1200: OC completo per 10th/11th gen' },
+        { val:'B560', tag:'Entry', note:'Mid LGA1200, RAM OC, buon valore legacy' },
+        { val:'H510', tag:'Budget',note:'Entry LGA1200, funzioni base' },
+      ],
+    }
+  },
+
+  // \u2500\u2500 SSD: tipo e generazione \u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500
+  ssd: {
+    label: 'Tipo di storage',
+    desc:  'NVMe \u00e8 consigliato per il sistema operativo. SATA \u00e8 ottimo come storage secondario.',
+    field: '_tipo',
+    groups: [
+      { group: 'NVMe PCIe (M.2)', items: [
+        { val:'NVMe Gen 5', icon:'\u26a1', note:'7.000\u201314.000 MB/s. Richiede mobo PCIe 5.0. Massime prestazioni 2025', tag:'Ultra' },
+        { val:'NVMe Gen 4', icon:'\ud83d\udd25', note:'3.500\u20137.400 MB/s. Standard attuale, ottimo per OS e giochi',           tag:'Consigliato' },
+        { val:'NVMe Gen 3', icon:'\u2705', note:'1.800\u20133.500 MB/s. Veloce, economico, compatibile con tutto',           tag:'Budget' },
+        { val:'NVMe',       icon:'\ud83d\udce6', note:'NVMe senza generazione specificata. Velocit\u00e0 variabile',               tag:'Vario' },
+      ]},
+      { group: 'SATA', items: [
+        { val:'M.2 SATA',  icon:'\ud83d\udcbe', note:'Fino a 550 MB/s, form factor M.2. Storage secondario economico', tag:'Legacy' },
+        { val:'SATA 2.5"', icon:'\ud83d\udcbe', note:'Fino a 550 MB/s, slot tradizionale. Storage secondario',         tag:'Legacy' },
+      ]},
+    ]
+  },
+
+  // \u2500\u2500 GPU: fascia di prestazione \u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500
+  gpu: {
+    label: 'Fascia prestazionale',
+    desc:  'Scegli la fascia. Puoi poi filtrare per marca (NVIDIA/AMD) e serie specifica.',
+    field: '_fascia_gpu',  // campo calcolato al volo
+    groups: [
+      { group: 'NVIDIA GeForce', items: [
+        { val:'RTX 50xx', icon:'\ud83d\udfe2', note:'Architettura Blackwell 2025. Ray tracing DLSS 4, massima efficienza', tag:'Nuova gen' },
+        { val:'RTX 40xx', icon:'\ud83d\udfe2', note:'Architettura Ada Lovelace. Ancora ottima, prezzi in calo',           tag:'Prev gen' },
+        { val:'RTX 30xx', icon:'\ud83d\udfe2', note:'Architettura Ampere. Budget, ancora competitivo a 1080p',            tag:'Legacy' },
+      ]},
+      { group: 'AMD Radeon', items: [
+        { val:'RX 9xxx', icon:'\ud83d\udd34', note:'Architettura RDNA 4 2025. Ottimo rapporto perf/prezzo', tag:'Nuova gen' },
+        { val:'RX 7xxx', icon:'\ud83d\udd34', note:'Architettura RDNA 3. Ancora competitivo, prezzi bassi', tag:'Prev gen' },
+      ]},
+      { group: 'Intel Arc', items: [
+        { val:'Arc Bxxx', icon:'\ud83d\udd35', note:'Arc Battlemage 2024. Ottimo per 1080p/1440p a basso prezzo', tag:'Budget' },
+        { val:'Arc Axxx', icon:'\ud83d\udd35', note:'Arc Alchemist. Entry level Intel, driver migliorati',         tag:'Entry' },
+      ]},
+    ]
+  },
+
+  // \u2500\u2500 PSU: prima wattaggio, poi lista filtrata \u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500
+  psu: {
+    label: 'Potenza alimentatore',
+    desc:  'Scegli il wattaggio in base alla tua build. Consigliamo almeno 100W di margine sul consumo stimato.',
+    field: '_fascia_w',  // calcolato dinamicamente
+    groups: [
+      { group: 'ATX Standard', items: [
+        { val:'450\u2013550W', icon:'\ud83d\udd0b', note:'Build entry/mid: CPU 65W + GPU \u2264 RTX 5060. Ideale per build silenziose', tag:'Budget' },
+        { val:'600\u2013650W', icon:'\ud83d\udd0b', note:'Build mid-range: CPU 105W + GPU \u2264 RTX 5060 Ti / RX 9060 XT',             tag:'Popolare' },
+        { val:'700\u2013750W', icon:'\u26a1', note:'Build gaming: CPU 105-125W + GPU \u2264 RTX 5070 / RX 9070. Sweet spot',      tag:'Consigliato' },
+        { val:'800\u2013850W', icon:'\u26a1', note:'Build high-end: CPU 170W + GPU \u2264 RTX 5080 / RX 9070 XT',                 tag:'High-End' },
+        { val:'1000W',    icon:'\ud83d\udd25', note:'Build top: RTX 5090 / sistema multi-componenti ad alto TDP',              tag:'Top Build' },
+        { val:'1200W+',   icon:'\ud83d\udd25', note:'Workstation / future-proof / build extreme overclocking',                 tag:'Extreme' },
+      ]},
+      { group: 'Compact (SFX/TFX)', items: [
+        { val:'SFX',   icon:'\ud83d\udce6', note:'Form factor compatto per case ITX. SFX standard fino a 850W', tag:'ITX' },
+        { val:'SFX-L', icon:'\ud83d\udce6', note:'SFX Large: pi\u00f9 potente, fino a 1000W. Compatibile case SFX-L',tag:'ITX+' },
+        { val:'TFX',   icon:'\ud83d\udce6', note:'Tiny Form Factor: per case slim/HTPC compatti',               tag:'Slim' },
+      ]},
+    ]
+  },
+
+  // \u2500\u2500 DISSIPATORI: tipo \u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500
+  cooler: {
+    label: 'Tipo di raffreddamento',
+    desc:  'AIO per CPU ad alto TDP o build silenziose. Torre aria per ottimo rapporto qualit\u00e0/prezzo.',
+    field: '_tipo_cool',
+    groups: [
+      { group: 'Raffreddamento a liquido AIO', items: [
+        { val:'AIO 420mm', icon:'\ud83d\udca7', note:'Massimo raffreddamento. Per CPU >170W TDP (9950X, i9-14900K). Require case supporto 420mm', tag:'Extreme' },
+        { val:'AIO 360mm', icon:'\ud83d\udca7', note:'Ottimo per CPU 105-170W TDP. Standard per gaming high-end. Silenzioso',                      tag:'Consigliato' },
+        { val:'AIO 280mm', icon:'\ud83d\udca7', note:'Buon compromesso: silenzioso e compatto',                                                     tag:'Mid' },
+        { val:'AIO 240mm', icon:'\ud83d\udca7', note:'Entry AIO: silenzioso per CPU fino a 105W TDP. Compatibile con la maggior parte dei case',   tag:'Entry' },
+        { val:'AIO 120mm', icon:'\ud83d\udca7', note:'AIO compatto per build ITX o CPU a basso TDP',                                               tag:'ITX' },
+      ]},
+      { group: 'Raffreddamento ad aria', items: [
+        { val:'Dual Tower',    icon:'\ud83c\udf2c\ufe0f', note:'Prestazioni top (Noctua NH-D15, Thermalright PA120): silenziosissimi, rivaleggiano AIO 240mm', tag:'Premium' },
+        { val:'Single Tower',  icon:'\ud83c\udf2c\ufe0f', note:'Standard: ottimo rapporto prezzo/prestazioni per CPU fino a 125W TDP',                         tag:'Popolare' },
+        { val:'Low-Profile',   icon:'\ud83c\udf2c\ufe0f', note:'Per case ITX/SFF con altezza limitata. Max 65-92mm',                                           tag:'ITX' },
+      ]},
+    ]
+  },
+
+  // \u2500\u2500 RAM: generazione DDR \u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500
+  ram: {
+    label: 'Capacit\u00e0 RAM',
+    desc:  'La generazione DDR \u00e8 gi\u00e0 fissata dalla scheda madre. Scegli la capacit\u00e0 totale.',
+    field: '_ram_fascia',
+    all: [
+      { val:'8GB',   icon:'\ud83d\udcbc', note:'Budget - office, web, gaming basic 1080p',     tag:'Budget' },
+      { val:'16GB',  icon:'\ud83c\udfae', note:'Standard gaming 1080p/1440p, multitasking leggero', tag:'Standard' },
+      { val:'32GB',  icon:'\u26a1',       note:'Sweet spot gaming 1440p/4K, streaming, content creation', tag:'Consigliato' },
+      { val:'64GB+', icon:'\ud83d\ude80', note:'Workstation, rendering 3D, VM, AI/ML',         tag:'Pro' },
+    ]
+  },
+
+  // ── MONITOR: per refresh rate ────────────────────────────
+  monitor: {
+    label: 'Refresh rate',
+    desc:  'Scegli la frequenza di aggiornamento. Pi\u00f9 \u00e8 alta, pi\u00f9 fluido sar\u00e0 il gaming.',
+    field: '_hz_fascia',
+    all: [
+      { val:'144Hz',  icon:'\ud83c\udfae', note:'Gaming standard - perfetto per la maggior parte dei giochi', tag:'Standard' },
+      { val:'165Hz',  icon:'\u26a1',       note:'Sweet spot - fluidit\u00e0 ottima',                            tag:'Consigliato' },
+      { val:'240Hz',  icon:'\ud83d\udd25', note:'Gaming competitivo - FPS, esports',                        tag:'Pro' },
+      { val:'360Hz+', icon:'\ud83d\ude80', note:'Top performance - massima reattivit\u00e0',                  tag:'Top' },
+    ]
+  },
+
+
+  // ── TASTIERA: layout ─────────────────────────────────────
+  keyboard: {
+    label: 'Layout',
+    desc:  'Scegli il formato della tastiera in base allo spazio e alle esigenze.',
+    field: '_layout',
+    all: [
+      { val:'Full Size', icon:'\u2328\ufe0f', note:'Tastiera completa con tastierino numerico', tag:'Full' },
+      { val:'TKL',       icon:'\u2702\ufe0f', note:'Tenkeyless - senza tastierino numerico, pi\u00f9 spazio per il mouse', tag:'TKL' },
+      { val:'75%',       icon:'\ud83d\udcd0', note:'Compatta con frecce, sweet spot gaming',  tag:'Compact' },
+      { val:'65%',       icon:'\ud83d\udd39', note:'Ultra-compatta',                          tag:'Mini' },
+      { val:'60%',       icon:'\ud83d\udd38', note:'Solo lettere + modificatori',             tag:'Mini' },
+    ]
+  },
+
+};
+
+// ══ SVG ICONE ════════════════════════════════════════════
+const ICONS = {
+  cpu: `<svg viewBox="0 0 24 24" fill="none" stroke="var(--teal)" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="4" y="4" width="16" height="16" rx="2"/><rect x="8" y="8" width="8" height="8"/><line x1="9" y1="4" x2="9" y2="2"/><line x1="12" y1="4" x2="12" y2="2"/><line x1="15" y1="4" x2="15" y2="2"/><line x1="9" y1="22" x2="9" y2="20"/><line x1="12" y1="22" x2="12" y2="20"/><line x1="15" y1="22" x2="15" y2="20"/><line x1="4" y1="9" x2="2" y2="9"/><line x1="4" y1="12" x2="2" y2="12"/><line x1="4" y1="15" x2="2" y2="15"/><line x1="22" y1="9" x2="20" y2="9"/><line x1="22" y1="12" x2="20" y2="12"/><line x1="22" y1="15" x2="20" y2="15"/></svg>`,
+  mobo: `<svg viewBox="0 0 24 24" fill="none" stroke="var(--teal)" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="2" width="20" height="20" rx="2"/><rect x="6" y="6" width="5" height="5"/><rect x="13" y="6" width="5" height="5"/><rect x="6" y="13" width="5" height="5"/><line x1="13" y1="15" x2="18" y2="15"/><line x1="13" y1="18" x2="18" y2="18"/></svg>`,
+  case: `<svg viewBox="0 0 24 24" fill="none" stroke="var(--teal)" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="4" y="2" width="16" height="20" rx="2"/><line x1="9" y1="6" x2="15" y2="6"/><circle cx="12" cy="14" r="3"/><line x1="12" y1="17" x2="12" y2="19"/></svg>`,
+  ram: `<svg viewBox="0 0 24 24" fill="none" stroke="var(--teal)" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="6" width="18" height="12" rx="1"/><line x1="7" y1="6" x2="7" y2="18"/><line x1="11" y1="6" x2="11" y2="18"/><line x1="15" y1="6" x2="15" y2="18"/><line x1="19" y1="6" x2="19" y2="18"/></svg>`,
+  gpu: `<svg viewBox="0 0 24 24" fill="none" stroke="var(--teal)" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="1" y="7" width="22" height="10" rx="2"/><rect x="5" y="11" width="4" height="2"/><rect x="11" y="11" width="4" height="2"/><line x1="6" y1="7" x2="6" y2="5"/><line x1="12" y1="7" x2="12" y2="5"/><line x1="18" y1="7" x2="18" y2="5"/><circle cx="18" cy="12" r="1.5" fill="var(--teal)" stroke="none"/></svg>`,
+  ssd: `<svg viewBox="0 0 24 24" fill="none" stroke="var(--teal)" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="7" width="20" height="10" rx="2"/><circle cx="17" cy="12" r="2"/><line x1="5" y1="10" x2="12" y2="10"/><line x1="5" y1="14" x2="10" y2="14"/></svg>`,
+  psu: `<svg viewBox="0 0 24 24" fill="none" stroke="var(--teal)" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="5" width="20" height="14" rx="2"/><polyline points="8,2 8,5"/><polyline points="16,2 16,5"/><line x1="12" y1="9" x2="12" y2="15"/><line x1="9" y1="12" x2="15" y2="12"/></svg>`,
+  cooler: `<svg viewBox="0 0 24 24" fill="none" stroke="var(--teal)" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><circle cx="12" cy="12" r="3"/><line x1="12" y1="3" x2="12" y2="7"/><line x1="12" y1="17" x2="12" y2="21"/><line x1="3" y1="12" x2="7" y2="12"/><line x1="17" y1="12" x2="21" y2="12"/></svg>`,
+  ventole: `<svg viewBox="0 0 24 24" fill="none" stroke="var(--teal)" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M12 12c2-2 2.5-5 1-7s-5-2-7 1c2 0 4 1 6 6z"/><path d="M12 12c2 2 5 2.5 7 1s2-5-1-7c0 2-1 4-6 6z"/><path d="M12 12c-2 2-2.5 5-1 7s5 2 7-1c-2 0-4-1-6-6z"/><path d="M12 12c-2-2-5-2.5-7-1s-2 5 1 7c0-2 1-4 6-6z"/><circle cx="12" cy="12" r="2"/></svg>`,
+  monitor: `<svg viewBox="0 0 24 24" fill="none" stroke="var(--teal)" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="3" width="20" height="14" rx="2"/><line x1="8" y1="21" x2="16" y2="21"/><line x1="12" y1="17" x2="12" y2="21"/></svg>`,
+  mouse: `<svg viewBox="0 0 24 24" fill="none" stroke="var(--teal)" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="6" y="2" width="12" height="20" rx="6"/><line x1="12" y1="2" x2="12" y2="10"/></svg>`,
+  keyboard: `<svg viewBox="0 0 24 24" fill="none" stroke="var(--teal)" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="6" width="20" height="12" rx="2"/><line x1="6" y1="10" x2="6" y2="10"/><line x1="10" y1="10" x2="10" y2="10"/><line x1="14" y1="10" x2="14" y2="10"/><line x1="18" y1="10" x2="18" y2="10"/><line x1="6" y1="14" x2="18" y2="14"/></svg>`,
+  headset: `<svg viewBox="0 0 24 24" fill="none" stroke="var(--teal)" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M3 13v-1a9 9 0 0 1 18 0v1"/><rect x="3" y="13" width="4" height="7" rx="1"/><rect x="17" y="13" width="4" height="7" rx="1"/></svg>`,
+};
+
+// ══ RENDER PROGRESS STRIP ════════════════════════════════
+function renderProgress() {
+  const strip = document.getElementById('progressStrip');
+  if (!strip) return;
+  strip.innerHTML = STEPS.map((s, i) => {
+    let cls = '';
+    if (i === state.step) cls = 'active';
+    else if (i < state.step) cls = 'done';
+    const canGo = i < state.step || (i === state.step);
+    const onclick = canGo ? 'goStep(' + i + ')' : '';
+    return '<div class="progress-dot ' + cls + '" onclick="' + onclick + '">' +
+      '<div class="dot-num">' + (cls==='done'?'✓':(i+1)) + '</div>' +
+      s.label +
+    '</div>';
+  }).join('');
+  // Aggiorna step counter
+  const sc = document.getElementById('stepCounter');
+  if (sc) sc.textContent = `Step ${state.step+1} di ${STEPS.length}`;
+}
+
+function goStep(i) {
+  if (i < 0 || i >= STEPS.length) return;
+  // Validazione prerequisiti: non permettere di saltare avanti senza piattaforma+socket
+  if (i >= 1) {
+    if (!state.piattaforma) {
+      state.step = 0;  // forza ritorno a piattaforma
+      render();
+      showToast && showToast('Scegli prima la piattaforma');
+      return;
+    }
+    if (!state.socket) {
+      state.step = 0;
+      render();
+      showToast && showToast('Scegli prima il socket');
+      return;
+    }
+  }
+  state.step = i;
+  render();
+  window.scrollTo({top: 0, behavior: 'smooth'});
+}
+
+// ══ RENDER SIDEBAR ════════════════════════════════════════
+function renderSidebar() {
+  const STEP_LABELS = {
+    case:'Case', cpu:'CPU', mobo:'Mobo', ram:'RAM',
+    gpu:'GPU', ssd:'SSD', psu:'PSU', cooler:'Cooler', ventole:'HDD',
+    monitor:'Monitor', mouse:'Mouse', keyboard:'Tastiera', headset:'Cuffie'
+  };
+  let rows = '';
+  let pieces = 0;
+  let totalForn = 0;
+
+  Object.entries(state.build).forEach(([sid, key]) => {
+    const label = STEP_LABELS[sid] || sid;
+    if (key) {
+      const p = PRODS.find(x => x.k === key);
+      if (p) {
+        pieces++;
+        const pf = p.p;
+        totalForn += pf;
+        const pc = prezzoCliente(pf);
+        rows += `<div class="sb-row">
+          <div class="sb-step">${label}</div>
+          <div class="sb-name">${p.d}</div>
+          <div class="sb-price">${fmt(pc)}</div>
+        </div>`;
+      }
+    } else {
+      rows += `<div class="sb-row">
+        <div class="sb-step">${label}</div>
+        <div class="sb-empty">Non scelto</div>
+      </div>`;
+    }
+  });
+
+  const totalComp = totalForn * IVA;
+  const impl = calcImpl(totalComp);
+  const totalFin = totalComp + impl;
+
+  const sidebarBody = document.getElementById('sidebarBody');
+  if (sidebarBody) sidebarBody.innerHTML = rows;
+
+  const totalEl = document.getElementById('sidebarTotal');
+  if (totalEl) totalEl.textContent = totalForn > 0 ? fmt(totalComp) : '—';
+
+  const rataEl = document.getElementById('sidebarRata');
+  if (rataEl) rataEl.textContent = totalForn > 0 ? `${fmtR(totalComp)}/mese × 36` : '';
+
+  const piecesEl = document.getElementById('piecesCount');
+  if (piecesEl) piecesEl.textContent = `${pieces}/9 componenti`;
+
+  // Build Health
+  const health = Math.round((pieces / 9) * 100);
+  const healthFill = document.getElementById('buildHealthFill');
+  const healthPct = document.getElementById('buildHealthPct');
+  if (healthFill) {
+    healthFill.style.width = health + '%';
+    healthFill.style.background = health < 30 ? '#ef4444' : health < 60 ? '#f59e0b' : health < 90 ? '#eab308' : 'var(--teal)';
+  }
+  if (healthPct) healthPct.textContent = health + '%';
+
+  // Risparmio
+  const rispWrap = document.getElementById('risparmioWrap');
+  const rispVal = document.getElementById('risparmioVal');
+  if (totalForn > 0 && rispWrap && rispVal) {
+    const amazon = totalComp * 1.12;
+    const risparmio = amazon - totalComp;
+    rispVal.textContent = `Risparmi circa ${fmt(risparmio)}`;
+    rispWrap.style.display = 'block';
+  } else if (rispWrap) {
+    rispWrap.style.display = 'none';
+  }
+
+  // Scalapay bar
+  const spBar = document.getElementById('scalaPayBar');
+  const spTotal = document.getElementById('spTotal');
+  const spRate = document.getElementById('spRate');
+  if (spBar && totalForn > 0) {
+    spBar.classList.add('visible');
+    if (spTotal) spTotal.textContent = fmt(totalComp);
+    if (spRate) spRate.textContent = fmtR(totalComp) + '/mese';
+  } else if (spBar) {
+    spBar.classList.remove('visible');
+  }
+
+  // Build completa
+  const allDone = !!(state.build.cpu && state.build.mobo && state.build.case &&
+    state.build.ram && state.build.gpu && state.build.ssd &&
+    state.build.psu && state.build.cooler);
+  const hasSomething = Object.values(state.build).some(v => v !== null);
+
+  const ctaGroup = document.getElementById('ctaGroup');
+  if (ctaGroup) ctaGroup.style.display = hasSomething ? 'flex' : 'none';
+
+  const btnCheckout = document.getElementById('btnCheckout');
+  if (btnCheckout) {
+    btnCheckout.disabled = !allDone;
+    btnCheckout.style.display = allDone ? 'block' : 'none';
+  }
+
+  const buildMsg = document.getElementById('buildIncompleteMsg');
+  if (buildMsg) buildMsg.style.display = allDone ? 'none' : 'block';
+
+  // Mobile bar
+  const mbbBar = document.getElementById('mbbBar');
+  const mbbBtn = document.getElementById('mbbBtn');
+  if (mbbBar) mbbBar.style.display = (hasSomething && window.innerWidth <= 768) ? 'flex' : 'none';
+  if (mbbBtn) {
+    mbbBtn.disabled = !allDone;
+    mbbBtn.style.opacity = allDone ? '1' : '0.3';
+    mbbBtn.style.pointerEvents = allDone ? 'auto' : 'none';
+  }
+  const mbbT = document.getElementById('mbbTotal');
+  if (mbbT) mbbT.textContent = totalForn > 0 ? fmt(totalComp) : '€ 0,00';
+  const mbbR = document.getElementById('mbbRata');
+  if (mbbR) mbbR.textContent = totalForn > 0 ? `Scalapay ${fmtR(totalComp)}/mese × 36` : '';
+}
+
+// ══ RENDER SUBCATEGORIE ══════════════════════════════════
+function renderSubcatSelector(sid, allProds) {
+  const sc = SUBCATS[sid];
+  if (!sc) return null;
+
+  let cats = [];
+  if (sc.groups) {
+    sc.groups.forEach(g => {
+      // Per CPU e Mobo: mostra solo i gruppi della piattaforma scelta
+      const pl = state.piattaforma;
+      if (sid === 'cpu' || sid === 'mobo') {
+        const gLow = g.group.toLowerCase();
+        if (pl === 'amd'   && !gLow.includes('amd'))   return;
+        if (pl === 'intel' && !gLow.includes('intel'))  return;
+      }
+      g.items.forEach(item => cats.push(item));
+    });
+  } else if (sc.dynamic && sc.all_groups) {
+    const cpuProd = state.build.cpu ? PRODS.find(x=>x.k===state.build.cpu) : null;
+    const socket = cpuProd ? cpuProd.socket : state.socket;
+    if (socket && sc.all_groups[socket]) cats = sc.all_groups[socket];
+  } else {
+    if (sid === 'cpu' || sid === 'mobo') {
+      cats = state.piattaforma === 'amd' ? (sc.amd||[]) : (sc.intel||[]);
+    } else {
+      cats = sc.all || [];
+    }
+  }
+
+  if (!cats.length) return null;
+
+  // Pre-filtra prodotti per piattaforma e socket scelti (per CPU/Mobo)
+  // così le subcat mostrano SOLO i prodotti compatibili con la scelta a monte
+  let baseProds = allProds;
+  if (sid === 'cpu' || sid === 'mobo') {
+    if (state.socket) {
+      baseProds = baseProds.filter(p => p.socket === state.socket);
+    } else if (state.piattaforma) {
+      const want = state.piattaforma === 'amd' ? 'AMD' : 'INTEL';
+      baseProds = baseProds.filter(p => p.platform === want);
+    }
+  }
+
+  const counts = {};
+  cats.forEach(c => {
+    counts[c.val] = baseProds.filter(p => p[sc.field] === c.val).length;
+  });
+
+  const visible = baseProds.length > 0 ? cats.filter(c => counts[c.val] > 0) : cats;
+  if (!visible.length) return null;
+
+  const active = state.filters[sid];
+
+  const rows = visible.map(function(c) {
+    const isActive = active === c.val;
+    const name = c.name || c.val;
+    const note = c.note || c.desc || '';
+    const tag  = c.tag  || (c.tags && c.tags[0]) || '';
+    const extraTags = Array.isArray(c.tags) ? c.tags.slice(1) : [];
+    const countTxt = allProds.length > 0 ? (counts[c.val] || 0) + ' prodotti' : '';
+    const icon = ICONS[sid] || ICONS.cpu;
+
+    let html = '<div class="subcat-card' + (isActive ? ' selected' : '') + '"';
+    html += ' data-sid="' + sid + '" data-val="' + encodeURIComponent(c.val) + '"';
+    html += ' onclick="selectSubcatEl(this)">';
+    html += '<div class="subcat-icon">' + icon + '</div>';
+    html += '<div class="subcat-name">' + name + '</div>';
+    if (note) html += '<div class="subcat-note">' + note + '</div>';
+    if (countTxt) html += '<div class="subcat-count">' + countTxt + '</div>';
+    if (tag || extraTags.length) {
+      html += '<div class="subcat-tags"><span class="subcat-tag">' + tag + '</span>';
+      extraTags.forEach(function(tg) { html += '<span class="subcat-tag">' + tg + '</span>'; });
+      html += '</div>';
+    }
+    html += '</div>';
+    return html;
+  }).join('');
+
+  return '<div class="subcat-grid" id="subcatGrid_' + sid + '">' + rows + '</div>';
+}
+
+function selectSubcatEl(el) {
+  const sid = el.dataset.sid;
+  const val = decodeURIComponent(el.dataset.val);
+  selectSubcat(sid, val);
+}
+
+
+function selectSubcat(sid, val) {
+  state.filters[sid] = val;
+  // Quando torni alle categorie (val=''), resetta anche la ricerca
+  if (!val) state.search[sid] = '';
+  playClick();
+  render();
+  window.scrollTo({top:0, behavior:'smooth'});
+}
+
+// ══ RENDER PRODUCTS ══════════════════════════════════════
+function renderCard(p, sid, isSelected, isIncompat) {
+  const pc = prezzoCliente(p.p);
+  
+  // ── 🔋 BLOCCO PSU INSUFFICIENTI ────────────────────────
+  // Se siamo nello step PSU e il prodotto è una PSU con watt insufficienti,
+  // marcala come bloccata (grigia + non cliccabile)
+  let isPSUInsufficient = false;
+  let psuRequiredW = 0;
+  if (sid === 'psu' && p.c === 'PSU') {
+    const tdp = (typeof calcBuildTDP === 'function') ? calcBuildTDP() : null;
+    if (tdp && tdp.minPSU > 0) {
+      psuRequiredW = tdp.minPSU;
+      const psuW = getPSUWatt(p.d, p);
+      if (psuW > 0 && psuW < psuRequiredW) {
+        isPSUInsufficient = true;
+      }
+    }
+  }
+  
+  const badges = [];
+  if (p._linea)     badges.push(`<span class="product-badge">${p._linea}</span>`);
+  if (p._chipset)   badges.push(`<span class="product-badge">${p._chipset}</span>`);
+  if (p._serie)     badges.push(`<span class="product-badge">${p._serie}</span>`);
+  if (p._tipo)      badges.push(`<span class="product-badge">${p._tipo}</span>`);
+  if (p._fascia_w)  badges.push(`<span class="product-badge punch">${p._fascia_w}</span>`);
+  if (p._cert)      badges.push(`<span class="product-badge ok">${p._cert}</span>`);
+  if (p._tipo_cool) badges.push(`<span class="product-badge">${p._tipo_cool}</span>`);
+  if (p._ram_label) badges.push(`<span class="product-badge punch">${p._ram_label}</span>`);
+  if (sid === 'ram' && p.ddr) badges.push(`<span class="product-badge">${p.ddr}</span>`);
+  // ── Monitor ─
+  if (p._hz)      badges.push(`<span class="product-badge punch">${p._hz}Hz</span>`);
+  if (p._pollici) badges.push(`<span class="product-badge">${p._pollici}"</span>`);
+  if (p._res)     badges.push(`<span class="product-badge ok">${p._res}</span>`);
+  if (p._panel)   badges.push(`<span class="product-badge">${p._panel}</span>`);
+  // ── Mouse/Tastiera/Cuffie ─
+  if (p._wireless === true) badges.push(`<span class="product-badge">Wireless</span>`);
+  if (p._dpi)     badges.push(`<span class="product-badge">${p._dpi.toLocaleString()} DPI</span>`);
+  if (p._switch)  badges.push(`<span class="product-badge">${p._switch}</span>`);
+  if (p._layout && sid === 'keyboard') badges.push(`<span class="product-badge">${p._layout}</span>`);
+  if (p._surround) badges.push(`<span class="product-badge ok">Surround</span>`);
+  // Badge form factor per mobo e case (anche se non in json, calcolato al volo)
+  if (sid === 'mobo') {
+    const ff = getFormFactor(p, 'mobo');
+    if (ff) badges.push(`<span class="product-badge">${ff}</span>`);
+  } else if (sid === 'case') {
+    const ff = getFormFactor(p, 'case');
+    if (ff) badges.push(`<span class="product-badge">${ff}</span>`);
+  }
+  if (p.b && !['AMD','Intel','INTEL'].includes(p.b))
+    badges.push(`<span class="product-badge">${p.b}</span>`);
+
+  // Logica disponibilità:
+  // - TIER ONE non comunica stock: disponibile se non c'è "incoming"
+  // - Altri fornitori: disponibile se stock > 0
+  const isTierOne = (p.s === 'TIER ONE');
+  let stockTxt = '';
+  let isEsaurito = false;
+  if (isTierOne) {
+    if (p.incoming) {
+      stockTxt = `<div class="product-stock" style="color:#f59e0b">🕐 In arrivo ${p.incoming}</div>`;
+    }
+    // se incoming null → disponibile (nessun badge stock)
+  } else {
+    if (p.stock > 50) {
+      stockTxt = '';
+    } else if (p.stock > 0) {
+      stockTxt = `<div class="product-stock">Ultime ${p.stock} unità</div>`;
+    } else if (p.incoming) {
+      stockTxt = `<div class="product-stock" style="color:#f59e0b">🕐 In arrivo</div>`;
+    } else {
+      stockTxt = `<div class="product-stock" style="color:#ef4444">Esaurito</div>`;
+      isEsaurito = true;
+    }
+  }
+  const reason = isIncompat ? incompatReason(sid, p) : null;
+  const isBlocked = !isSelected && (isEsaurito || isIncompat || isPSUInsufficient);
+
+  const classes = [
+    'product-card',
+    isSelected ? 'selected' : '',
+    isIncompat ? 'product-incompat' : '',
+    isEsaurito && !isSelected ? 'product-esaurito' : '',
+    isPSUInsufficient && !isSelected ? 'product-psu-insufficient' : '',
+  ].filter(Boolean).join(' ');
+
+  const clickAttr = isBlocked
+    ? ''
+    : `data-sid="${sid}" data-k="${encodeURIComponent(p.k)}" onclick="selProdEl(this,event)"`;
+
+  let reasonHtml = reason
+    ? `<div class="product-incompat-reason">⚠ ${reason}</div>`
+    : '';
+  
+  // Reason custom per PSU insufficiente
+  if (isPSUInsufficient && !isSelected) {
+    const psuW = getPSUWatt(p.d, p);
+    reasonHtml = `<div class="product-incompat-reason" style="background:rgba(239,68,68,.15);color:#fca5a5;border-color:rgba(239,68,68,.4)">⚡ Insufficiente — ${psuW}W &lt; ${psuRequiredW}W richiesti</div>`;
+  }
+
+  // Foto prodotto: usa _img da prodotti.json se presente, altrimenti fallback brand
+  // Helper escape per attributi HTML (evita rottura dovuta a virgolette o caratteri speciali)
+  const escAttr = (s) => String(s||'').replace(/&/g,'&amp;').replace(/"/g,'&quot;').replace(/</g,'&lt;').replace(/>/g,'&gt;');
+  const escText = (s) => String(s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');
+  const brandLabel = escText(p.b || p.s || '');
+  const photoHtml = p._img
+    ? `<div class="product-photo"><img src="foto/${escAttr(p._img)}" alt="${escAttr(p.d)}" loading="lazy" onerror="this.style.display='none';this.nextElementSibling.style.display='flex';"><div class="photo-fallback" style="display:none">${brandLabel}</div></div>`
+    : `<div class="product-photo"><div class="photo-fallback" style="display:flex">${brandLabel}</div></div>`;
+
+  return `<div class="${classes}" ${clickAttr} ${reason ? `title="${reason}"` : ''}>
+    ${photoHtml}
+    <div class="product-body">
+      <div class="product-name">${p.d}</div>
+      <div class="product-price">${fmt(pc)}</div>
+      <div class="product-meta">${badges.join('')}</div>
+      ${reasonHtml}
+      ${stockTxt}
+    </div>
+  </div>`;
+}
+function renderProds(sid) {
+  const allProds = getProds(sid);
+  const sc = SUBCATS[sid];
+  let active = state.filters[sid];
+  const search = (state.search[sid] || '').toLowerCase();
+  const selKey = state.build[sid];
+
+  // SANITY: se il filtro sottocategoria attivo non produce alcun prodotto valido,
+  // resettalo automaticamente — evita che torni indietro e trovi la lista vuota
+  if (sc && active) {
+    const checkExists = allProds.some(p => p[sc.field] === active);
+    if (!checkExists) {
+      state.filters[sid] = null;
+      active = null;
+    }
+  }
+
+  // Se ha sottocategorie e nessuna selezionata, mostra le card sottocategorie
+  if (sc && !active) {
+    const subcatHtml = renderSubcatSelector(sid, allProds, () => {});
+    if (subcatHtml) return subcatHtml;
+    // Se renderSubcatSelector ritorna null (zero subcat con prodotti),
+    // mostra direttamente tutti i prodotti (fallback)
+  }
+
+  // Filtra per sottocategoria e ricerca
+  let filtered = allProds;
+  if (sc && active) filtered = filtered.filter(p => p[sc.field] === active);
+  if (search) filtered = filtered.filter(p =>
+    p.d.toLowerCase().includes(search) || (p.b||'').toLowerCase().includes(search));
+
+  // Sort: selezionato primo, esauriti in fondo, poi prezzo
+  const isEsauritoP = (p) => {
+    // TIER ONE: esaurito solo se incoming (in arrivo a una data)
+    if (p.s === 'TIER ONE') return !!p.incoming;
+    // Altri: stock null/0 e nessun incoming = esaurito
+    return (p.stock === 0 || p.stock === null) && !p.incoming;
+  };
+  const sortFn = (a, b) => {
+    if (a.k === selKey) return -1;
+    if (b.k === selKey) return 1;
+    const aE = isEsauritoP(a);
+    const bE = isEsauritoP(b);
+    if (aE && !bE) return 1;
+    if (!aE && bE) return -1;
+    return a.p - b.p;
+  };
+
+  // Per step CPU: la lista è già filtrata dal socket nell'isCompat
+  //   → mostrare solo i compatibili, mai gli incompatibili
+  // Per Mobo/Case/RAM/PSU/Cooler: separa solo se c'è un componente di riferimento
+  const b = state.build;
+  const hasReference =
+    (sid === 'mobo'   && state.socket) ||
+    (sid === 'case'   && b.mobo) ||
+    (sid === 'ram'    && (b.mobo || b.cpu)) ||
+    (sid === 'psu'    && b.case) ||
+    (sid === 'cooler' && (b.case || b.cpu));
+
+  const compatibili = filtered.filter(p => isCompat(sid, p)).sort(sortFn);
+  const incompatibili = hasReference
+    ? filtered.filter(p => !isCompat(sid, p)).sort(sortFn)
+    : [];
+
+  // Banner compatibilità contestuale
+  let compatBanner = '';
+  if (sid === 'case') {
+    const mobo = b.mobo ? PRODS.find(x=>x.k===b.mobo) : null;
+    if (mobo) {
+      const ff = getFormFactor(mobo, 'mobo');
+      if (ff) compatBanner = `<div class="compat-banner">🔧 Mostro i case compatibili con scheda madre <strong>${ff}</strong> — gli incompatibili sono in fondo</div>`;
+    }
+  } else if (sid === 'ram') {
+    const mobo = b.mobo ? PRODS.find(x=>x.k===b.mobo) : null;
+    const cpu  = b.cpu  ? PRODS.find(x=>x.k===b.cpu)  : null;
+    const ddr  = (mobo||cpu) ? (mobo||cpu).ddr : null;
+    if (ddr) compatBanner = `<div class="compat-banner">🧬 La tua scheda madre richiede <strong>${ddr}</strong></div>`;
+  } else if (sid === 'psu') {
+    const sc2 = b.case ? PRODS.find(x=>x.k===b.case) : null;
+    const tdp = typeof calcBuildTDP === 'function' ? calcBuildTDP() : null;
+    let msg = '';
+    if (tdp && tdp.minPSU > 0) {
+      msg += `Consumo build: <strong>${tdp.total}W</strong> · PSU minimo richiesto: <strong style="color:#2dd4bf">${tdp.minPSU}W</strong>`;
+    }
+    if (sc2) {
+      const pf = getPsuForm(sc2);
+      if (pf && pf !== 'ATX') msg += (msg?' · ':'') + `Form factor richiesto: <strong>${pf}</strong>`;
+    }
+    if (msg) compatBanner = `<div class="compat-banner">⚡ ${msg}</div>`;
+  } else if (sid === 'cooler') {
+    const cpu = b.cpu ? PRODS.find(x=>x.k===b.cpu) : null;
+    if (cpu && typeof getCPUPeak === 'function') {
+      const tdp = getCPUPeak(cpu.d);
+      if (tdp > 170) compatBanner = `<div class="compat-banner">📐 CPU da <strong>${tdp}W</strong> — richiede AIO 240/360mm</div>`;
+      else if (tdp > 125) compatBanner = `<div class="compat-banner">📐 CPU da <strong>${tdp}W</strong> — consigliato AIO o tower alta</div>`;
+    }
+  }
+
+  const backBtn = sc && active
+    ? `<div class="subcat-back" onclick="selectSubcat('${sid}','')">← Torna alle categorie</div>` : '';
+  const searchHtml = `<div class="search-wrap"><input id="search_${sid}" class="search-input" type="text" placeholder="Cerca..." value="${state.search[sid]||''}" oninput="doSearch('${sid}',this.value)"></div>`;
+
+  // Costruisci HTML griglia
+  let gridHtml = '';
+  if (filtered.length === 0) {
+    gridHtml = '<p style="color:var(--ink4);font-size:12px;padding:20px 0">Nessun prodotto trovato</p>';
+  } else {
+    if (compatibili.length > 0) {
+      gridHtml += `<div class="products-grid">${compatibili.map(p => renderCard(p, sid, p.k===selKey, false)).join('')}</div>`;
+    } else if (incompatibili.length > 0) {
+      gridHtml += '<p style="color:rgba(45,212,191,.5);font-size:12px;padding:12px 0">Nessun prodotto compatibile — prova a cambiare i componenti precedenti.</p>';
+    }
+    if (incompatibili.length > 0) {
+      gridHtml += `<div class="incompat-divider">
+        <span>⚠️ Non compatibili con la tua configurazione (${incompatibili.length})</span>
+        <button class="incompat-toggle" onclick="toggleIncompat('${sid}')">Mostra</button>
+      </div>
+      <div id="incompat_${sid}" class="incompat-section" style="display:none">
+        <div class="products-grid">${incompatibili.map(p => renderCard(p, sid, p.k===selKey, true)).join('')}</div>
+      </div>`;
+    }
+  }
+
+  return backBtn + compatBanner + searchHtml + `<div id="productGrid_${sid}">${gridHtml}</div>`;
+}
+
+function toggleIncompat(sid) {
+  const el = document.getElementById('incompat_' + sid);
+  if (!el) return;
+  const btn = el.previousElementSibling && el.previousElementSibling.querySelector('.incompat-toggle');
+  const isHidden = el.style.display === 'none';
+  el.style.display = isHidden ? 'block' : 'none';
+  if (btn) btn.textContent = isHidden ? 'Nascondi' : 'Mostra';
+}
+
+function doSearch(sid, val) {
+  state.search[sid] = val;
+  const gridEl = document.getElementById('productGrid_' + sid);
+  if (!gridEl) { render(); return; }
+  const sc = SUBCATS[sid];
+  const active = state.filters[sid];
+  const selKey = state.build[sid];
+
+  let filtered = getProds(sid);
+  if (sc && active) filtered = filtered.filter(p => p[sc.field] === active);
+  if (val) filtered = filtered.filter(p =>
+    p.d.toLowerCase().includes(val.toLowerCase()) || (p.b||'').toLowerCase().includes(val.toLowerCase()));
+
+  const isEsauritoP = (p) => {
+    if (p.s === 'TIER ONE') return !!p.incoming;
+    return (p.stock === 0 || p.stock === null) && !p.incoming;
+  };
+  const sortFn = (a, b) => {
+    if (a.k === selKey) return -1;
+    if (b.k === selKey) return 1;
+    const aE = isEsauritoP(a);
+    const bE = isEsauritoP(b);
+    if (aE && !bE) return 1;
+    if (!aE && bE) return -1;
+    return a.p - b.p;
+  };
+
+  const b = state.build;
+  const hasReference =
+    (sid === 'mobo'   && state.socket) ||
+    (sid === 'case'   && b.mobo) ||
+    (sid === 'ram'    && (b.mobo || b.cpu)) ||
+    (sid === 'psu'    && b.case) ||
+    (sid === 'cooler' && (b.case || b.cpu));
+
+  const compatibili   = filtered.filter(p => isCompat(sid, p)).sort(sortFn);
+  const incompatibili = hasReference ? filtered.filter(p => !isCompat(sid, p)).sort(sortFn) : [];
+
+  if (filtered.length === 0) {
+    gridEl.innerHTML = '<p style="color:var(--ink4);font-size:12px;padding:20px 0">Nessun prodotto trovato</p>';
+    return;
+  }
+  let h = '';
+  if (compatibili.length > 0) {
+    h += '<div class="products-grid">' + compatibili.map(p => renderCard(p, sid, p.k===selKey, false)).join('') + '</div>';
+  }
+  if (incompatibili.length > 0) {
+    h += '<div class="incompat-divider"><span>⚠️ Non compatibili (' + incompatibili.length + ')</span>'
+       + '<button class="incompat-toggle" onclick="toggleIncompat(\'' + sid + '\')">Mostra</button></div>'
+       + '<div id="incompat_' + sid + '" class="incompat-section" style="display:none">'
+       + '<div class="products-grid">' + incompatibili.map(p => renderCard(p, sid, p.k===selKey, true)).join('') + '</div></div>';
+  }
+  gridEl.innerHTML = h;
+}
+
+// ══ SELEZIONE PRODOTTO ═══════════════════════════════════
+function selProd(sid, key, evt) {
+  const prev = state.build[sid];
+  state.build[sid] = prev === key ? null : key;
+  if (state.build[sid]) {
+    playClick();
+    if (typeof sparkEffect === 'function' && evt) sparkEffect(evt);
+  }
+  renderSidebar();
+  render();
+  // Scroll al btn continua
+  setTimeout(() => {
+    const btn = document.getElementById('btnNext');
+    if (btn && state.build[sid]) btn.scrollIntoView({behavior:'smooth', block:'center'});
+  }, 100);
+}
+
+function selProdEl(el, evt) {
+  const sid = el.dataset.sid;
+  const key = decodeURIComponent(el.dataset.k);
+  selProd(sid, key, evt);
+}
+
+// ══ NAVIGAZIONE ══════════════════════════════════════════
+function nextStep() {
+  // Validazione: se sei sullo step piattaforma, serve piattaforma+socket per avanzare
+  const curStep = STEPS[state.step];
+  if (curStep && curStep.id === 'piattaforma') {
+    if (!state.piattaforma) {
+      showToast && showToast('Scegli prima la piattaforma');
+      return;
+    }
+    if (!state.socket) {
+      showToast && showToast('Scegli prima il socket (AM5/AM4 o LGA)');
+      return;
+    }
+  }
+  if (state.step < STEPS.length - 1) {
+    state.step++;
+    playWhoosh();
+    render();
+    window.scrollTo({top:0, behavior:'smooth'});
+  }
+}
+
+function prevStep() {
+  // Context-aware: se sei dentro una sottocategoria (es. "Ryzen 9" in CPU),
+  // il primo click su Indietro torna al selettore sottocategorie.
+  // Il secondo click va effettivamente allo step precedente.
+  const curStep = STEPS[state.step];
+  if (curStep && SUBCATS[curStep.id] && state.filters[curStep.id]) {
+    state.filters[curStep.id] = null;
+    state.search[curStep.id] = '';
+    render();
+    window.scrollTo({top:0, behavior:'smooth'});
+    return;
+  }
+  // Altrimenti torna allo step precedente
+  if (state.step > 0) {
+    state.step--;
+    playWhoosh && playWhoosh();
+    render();
+    window.scrollTo({top:0, behavior:'smooth'});
+  }
+}
+
+// ══ RENDER MAIN ══════════════════════════════════════════
+function render() {
+  renderProgress();
+  renderSidebar();
+
+  const mc = document.getElementById('mainContent');
+  if (!mc) return;
+
+  const s = STEPS[state.step];
+
+  // ── PIATTAFORMA ──────────────────────────────────────
+  if (s.id === 'piattaforma') {
+    const amdActive = state.piattaforma === 'amd' ? 'active' : '';
+    const intelActive = state.piattaforma === 'intel' ? 'active' : '';
+    const socketHtml = state.piattaforma ? renderSocketGrid() : '';
+    mc.innerHTML =
+      '<div class="step-header">' +
+        '<div class="step-num">Step 01</div>' +
+        '<div class="step-title">Scegli la piattaforma</div>' +
+        '<div class="step-subtitle">Seleziona il brand del processore per iniziare la tua build.</div>' +
+      '</div>' +
+      '<div class="pf-brand-row">' +
+        '<div class="pf-brand ' + amdActive + '" onclick="selPlatform(\x27amd\x27)">' +
+          '<span class="pf-brand-name">AMD</span>' +
+          '<span class="pf-brand-sub">Ryzen &middot; Gaming</span>' +
+          '<span class="pf-brand-badge">3D V-Cache &middot; Consigliato</span>' +
+        '</div>' +
+        '<div class="pf-brand ' + intelActive + '" onclick="selPlatform(\x27intel\x27)">' +
+          '<span class="pf-brand-name">INTEL</span>' +
+          '<span class="pf-brand-sub">Core &middot; Produttivit&agrave;</span>' +
+          '<span class="pf-brand-badge">Arrow Lake &middot; Raptor Lake</span>' +
+        '</div>' +
+      '</div>' +
+      socketHtml;
+  }
+
+  // ── RIEPILOGO ────────────────────────────────────────
+  else if (s.id === 'riepilogo') {
+    mc.innerHTML = renderRiepilogo();
+  }
+
+  // ── STEP COMPONENTE ──────────────────────────────────
+  else {
+    const sid = s.id;
+    const stepN = STEPS.findIndex(x=>x.id===sid) + 1;
+    const selKey = state.build[sid];
+    const hasSel = !!selKey;
+
+    const isOptional = ['ventole','monitor','mouse','keyboard','headset'].includes(sid);
+    const skipTopBtn = isOptional ? `<button onclick="nextStep()" style="padding:8px 16px;background:rgba(45,212,191,.12);color:var(--teal);font-family:var(--font);font-size:11px;font-weight:700;border:1px solid rgba(45,212,191,.35);border-radius:var(--r-sm);cursor:pointer;transition:all .15s;letter-spacing:.04em">Salta questo step →</button>` : '';
+
+    mc.innerHTML = `
+      <div class="step-header" style="display:flex;justify-content:space-between;align-items:flex-end;gap:16px;flex-wrap:wrap">
+        <div>
+          <div class="step-num">Step ${String(stepN).padStart(2,'0')}</div>
+          <div class="step-title">${s.label}</div>
+          <div class="step-subtitle">${isOptional ? 'Categoria opzionale — puoi saltarla se non ti serve.' : 'Scegli il componente. I prezzi includono IVA 22%.'}</div>
+        </div>
+        ${skipTopBtn}
+      </div>
+      ${renderProds(sid)}
+      <div style="margin-top:20px;display:flex;gap:10px;align-items:center">
+        <button onclick="prevStep()" style="padding:10px 18px;background:rgba(255,255,255,.05);border:1px solid rgba(255,255,255,.1);color:var(--ink2);font-family:var(--font);font-size:12px;font-weight:600;border-radius:var(--r-sm);cursor:pointer;transition:all .15s">← Indietro</button>
+        ${hasSel ? `<button id="btnNext" onclick="nextStep()" style="padding:11px 22px;background:linear-gradient(135deg,var(--teal),var(--teal-dark));color:#07050d;font-family:var(--font);font-size:13px;font-weight:700;border:none;border-radius:var(--r-sm);cursor:pointer;transition:all .15s">Continua →</button>` : (['ventole','monitor','mouse','keyboard','headset'].includes(sid) ? `<button id="btnNext" onclick="nextStep()" style="padding:11px 22px;background:rgba(45,212,191,.15);color:var(--teal);font-family:var(--font);font-size:13px;font-weight:700;border:1px solid rgba(45,212,191,.4);border-radius:var(--r-sm);cursor:pointer;transition:all .15s">Salta (opzionale) →</button>` : `<button id="btnNext" onclick="nextStep()" style="padding:11px 22px;background:rgba(255,255,255,.04);color:var(--ink4);font-family:var(--font);font-size:12px;font-weight:600;border:1px solid rgba(255,255,255,.08);border-radius:var(--r-sm);cursor:pointer">Salta →</button>`)}
+      </div>
+    `;
+  }
+}
+
+// ── PIATTAFORMA & SOCKET ─────────────────────────────────
+function selPlatform(pl) {
+  state.piattaforma = pl;
+  state.socket = null;
+  state.build.cpu = null;
+  state.build.mobo = null;
+  state.build.ram = null;
+  state.filters = {};
+  playClick();
+
+  render();
+}
+
+function renderSocketGrid() {
+  const sockets = state.piattaforma === 'amd'
+    ? [
+        {val:'AM5', name:'AM5', cpu:'Ryzen 7000 / 9000', ddr:'DDR5', note:'PCIe 5.0 - Piattaforma attuale', badge:'Consigliato'},
+        {val:'AM4', name:'AM4', cpu:'Ryzen 3000 / 5000', ddr:'DDR4', note:'Budget - Ampia disponibilita', badge:''},
+      ]
+    : [
+        {val:'LGA1851', name:'LGA1851', cpu:'Core Ultra 5/7/9', ddr:'DDR5', note:'Arrow Lake - Gen attuale', badge:'Nuovo'},
+        {val:'LGA1700', name:'LGA1700', cpu:'Core i5/i7/i9 12-14th', ddr:'DDR5/4', note:'Raptor Lake - Top gaming', badge:'Popolare'},
+        {val:'LGA1200', name:'LGA1200', cpu:'Core 10th / 11th Gen', ddr:'DDR4', note:'Budget - Legacy', badge:''},
+      ];
+
+  const sockHtml = sockets.map(function(s) {
+    const isActive = state.socket === s.val;
+    const act = isActive ? ' active' : '';
+    const badgeHtml = s.badge ? '<div class="pf-socket-badge-label">' + s.badge + '</div>' : '';
+    return ['<div class="pf-socket-card' + act + '" onclick="selSocket(this.dataset.v)" data-v="' + s.val + '">',
+      badgeHtml,
+      '<div class="pf-socket-name">' + s.name + '</div>',
+      '<div class="pf-socket-cpu">' + s.cpu + '</div>',
+      '<span class="pf-socket-ddr">' + s.ddr + '</span>',
+      '<div class="pf-socket-note">' + s.note + '</div>',
+      '</div>'
+    ].join('');
+  }).join('');
+
+  const contBtn = state.socket
+    ? '<div style="margin-top:18px"><button onclick="goStep(1)" style="padding:12px 24px;background:linear-gradient(135deg,var(--teal),var(--teal-dark));color:#07050d;font-family:var(--font);font-size:13px;font-weight:700;border:none;border-radius:var(--r-sm);cursor:pointer">Continua con ' + state.socket + ' &rarr;</button></div>'
+    : '';
+
+  return '<div class="pf-socket-section">' +
+    '<div class="pf-socket-label">Scegli il socket</div>' +
+    '<div class="pf-socket-grid">' + sockHtml + '</div>' +
+    contBtn +
+    '</div>';
+}
+
+
+function selSocket(sk) {
+  state.socket = sk;
+  state.build.cpu = null;
+  state.build.mobo = null;
+  state.build.ram = null;
+  state.filters = {};
+  playClick();
+  render();
+}
+
+// ── RIEPILOGO ────────────────────────────────────────────
+function renderRiepilogo() {
+  const LABELS = {
+    case:'Case', cpu:'CPU', mobo:'Scheda Madre', ram:'RAM',
+    gpu:'Scheda Video', ssd:'SSD', psu:'Alimentatore',
+    cooler:'Dissipatore', ventole:'Archiviazione',
+    monitor:'Monitor', mouse:'Mouse', keyboard:'Tastiera', headset:'Cuffie'
+  };
+  let totalForn = 0;
+  let rows = '';
+
+  Object.entries(state.build).forEach(([sid, key]) => {
+    if (!key) return;
+    const p = PRODS.find(x=>x.k===key);
+    if (!p) return;
+    const pc = prezzoCliente(p.p);
+    totalForn += p.p;
+    rows += `<div class="riep-row">
+      <span class="riep-label">${LABELS[sid]||sid}</span>
+      <span class="riep-val">${p.d.length>30?p.d.slice(0,30)+'…':p.d} — ${fmt(pc)}</span>
+    </div>`;
+  });
+
+  const totalComp = totalForn * IVA;
+  const impl = calcImpl(totalComp);
+  const totalFin = totalComp + impl;
+
+  // Resoconto intelligente
+  const alerts = buildResoconto();
+
+  const alertHtml = alerts.length > 0 ? `
+    <div class="resoconto-box">
+      <div class="resoconto-title">Analisi della Build</div>
+      ${alerts.map(a => `
+        <div class="alert-item ${a.type}" onclick="${a.goStep ? `goStep(${a.goStep})` : ''}">
+          <span class="alert-icon">${a.icon}</span>
+          <span class="alert-text">${a.text}</span>
+          ${a.goStep ? '<span class="alert-fix">Correggi →</span>' : ''}
+        </div>
+      `).join('')}
+    </div>` : '<div class="resoconto-box"><div style="color:var(--teal);font-weight:700;font-size:13px">✅ Build ottimale — nessun problema rilevato!</div></div>';
+
+  return `
+    <div class="step-header">
+      <div class="step-num">Riepilogo</div>
+      <div class="step-title">La tua build</div>
+      <div class="step-subtitle">Controlla tutto prima di procedere all'ordine.</div>
+    </div>
+    ${alertHtml}
+    <div class="resoconto-box">
+      ${rows}
+      <div class="riep-impl">+ Costo implementazione (montaggio, test, configurazione): ${fmt(impl)}</div>
+      <div class="riep-row">
+        <span class="riep-label">Totale finale</span>
+        <span class="riep-total">${fmt(totalFin)}</span>
+      </div>
+      <div style="font-size:10px;color:var(--ink4);margin-top:8px">IVA 22% inclusa · Spedizione €24,90</div>
+    </div>
+    <div style="margin-top:16px;display:flex;gap:10px;flex-wrap:wrap">
+      <button onclick="prevStep()" style="padding:10px 18px;background:rgba(255,255,255,.05);border:1px solid rgba(255,255,255,.1);color:var(--ink2);font-family:var(--font);font-size:12px;font-weight:600;border-radius:var(--r-sm);cursor:pointer">← Modifica</button>
+      <button onclick="openCheckout()" style="padding:12px 24px;background:linear-gradient(135deg,var(--punch),var(--punch-dark));color:#fff;font-family:var(--font);font-size:14px;font-weight:700;border:none;border-radius:var(--r-sm);cursor:pointer">Procedi all'ordine →</button>
+    </div>\n  `;
+}
+
+// ══ RESOCONTO INTELLIGENTE ════════════════════════════════
+// ═══════════════════════════════════════════════════════════
+// NUOVA LOGICA — PSU CHECK + ACHIEVEMENTS + BUILD HEALTH +
+// SPARK + RISPARMIO + SUONI + RESOCONTO FINALE
+// ═══════════════════════════════════════════════════════════
+
+// ── TDP DATABASE COMPLETO ────────────────────────────────
+const TDP = {
+  cpu: {
+    // AMD AM5
+    'ryzen 5 9600x': {tdp:65, peak:88},
+    'ryzen 5 9600': {tdp:65, peak:88},
+    'ryzen 7 9700x': {tdp:65, peak:88},
+    'ryzen 7 9800x3d': {tdp:120, peak:162},
+    'ryzen 7 7800x3d': {tdp:120, peak:162},
+    'ryzen 9 9900x': {tdp:120, peak:162},
+    'ryzen 9 9950x': {tdp:170, peak:230},
+    'ryzen 9 9950x3d': {tdp:170, peak:230},
+    // AMD AM4
+    'ryzen 5 5600x': {tdp:65, peak:88},
+    'ryzen 5 5500': {tdp:65, peak:88},
+    'ryzen 7 5800x3d': {tdp:105, peak:142},
+    // Intel LGA1851
+    'i9-14900kf': {tdp:125, peak:253},
+    'i9-14900k': {tdp:125, peak:253},
+    'i7-14700k': {tdp:125, peak:192},
+    'i7-14700kf': {tdp:125, peak:192},
+    'core ultra 9': {tdp:125, peak:200},
+    'core ultra 7': {tdp:65, peak:120},
+    'core ultra 5': {tdp:65, peak:115},
+    '_default': {tdp:65, peak:95}
+  },
+  gpu: {
+    'rtx 5090': {tdp:575},
+    'rtx 5080': {tdp:360},
+    'rtx 5070 ti': {tdp:300},
+    'rtx 5070': {tdp:250},
+    'rtx 5060 ti': {tdp:180},
+    'rtx 5060': {tdp:150},
+    'rtx 4090': {tdp:450},
+    'rtx 4080': {tdp:320},
+    'rtx 4070 ti': {tdp:285},
+    'rtx 4070': {tdp:200},
+    'rtx 4060 ti': {tdp:160},
+    'rtx 4060': {tdp:115},
+    'rx 9070 xt': {tdp:304},
+    'rx 9070': {tdp:220},
+    'rx 9060 xt': {tdp:150},
+    'rx 7900 xtx': {tdp:355},
+    'rx 7900 xt': {tdp:315},
+    'rx 7800 xt': {tdp:263},
+    '_default': {tdp:150}
+  },
+  mobo: {
+    // by chipset keyword
+    'x870': {tdp:65}, 'x670': {tdp:65}, 'z790': {tdp:65}, 'z690': {tdp:60},
+    'b850': {tdp:45}, 'b650': {tdp:40}, 'b760': {tdp:40}, 'b550': {tdp:35},
+    'a620': {tdp:28}, 'h610': {tdp:25}, 'h770': {tdp:35},
+    '_default': {tdp:40}
+  },
+  ram: {
+    // by capacity+type keyword
+    'ddr5': {base:8, perStick:4},
+    'ddr4': {base:5, perStick:2.5},
+    '_default': {base:6, perStick:3}
+  },
+  ssd: {
+    'gen 5': {tdp:10}, 'gen5': {tdp:10},
+    'gen 4': {tdp:6}, 'gen4': {tdp:6},
+    'gen 3': {tdp:4}, 'gen3': {tdp:4},
+    '_default': {tdp:5}
+  },
+  cooler: {
+    'aio 360': {tdp:18}, '360mm': {tdp:18},
+    'aio 280': {tdp:15}, '280mm': {tdp:15},
+    'aio 240': {tdp:12}, '240mm': {tdp:12},
+    'aio 120': {tdp:8},
+    'dual tower': {tdp:7}, 'nh-d15': {tdp:7},
+    'tower': {tdp:6},
+    '_default': {tdp:6}
+  }
+};
+
+function getTDP(category, name) {
+  if(!name) return 0;
+  const n = name.toLowerCase();
+  const db = TDP[category];
+  if(!db) return 0;
+  for(const [key, val] of Object.entries(db)) {
+    if(key !== '_default' && n.includes(key)) return val.tdp || val.peak || 0;
+  }
+  return db._default ? (db._default.tdp || 0) : 0;
+}
+
+function getCPUPeak(name) {
+  if(!name) return 65;
+  const n = name.toLowerCase();
+  for(const [key, val] of Object.entries(TDP.cpu)) {
+    if(key !== '_default' && n.includes(key)) return val.peak;
+  }
+  return TDP.cpu._default.peak;
+}
+
+function calcRAMWatt(name) {
+  if(!name) return 0;
+  const n = name.toLowerCase();
+  const isDDR5 = n.includes('ddr5');
+  const base = isDDR5 ? 8 : 5;
+  // stima stick: cerca 2x o 4x
+  const is4stick = n.includes('4x') || n.includes('128gb') || n.includes('64gb');
+  return is4stick ? base * 1.8 : base;
+}
+
+function calcBuildTDP() {
+  const b = state.build;
+  let total = 0;
+  let tdpGPU = 0;
+  let psuMinOEM = 0;
+  let fasciaGPU = 'mid';
+  const breakdown = {};
+
+  const _p = k => PRODS.find(x=>x.k===k);
+  
+  // Usa i campi _tdp_w pre-calcolati dal backend se disponibili,
+  // altrimenti fallback alla vecchia logica
+  if(b.cpu)    { const p=_p(b.cpu);    if(p){ breakdown.cpu    = (typeof p._tdp_w === 'number') ? p._tdp_w : getCPUPeak(p.d); total += breakdown.cpu; } }
+  if(b.gpu)    { const p=_p(b.gpu);    if(p){
+    breakdown.gpu = (typeof p._tdp_w === 'number') ? p._tdp_w : getTDP('gpu',p.d);
+    total += breakdown.gpu;
+    tdpGPU = breakdown.gpu;
+    psuMinOEM = p._gpu_psu_min_oem || 0;
+    fasciaGPU = p._gpu_fascia || 'mid';
+  } }
+  if(b.mobo)   { const p=_p(b.mobo);   if(p){ breakdown.mobo   = (typeof p._tdp_w === 'number') ? p._tdp_w : getTDP('mobo',p.d); total += breakdown.mobo; } }
+  if(b.ram)    { const p=_p(b.ram);    if(p){ breakdown.ram    = (typeof p._tdp_w === 'number') ? p._tdp_w : calcRAMWatt(p.d); total += breakdown.ram; } }
+  if(b.ssd)    { const p=_p(b.ssd);    if(p){ breakdown.ssd    = (typeof p._tdp_w === 'number') ? p._tdp_w : getTDP('ssd',p.d); total += breakdown.ssd; } }
+  if(b.cooler) { const p=_p(b.cooler); if(p){ breakdown.cooler = (typeof p._tdp_w === 'number') ? p._tdp_w : getTDP('cooler',p.d); total += breakdown.cooler; } }
+  if(b.case)   { const p=_p(b.case);   if(p && typeof p._tdp_w === 'number'){ breakdown.case = p._tdp_w; total += breakdown.case; } }
+
+  // ── NUOVA FORMULA CONSERVATIVA ─────────────────────────
+  // Floor minimo PSU per fascia GPU (negoziante prudente)
+  const FLOOR_FASCIA = {
+    'ultra_enthusiast': 1000,  // 5090
+    'enthusiast_top':    850,  // 4090
+    'enthusiast':        850,  // 5080, 4080S, 7900 XTX, 9070 XT
+    'high_end':          850,  // 5070 Ti, 7900 XT, 9070
+    'mid_high':          750,  // 4070 Super, 5070, 7800 XT
+    'mid':               750,  // 4070, 5060 Ti, 7700 XT
+    'entry_gaming':      650,  // 4060, 5060, 7600, 9060
+    'casual':            450   // GT 1030, GTX 1650
+  };
+  const floor = FLOOR_FASCIA[fasciaGPU] || 550;
+  
+  // Formula: MAX(TDP×1.6, TDP_GPU×2.0, PSU_OEM×1.20, floor_fascia)
+  const candidate = Math.max(
+    Math.ceil(total * 1.6),
+    Math.ceil(tdpGPU * 2.0),
+    Math.ceil(psuMinOEM * 1.20),
+    floor
+  );
+  
+  // Arrotonda alla taglia commerciale superiore
+  const taglie = [450, 500, 550, 600, 650, 700, 750, 800, 850, 1000, 1050, 1200, 1300, 1500, 1600, 2000, 2200];
+  let minPSU = 2200;
+  for (const t of taglie) {
+    if (t >= candidate) { minPSU = t; break; }
+  }
+  
+  return { total, breakdown, minPSU, tdpGPU, psuMinOEM, fasciaGPU, floor };
+}
+
+function getPSUWatt(name, prod) {
+  // Se passato prodotto con _psu_w, usa quello (affidabile, da backend)
+  if (prod && typeof prod._psu_w === 'number' && prod._psu_w > 0) return prod._psu_w;
+  // Fallback: estrai dalla descrizione
+  if(!name) return 0;
+  const m = name.match(/(\d{3,4})\s*w/i);
+  return m ? parseInt(m[1]) : 0;
+}
+
+// ── BUILD HEALTH ─────────────────────────────────────────
+function calcBuildHealth() {
+  const steps = ['piattaforma','cpu','mobo','case','ram','gpu','ssd','psu','cooler'];
+  const done = steps.filter(s => state.build[s] || (s==='piattaforma' && state.piattaforma)).length;
+  return Math.round((done / steps.length) * 100);
+}
+
+function updateBuildHealth() {
+  const pct = calcBuildHealth();
+  const bar = document.getElementById('buildHealthFill');
+  const lbl = document.getElementById('buildHealthPct');
+  if(!bar || !lbl) return;
+  bar.style.width = pct + '%';
+  const color = pct < 30 ? '#ef4444' : pct < 60 ? '#f97316' : pct < 90 ? '#f59e0b' : '#2dd4bf';
+  bar.style.background = color;
+  bar.style.boxShadow = `0 0 8px ${color}66`;
+  lbl.textContent = pct + '%';
+  lbl.style.color = color;
+}
+
+// ── RISPARMIO VS AMAZON ──────────────────────────────────
+const AMAZON_MARKUP = 1.12; // Amazon mediamente 12% più caro
+function calcRisparmio() {
+  const b = state.build;
+  let totaleNostro = 0;
+  Object.values(b).filter(Boolean).forEach(p => { totaleNostro += calcP(p.p); });
+  const totaleAmazon = totaleNostro * AMAZON_MARKUP;
+  return Math.round(totaleAmazon - totaleNostro);
+}
+
+function updateRisparmio() {
+  const el = document.getElementById('risparmioAmazon');
+  if(!el) return;
+  const risp = calcRisparmio();
+  if(risp > 0) {
+    el.style.display = 'block';
+    el.innerHTML = `<span style="font-size:8px;letter-spacing:.1em;text-transform:uppercase;color:rgba(45,212,191,.5)">Risparmi vs Amazon</span><span style="font-size:18px;font-weight:800;color:#2dd4bf;display:block;letter-spacing:-.02em">€ ${risp}</span>`;
+  } else {
+    el.style.display = 'none';
+  }
+}
+
+// ── ACHIEVEMENTS ─────────────────────────────────────────
+const ACHIEVEMENTS = {
+  // Piattaforma
+  'team_red':   { icon:'🔴', title:'Team Red',   desc:'Hai scelto il lato AMD',   trigger: b => b.piattaforma === 'AMD' },
+  'team_blue':  { icon:'🔵', title:'Team Blue',  desc:'Hai scelto il lato Intel', trigger: b => b.piattaforma === 'Intel' },
+  // CPU — usa PRODS.find() perché b.cpu è una chiave stringa
+  'hunter_3d':      { icon:'🎮', title:'3D Hunter',      desc:'V-Cache: il segreto dei pro',  trigger: b => { const p = b.cpu && PRODS.find(x=>x.k===b.cpu); return p && p.d.toLowerCase().includes('x3d'); } },
+  'no_mercy':       { icon:'💀', title:'No Mercy',       desc:'Ryzen 9 — nessuno ti ferma',   trigger: b => { const p = b.cpu && PRODS.find(x=>x.k===b.cpu); return p && p.d.toLowerCase().includes('ryzen 9'); } },
+  'overclock_king': { icon:'⚡', title:'Overclock King', desc:'Intel i9 — potenza bruta',     trigger: b => { const p = b.cpu && PRODS.find(x=>x.k===b.cpu); return p && p.d.toLowerCase().includes('i9'); } },
+  'il_cervello':    { icon:'🧠', title:'Il Cervello',    desc:'CPU installata nella build',   trigger: b => !!b.cpu },
+  // Mobo
+  'premium_board': { icon:'👑', title:'Premium Board', desc:'X870/Z790 — solo il meglio', trigger: b => { const p = b.mobo && PRODS.find(x=>x.k===b.mobo); return p && (p.d.toLowerCase().includes('x870') || p.d.toLowerCase().includes('z790')); } },
+  'connesso':      { icon:'🔌', title:'Connesso',      desc:'Scheda madre installata',    trigger: b => !!b.mobo },
+  // Case
+  'the_castle':  { icon:'🏰', title:'The Castle',       desc:'Full Tower — grande e maestoso', trigger: b => { const p = b.case && PRODS.find(x=>x.k===b.case); return p && p.d.toLowerCase().includes('full'); } },
+  'small_deadly':{ icon:'💎', title:'Small but Deadly', desc:'ITX — piccolo e letale',         trigger: b => { const p = b.case && PRODS.find(x=>x.k===b.case); return p && p.d.toLowerCase().includes('itx'); } },
+  'casa_dolce':  { icon:'🏠', title:'Casa Dolce Casa',  desc:'Il tuo PC ha trovato dimora',    trigger: b => !!b.case },
+  // RAM
+  'speed_demon': { icon:'🚀', title:'Speed Demon', desc:'DDR5-6000+ — oltre i limiti', trigger: b => { const p = b.ram && PRODS.find(x=>x.k===b.ram); return p && (p.d.includes('6000')||p.d.includes('6400')||p.d.includes('6600')||p.d.includes('7200')); } },
+  'elefante':    { icon:'🐘', title:'Elefante',    desc:'64GB+ — memoria infinita',    trigger: b => { const p = b.ram && PRODS.find(x=>x.k===b.ram); return p && (p.d.toLowerCase().includes('64gb')||p.d.toLowerCase().includes('128gb')||p.d.toLowerCase().includes('64 gb')); } },
+  'il_dna':      { icon:'🧬', title:'Il DNA',      desc:'RAM installata nella build',  trigger: b => !!b.ram },
+  // GPU
+  'vulcano':    { icon:'🌋', title:'Vulcano',    desc:'RTX 5080+ — potenza eruttiva',       trigger: b => { const p = b.gpu && PRODS.find(x=>x.k===b.gpu); return p && (p.d.toLowerCase().includes('5080')||p.d.toLowerCase().includes('5090')); } },
+  'high_roller':{ icon:'🔥', title:'High Roller',desc:'GPU top-tier senza compromessi',     trigger: b => { const p = b.gpu && PRODS.find(x=>x.k===b.gpu); return p && (p.d.toLowerCase().includes('5070 ti')||p.d.toLowerCase().includes('9070 xt')||p.d.toLowerCase().includes('4090')); } },
+  'sweet_spot': { icon:'🎯', title:'Sweet Spot', desc:'Massimo valore per ogni euro',        trigger: b => { const p = b.gpu && PRODS.find(x=>x.k===b.gpu); return p && (p.d.toLowerCase().includes('5060')||p.d.toLowerCase().includes('4070')||p.d.toLowerCase().includes('9060')); } },
+  'la_visione': { icon:'👁️', title:'La Visione', desc:'GPU installata nella build',         trigger: b => !!b.gpu },
+  // SSD
+  'ludicrous':   { icon:'💨', title:'Ludicrous Speed', desc:'Gen 5 — Spaceballs approved',    trigger: b => { const p = b.ssd && PRODS.find(x=>x.k===b.ssd); return p && (p._tipo==='NVMe Gen 5'||p.d.toLowerCase().includes('gen 5')||p.d.toLowerCase().includes('gen5')); } },
+  'flash':       { icon:'⚡', title:'Flash',           desc:'Gen 4 — caricamenti? cosa sono?',trigger: b => { const p = b.ssd && PRODS.find(x=>x.k===b.ssd); return p && (p._tipo==='NVMe Gen 4'||p.d.toLowerCase().includes('gen 4')||p.d.toLowerCase().includes('gen4')); } },
+  'archiviato':  { icon:'💾', title:'Archiviato',      desc:'SSD installato nella build',     trigger: b => !!b.ssd },
+  // PSU
+  'nuclear_power': { icon:'☢️', title:'Nuclear Power', desc:'1000W+ — centrale elettrica', trigger: b => { const p = b.psu && PRODS.find(x=>x.k===b.psu); return p && getPSUWatt(p.d, p) >= 1000; } },
+  'equilibrio':    { icon:'✅', title:'Equilibrio Perfetto', desc:'PSU perfettamente dimensionata', trigger: b => {
+    const p = b.psu && PRODS.find(x=>x.k===b.psu);
+    if(!p) return false;
+    const w = getPSUWatt(p.d, p);
+    const {minPSU} = calcBuildTDP();
+    return w >= minPSU && w <= minPSU + 150;
+  }},
+  'alimentato': { icon:'🔋', title:'Alimentato', desc:'PSU installata nella build', trigger: b => !!b.psu },
+  // Dissipatore
+  'arctic_circle':  { icon:'❄️', title:'Arctic Circle',  desc:'AIO 360mm — freddo polare',      trigger: b => { const p = b.cooler && PRODS.find(x=>x.k===b.cooler); return p && p.d.toLowerCase().includes('360'); } },
+  'silent_thunder': { icon:'🌬️', title:'Silent Thunder', desc:'Dual tower — silenzioso ma letale',trigger: b => { const p = b.cooler && PRODS.find(x=>x.k===b.cooler); return p && p.d.toLowerCase().includes('dual'); } },
+  'sotto_controllo':{ icon:'🌡️', title:'Sotto Controllo',desc:'Dissipatore installato',           trigger: b => !!b.cooler },
+  // Build completa
+  'build_complete': { icon:'🏆', title:'Build Complete', desc:'Sei ufficialmente un PC Builder', trigger: b => Object.keys(b).filter(k => b[k]).length >= 8 },
+  'no_budget': { icon:'💸', title:'No Budget No Party', desc:'Build da oltre €3.000', trigger: b => {
+    const tot = Object.values(b).filter(Boolean).reduce((s,k) => { const p=PRODS.find(x=>x.k===k); return s+(p?calcP(p.p):0); }, 0);
+    return tot > 3000;
+  }},
+  'budget_master': { icon:'🧠', title:'Budget Master', desc:'Build completa sotto €1.200', trigger: b => {
+    const vals = Object.values(b).filter(Boolean);
+    const tot = vals.reduce((s,k) => { const p=PRODS.find(x=>x.k===k); return s+(p?calcP(p.p):0); }, 0);
+    return vals.length >= 8 && tot < 1200;
+  }},
+  'perfectly_balanced': { icon:'⚖️', title:'Perfectly Balanced', desc:'Nessun bottleneck rilevato', trigger: b => {
+    const alert = getResocontoAlerts();
+    return alert.filter(a => a.level === 'critical').length === 0;
+  }}
+};
+
+const unlockedAchievements = new Set();
+
+function checkAchievements() {
+  const b = {...state.build, piattaforma: state.piattaforma};
+  Object.entries(ACHIEVEMENTS).forEach(([key, ach]) => {
+    if(!unlockedAchievements.has(key) && ach.trigger(b)) {
+      unlockedAchievements.add(key);
+      showAchievement(ach);
+    }
+  });
+}
+
+function showAchievement(ach) {
+  const container = document.getElementById('achievementContainer');
+  if(!container) return;
+  const el = document.createElement('div');
+  el.className = 'achievement-popup';
+  el.innerHTML = `
+    <div class="ach-icon">${ach.icon}</div>
+    <div class="ach-body">
+      <div class="ach-label">Obiettivo sbloccato</div>
+      <div class="ach-title">${ach.title}</div>
+      <div class="ach-desc">${ach.desc}</div>
+    </div>
+    <div class="ach-shine"></div>\n  `;
+  container.appendChild(el);
+  playSound('achievement');
+  requestAnimationFrame(() => {
+    requestAnimationFrame(() => { el.classList.add('visible'); });
+  });
+  setTimeout(() => {
+    el.classList.remove('visible');
+    el.classList.add('hiding');
+    setTimeout(() => el.remove(), 500);
+  }, 3500);
+}
+
+// ── SPARK EFFECT ─────────────────────────────────────────
+function createSpark(e, el) {
+  const rect = el.getBoundingClientRect();
+  const x = e.clientX - rect.left;
+  const y = e.clientY - rect.top;
+  for(let i = 0; i < 8; i++) {
+    const spark = document.createElement('div');
+    spark.className = 'spark';
+    const angle = (Math.PI * 2 * i) / 8;
+    const dist = 30 + Math.random() * 20;
+    const tx = Math.cos(angle) * dist;
+    const ty = Math.sin(angle) * dist;
+    const colors = ['#2dd4bf','#d946a8','#ffffff','#e879c8'];
+    const color = colors[Math.floor(Math.random() * colors.length)];
+    spark.style.cssText = `
+      position:absolute;left:${x}px;top:${y}px;
+      width:${3 + Math.random()*3}px;height:${3 + Math.random()*3}px;
+      border-radius:50%;background:${color};
+      box-shadow:0 0 6px ${color};
+      pointer-events:none;z-index:999;
+      animation:sparkFly .5s ease-out forwards;
+      --tx:${tx}px;--ty:${ty}px;\n    `;
+    el.style.position = 'relative';
+    el.appendChild(spark);
+    setTimeout(() => spark.remove(), 500);
+  }
+}
+
+// ── SUONI UI ─────────────────────────────────────────────
+let audioCtx = null;
+// soundEnabled gestito nel main
+
+function getAudioCtx() {
+  if(!audioCtx) audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+  return audioCtx;
+}
+
+function playSound(type) {
+  if(!soundEnabled) return;
+  try {
+    const ctx = getAudioCtx();
+    const osc = ctx.createOscillator();
+    const gain = ctx.createGain();
+    osc.connect(gain); gain.connect(ctx.destination);
+    if(type === 'click') {
+      osc.type = 'sine'; osc.frequency.setValueAtTime(800, ctx.currentTime);
+      osc.frequency.exponentialRampToValueAtTime(400, ctx.currentTime + 0.1);
+      gain.gain.setValueAtTime(0.08, ctx.currentTime);
+      gain.gain.exponentialRampToValueAtTime(0.001, ctx.currentTime + 0.1);
+      osc.start(ctx.currentTime); osc.stop(ctx.currentTime + 0.1);
+    } else if(type === 'whoosh') {
+      osc.type = 'sawtooth'; osc.frequency.setValueAtTime(200, ctx.currentTime);
+      osc.frequency.exponentialRampToValueAtTime(800, ctx.currentTime + 0.15);
+      gain.gain.setValueAtTime(0.05, ctx.currentTime);
+      gain.gain.exponentialRampToValueAtTime(0.001, ctx.currentTime + 0.15);
+      osc.start(ctx.currentTime); osc.stop(ctx.currentTime + 0.15);
+    } else if(type === 'achievement') {
+      // Accordo ascendente tipo PlayStation
+      [0, 100, 200].forEach((delay, i) => {
+        const o2 = ctx.createOscillator();
+        const g2 = ctx.createGain();
+        o2.connect(g2); g2.connect(ctx.destination);
+        o2.type = 'sine';
+        const freqs = [523, 659, 784]; // Do Mi Sol
+        o2.frequency.setValueAtTime(freqs[i], ctx.currentTime + delay/1000);
+        g2.gain.setValueAtTime(0, ctx.currentTime + delay/1000);
+        g2.gain.linearRampToValueAtTime(0.12, ctx.currentTime + delay/1000 + 0.05);
+        g2.gain.exponentialRampToValueAtTime(0.001, ctx.currentTime + delay/1000 + 0.4);
+        o2.start(ctx.currentTime + delay/1000);
+        o2.stop(ctx.currentTime + delay/1000 + 0.4);
+      });
+    }
+  } catch(e) {}
+}
+
+// ── RESOCONTO FINALE INTELLIGENTE ────────────────────────
+function getResocontoAlerts() {
+  const b = state.build;
+  const alerts = [];
+  // Helper: risolve chiave stringa → oggetto prodotto
+  const _p = k => k ? PRODS.find(x=>x.k===k) : null;
+  const pCPU    = _p(b.cpu);
+  const pGPU    = _p(b.gpu);
+  const pPSU    = _p(b.psu);
+  const pRAM    = _p(b.ram);
+  const pMobo   = _p(b.mobo);
+  const pSSD    = _p(b.ssd);
+  const pCooler = _p(b.cooler);
+
+  // 1. PSU check
+  if(pPSU && (b.cpu || b.gpu)) {
+    const {total, minPSU, breakdown} = calcBuildTDP();
+    const psuW = getPSUWatt(pPSU.d, pPSU);
+    if(psuW > 0 && psuW < minPSU) {
+      alerts.push({
+        level: 'critical',
+        icon: '⚡',
+        title: 'PSU insufficiente',
+        msg: `La tua PSU ${pPSU.d} (${psuW}W) è sotto il minimo consigliato di ${minPSU}W per questa build (consumo stimato: ${total}W × 1.20 margine).`,
+        step: 'psu',
+        btnLabel: 'Cambia PSU'
+      });
+    } else if(psuW > 0 && psuW >= minPSU && psuW <= minPSU + 100) {
+      alerts.push({
+        level: 'ok',
+        icon: '✅',
+        title: 'PSU dimensionata correttamente',
+        msg: `${pPSU.d} (${psuW}W) — margine ideale rispetto al consumo stimato di ${total}W.`,
+        step: null
+      });
+    }
+  }
+
+  // 2. Dissipatore inadeguato per TDP CPU
+  if(pCPU && !b.cooler) {
+    const cpuPeak = getCPUPeak(pCPU.d);
+    if(cpuPeak > 88) {
+      alerts.push({
+        level: 'critical',
+        icon: '🌡️',
+        title: 'Nessun dissipatore',
+        msg: `${pCPU.d} ha un TDP di picco di ${cpuPeak}W e richiede un dissipatore adeguato. Senza raffreddamento adeguato rischi thermal throttling.`,
+        step: 'cooler',
+        btnLabel: 'Aggiungi dissipatore'
+      });
+    }
+  } else if(pCPU && pCooler) {
+    const cpuPeak = getCPUPeak(pCPU.d);
+    const coolerName = pCooler.d.toLowerCase();
+    const isTowerOnly = !coolerName.includes('aio') && !coolerName.includes('240') && !coolerName.includes('280') && !coolerName.includes('360');
+    if(cpuPeak > 162 && isTowerOnly) {
+      alerts.push({
+        level: 'warning',
+        icon: '🌡️',
+        title: 'Dissipatore non ottimale',
+        msg: `${pCPU.d} (${cpuPeak}W picco) su dissipatore a torre — considera un AIO 240/360mm per prestazioni ottimali.`,
+        step: 'cooler',
+        btnLabel: 'Migliora dissipatore'
+      });
+    }
+  }
+
+  // 3. RAM non ottimale per CPU
+  if(pCPU && pRAM) {
+    const cpuName = pCPU.d.toLowerCase();
+    const ramName = pRAM.d.toLowerCase();
+    const isZen5 = cpuName.includes('9600') || cpuName.includes('9700') || cpuName.includes('9800') || cpuName.includes('9900') || cpuName.includes('9950');
+    const isDDR5 = ramName.includes('ddr5');
+    const hasGoodSpeed = ramName.includes('6000') || ramName.includes('6200') || ramName.includes('6400') || ramName.includes('6600');
+    if(isZen5 && isDDR5 && !hasGoodSpeed) {
+      alerts.push({
+        level: 'warning',
+        icon: '🧬',
+        title: 'RAM non ottimizzata per Zen 5',
+        msg: `I Ryzen serie 9000 rendono al meglio con DDR5-6000 o superiore. La tua RAM potrebbe limitare le prestazioni del ${pCPU.d}.`,
+        step: 'ram',
+        btnLabel: 'Ottimizza RAM'
+      });
+    }
+    if(!isDDR5 && isZen5) {
+      alerts.push({
+        level: 'warning',
+        icon: '🧬',
+        title: 'DDR4 su piattaforma AM5',
+        msg: `AM5 supporta nativamente DDR5. Con DDR4 perdi parte del bandwidth disponibile per ${pCPU.d}.`,
+        step: 'ram',
+        btnLabel: 'Passa a DDR5'
+      });
+    }
+  }
+
+  // 4. Bottleneck CPU/GPU
+  if(pCPU && pGPU) {
+    const cpuName = pCPU.d.toLowerCase();
+    const gpuName = pGPU.d.toLowerCase();
+    const isWeakCPU = cpuName.includes('i3') || cpuName.includes('ryzen 3') || cpuName.includes('5500') || cpuName.includes('i5-12');
+    const isStrongGPU = gpuName.includes('5080') || gpuName.includes('5090') || gpuName.includes('4090') || gpuName.includes('5070 ti') || gpuName.includes('9070 xt');
+    if(isWeakCPU && isStrongGPU) {
+      alerts.push({
+        level: 'critical',
+        icon: '⚠️',
+        title: 'Bottleneck CPU/GPU rilevato',
+        msg: `${pCPU.d} limiterà significativamente ${pGPU.d}. Il processore non riesce ad alimentare una GPU di questa fascia. Stima: 20-35% di performance persa.`,
+        step: 'cpu',
+        btnLabel: 'Migliora CPU'
+      });
+    }
+    const isMidGPU = gpuName.includes('5060') || gpuName.includes('4060') || gpuName.includes('3060');
+    const isOverkillCPU = cpuName.includes('9950x') || cpuName.includes('i9');
+    if(isOverkillCPU && isMidGPU) {
+      alerts.push({
+        level: 'info',
+        icon: '💡',
+        title: 'CPU sovradimensionata',
+        msg: `${pCPU.d} è eccessiva per ${pGPU.d}. Potresti scalare su una CPU meno costosa e investire il risparmio su una GPU migliore.`,
+        step: 'gpu',
+        btnLabel: 'Migliora GPU'
+      });
+    }
+  }
+
+  // 5. No SSD
+  if(!b.ssd) {
+    alerts.push({
+      level: 'warning',
+      icon: '💾',
+      title: 'Nessun SSD selezionato',
+      msg: 'Nessun SSD nella build. Il sistema non può avviarsi senza storage.',
+      step: 'ssd',
+      btnLabel: 'Aggiungi SSD'
+    });
+  }
+
+  // 6. Upgrade consigliato SSD
+  if(pSSD) {
+    const ssdName = pSSD.d.toLowerCase();
+    if((ssdName.includes('gen 3') || ssdName.includes('gen3')) && pMobo && (pMobo.d.toLowerCase().includes('b650') || pMobo.d.toLowerCase().includes('x870') || pMobo.d.toLowerCase().includes('b850'))) {
+      alerts.push({
+        level: 'info',
+        icon: '💡',
+        title: 'SSD Gen3 su mobo moderna',
+        msg: 'La tua scheda madre supporta PCIe 4.0/5.0 ma hai un SSD Gen3. Con Gen4 avresti il doppio della velocità di trasferimento.',
+        step: 'ssd',
+        btnLabel: 'Passa a Gen4'
+      });
+    }
+  }
+
+  return alerts;
+}
+
+function renderResoconto() {
+  const el = document.getElementById('resocontoPanel');
+  if(!el) return;
+  const alerts = getResocontoAlerts();
+  if(alerts.length === 0) { el.style.display = 'none'; return; }
+  el.style.display = 'block';
+
+  const criticals = alerts.filter(a => a.level === 'critical');
+  const warnings = alerts.filter(a => a.level === 'warning');
+  const infos = alerts.filter(a => a.level === 'info' || a.level === 'ok');
+
+  const colorMap = { critical:'#ef4444', warning:'#f59e0b', info:'#2dd4bf', ok:'#2dd4bf' };
+  const bgMap = { critical:'rgba(239,68,68,.08)', warning:'rgba(245,158,11,.08)', info:'rgba(45,212,191,.06)', ok:'rgba(45,212,191,.06)' };
+
+  el.innerHTML = `
+    <div style="font-size:9px;font-weight:700;letter-spacing:.15em;text-transform:uppercase;color:rgba(255,255,255,.3);margin-bottom:14px">
+      Analisi Build — ${criticals.length} critici · ${warnings.length} avvisi · ${infos.length} suggerimenti
+    </div>
+    ${alerts.map(a => `
+      <div style="display:flex;align-items:flex-start;gap:12px;padding:12px 14px;background:${bgMap[a.level]};border:1px solid ${colorMap[a.level]}33;border-left:3px solid ${colorMap[a.level]};border-radius:0 10px 10px 0;margin-bottom:8px">
+        <span style="font-size:18px;flex-shrink:0;margin-top:2px">${a.icon}</span>
+        <div style="flex:1">
+          <div style="font-size:12px;font-weight:700;color:${colorMap[a.level]};margin-bottom:3px">${a.title}</div>
+          <div style="font-size:11px;color:rgba(255,255,255,.5);line-height:1.5">${a.msg}</div>
+        </div>
+        ${a.step ? `<button onclick="goToStepById('${a.step}')" style="flex-shrink:0;padding:6px 12px;background:${colorMap[a.level]}22;border:1px solid ${colorMap[a.level]}44;color:${colorMap[a.level]};font-family:var(--font);font-size:10px;font-weight:700;border-radius:20px;cursor:pointer;white-space:nowrap">Correggi →</button>` : ''}
+      </div>
+    `).join('')}\n  `;
+}
+
+// ── UPDATE SIDEBAR UNIFICATO ──────────────────────────────
+function updateAllExtras() {
+  updateBuildHealth();
+  updateRisparmio();
+  checkAchievements();
+  renderResoconto();
+}
+
+
+// ══ CHECKOUT ═════════════════════════════════════════════
+function openCheckout() {
+  document.getElementById('modalOverlay').classList.add('open');
+}
+function closeCheckout() {
+  document.getElementById('modalOverlay').classList.remove('open');
+}
+function closeCheckoutIfOutside(e) {
+  if (e.target === document.getElementById('modalOverlay')) closeCheckout();
+}
+function openWhatsApp() {
+  const msg = buildMsg('','','','');
+  window.open(`https://wa.me/393477133866?text=${encodeURIComponent('Ciao! Sono interessato al configuratore PC.')}`, '_blank');
+}
+function buildMsg(name, email, phone, note) {
+  const LABELS = {case:'Case',cpu:'CPU',mobo:'Mobo',ram:'RAM',gpu:'GPU',ssd:'SSD',psu:'PSU',cooler:'Cooler',ventole:'Archiviazione',monitor:'Monitor',mouse:'Mouse',keyboard:'Tastiera',headset:'Cuffie'};
+  let totalForn = 0;
+  let lines = `*Configuratore PC — Minimal Gamers*\n`;
+  if (name) lines += `*Cliente:* ${name}\n`;
+  if (email) lines += `*Email:* ${email}\n`;
+  if (phone) lines += `*Tel:* ${phone}\n`;
+  lines += '\n*Build:*\n';
+  Object.entries(state.build).forEach(([sid,key]) => {
+    if (!key) return;
+    const p = PRODS.find(x=>x.k===key);
+    if (!p) return;
+    totalForn += p.p;
+    lines += `• ${LABELS[sid]||sid}: ${p.d} — ${fmt(p.p*IVA)}\n`;
+  });
+  const totalComp = totalForn * IVA;
+  const impl = calcImpl(totalComp);
+  lines += `
+*Totale:* ${fmt(totalComp + impl)}`;
+  if (note) lines += `
+*Note:* ${note}`;
+  return lines;
+}
+function submitOrder() {
+  const name  = document.getElementById('ord-name')?.value || '';
+  const email = document.getElementById('ord-email')?.value || '';
+  const phone = document.getElementById('ord-phone')?.value || '';
+  const note  = document.getElementById('ord-note')?.value  || '';
+  if (!name || !email || !phone) { showToast('Compila tutti i campi obbligatori'); return; }
+  const msg = buildMsg(name, email, phone, note);
+  const url = `https://wa.me/393477133866?text=${encodeURIComponent(msg)}`;
+  window.open(url, '_blank');
+  closeCheckout();
+}
+function shareLink() {
+  const p = new URLSearchParams();
+  if (state.piattaforma) p.set('pf', state.piattaforma);
+  if (state.socket)      p.set('sk', state.socket);
+  Object.entries(state.build).forEach(([k,v]) => { if(v) p.set(k,v); });
+  const url = location.href.split('?')[0] + '?' + p.toString();
+  navigator.clipboard.writeText(url).then(() => showToast('Link copiato!'));
+}
+
+// ══ TOAST ════════════════════════════════════════════════
+function showToast(msg) {
+  const t = document.getElementById('toast');
+  if (!t) return;
+  t.textContent = msg;
+  t.classList.add('show');
+  setTimeout(() => t.classList.remove('show'), 2500);
+}
+
+// ══ SUONI ════════════════════════════════════════════════
+function playClick() {
+  if (!soundEnabled) return;
+  try {
+    const ctx = new (window.AudioContext || window.webkitAudioContext)();
+    const osc = ctx.createOscillator();
+    const gain = ctx.createGain();
+    osc.connect(gain); gain.connect(ctx.destination);
+    osc.frequency.setValueAtTime(800, ctx.currentTime);
+    osc.frequency.exponentialRampToValueAtTime(400, ctx.currentTime + 0.1);
+    gain.gain.setValueAtTime(0.08, ctx.currentTime);
+    gain.gain.exponentialRampToValueAtTime(0.001, ctx.currentTime + 0.1);
+    osc.start(); osc.stop(ctx.currentTime + 0.1);
+  } catch(e) {}
+}
+function playWhoosh() {
+  if (!soundEnabled) return;
+  try {
+    const ctx = new (window.AudioContext || window.webkitAudioContext)();
+    const osc = ctx.createOscillator();
+    const gain = ctx.createGain();
+    osc.connect(gain); gain.connect(ctx.destination);
+    osc.frequency.setValueAtTime(200, ctx.currentTime);
+    osc.frequency.exponentialRampToValueAtTime(800, ctx.currentTime + 0.15);
+    gain.gain.setValueAtTime(0.06, ctx.currentTime);
+    gain.gain.exponentialRampToValueAtTime(0.001, ctx.currentTime + 0.15);
+    osc.start(); osc.stop(ctx.currentTime + 0.15);
+  } catch(e) {}
+}
+
+// ══ SPARK EFFECT ═════════════════════════════════════════
+function sparkEffect(e) {
+  if (!e || !e.currentTarget) return;
+  const rect = e.currentTarget.getBoundingClientRect();
+  const x = e.clientX - rect.left;
+  const y = e.clientY - rect.top;
+  for (let i = 0; i < 8; i++) {
+    const spark = document.createElement('div');
+    const angle = (Math.PI * 2 / 8) * i;
+    const distance = 30 + Math.random() * 20;
+    const dx = Math.cos(angle) * distance;
+    const dy = Math.sin(angle) * distance;
+    spark.style.cssText = `
+      position:absolute;width:4px;height:4px;border-radius:50%;
+      background:${Math.random()>.5?'var(--teal)':'var(--punch)'};
+      pointer-events:none;z-index:9999;
+      left:${e.clientX}px;top:${e.clientY}px;
+      transform:translate(-50%,-50%);
+      transition:all .4s ease-out;opacity:1;\n    `;
+    document.body.appendChild(spark);
+    requestAnimationFrame(() => {
+      spark.style.transform = `translate(calc(-50% + ${dx}px), calc(-50% + ${dy}px))`;
+      spark.style.opacity = '0';
+    });
+    setTimeout(() => spark.remove(), 400);
+  }
+}
+
+// ══ CANVAS PARTICELLE ════════════════════════════════════
+(function initParticles() {
+  const canvas = document.getElementById('particleCanvas');
+  if (!canvas) return;
+  const ctx = canvas.getContext('2d');
+  let W, H, particles = [];
+  
+  function resize() {
+    W = canvas.width = window.innerWidth;
+    H = canvas.height = window.innerHeight;
+  }
+  resize();
+  window.addEventListener('resize', resize);
+
+  const COLORS = ['rgba(45,212,191,', 'rgba(217,70,168,', 'rgba(255,255,255,'];
+  
+  for (let i = 0; i < 80; i++) {
+    particles.push({
+      x: Math.random() * window.innerWidth,
+      y: Math.random() * window.innerHeight,
+      r: Math.random() * 1.5 + .5,
+      vx: (Math.random()-.5) * .4,
+      vy: -(Math.random() * .6 + .2),
+      color: COLORS[Math.floor(Math.random()*COLORS.length)],
+      alpha: Math.random() * .6 + .2,
+      phase: Math.random() * Math.PI * 2,
+    });
+  }
+
+  function draw() {
+    ctx.clearRect(0, 0, W, H);
+    particles.forEach((p, i) => {
+      p.x += p.vx + Math.sin(Date.now()*.001 + p.phase) * .3;
+      p.y += p.vy;
+      if (p.y < -10) { p.y = H + 10; p.x = Math.random() * W; }
+      if (p.x < -10) p.x = W + 10;
+      if (p.x > W + 10) p.x = -10;
+
+      // Glow
+      const grad = ctx.createRadialGradient(p.x, p.y, 0, p.x, p.y, p.r * 4);
+      grad.addColorStop(0, p.color + p.alpha + ')');
+      grad.addColorStop(1, p.color + '0)');
+      ctx.beginPath();
+      ctx.arc(p.x, p.y, p.r * 4, 0, Math.PI * 2);
+      ctx.fillStyle = grad;
+      ctx.fill();
+
+      // Nucleo
+      ctx.beginPath();
+      ctx.arc(p.x, p.y, p.r, 0, Math.PI * 2);
+      ctx.fillStyle = p.color + (p.alpha * 1.5).toFixed(2) + ')';
+      ctx.fill();
+
+      // Connessioni
+      for (let j = i + 1; j < Math.min(i + 6, particles.length); j++) {
+        const p2 = particles[j];
+        const dx = p.x - p2.x, dy = p.y - p2.y;
+        const dist = Math.sqrt(dx*dx + dy*dy);
+        if (dist < 100) {
+          ctx.beginPath();
+          ctx.moveTo(p.x, p.y);
+          ctx.lineTo(p2.x, p2.y);
+          ctx.strokeStyle = `rgba(45,212,191,${(.15 * (1 - dist/100)).toFixed(3)})`;
+          ctx.lineWidth = .5;
+          ctx.stroke();
+        }
+      }
+    });
+    requestAnimationFrame(draw);
+  }
+  draw();
+})();
+
+// ══ URL PARAMS ═══════════════════════════════════════════
+function loadFromUrl() {
+  const p = new URLSearchParams(location.search);
+  if (p.get('pf')) state.piattaforma = p.get('pf');
+  if (p.get('sk')) state.socket = p.get('sk');
+  Object.keys(state.build).forEach(k => { if(p.get(k)) state.build[k] = p.get(k); });
+}
+
+// ══ ALIAS COMPATIBILITÀ ═══════════════════════════════════
+function buildResoconto() {
+  if (typeof getResocontoAlerts === 'function') return getResocontoAlerts();
+  return [];
+}
+// ══ FETCH PRODOTTI ═══════════════════════════════════════
+async function fetchProdotti() {
+  // Mostra loading
+  const mc = document.getElementById('mainContent');
+  if (mc) mc.innerHTML = '<div style="text-align:center;padding:60px 0;color:var(--ink3)"><div style="font-size:32px;margin-bottom:12px">⚙️</div><div style="font-size:14px;font-weight:600;letter-spacing:.08em;text-transform:uppercase">Caricamento prodotti...</div></div>';
+
+  try {
+    const r = await fetch('prodotti.json?v=' + Date.now());
+    if (!r.ok) throw new Error('HTTP ' + r.status);
+    const data = await r.json();
+    PRODS = data;
+    console.log('✓ Prodotti caricati:', PRODS.length);
+  } catch(e) {
+    console.error('Errore fetch prodotti.json:', e.message);
+    // In locale/artifact senza server: mostra messaggio utile
+    if (mc) mc.innerHTML = '<div style="text-align:center;padding:60px 24px;color:var(--ink3);max-width:480px;margin:0 auto"><div style="font-size:32px;margin-bottom:16px">📦</div><div style="font-size:15px;font-weight:700;color:#fff;margin-bottom:8px">Prodotti non disponibili</div><div style="font-size:13px;line-height:1.6">Carica questo file su <strong style="color:var(--teal)">Vercel</strong> insieme al <code style="background:rgba(255,255,255,.08);padding:2px 6px;border-radius:4px">prodotti.json</code> aggiornato per vedere i prodotti del listino.</div><div style="margin-top:20px;font-size:12px;color:var(--ink4)">GitHub Actions aggiorna il listino ogni mattina alle 10:00.</div></div>';
+  }
+}
+
+// ══ INIT ════════════════════════════════════════════════
+(async () => {
+  loadFromUrl();
+  await fetchProdotti();
+  render();
+})();
+</script>
+</body>
+</html>

@@ -1,0 +1,415 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Minimal Gamers — PC Gaming Builder</title>
+<meta name="description" content="Configura il tuo PC da gaming. Componenti compatibili al 100%, validazione watt automatica, prezzi live.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+:root{
+  --bg:#07050d;
+  --punch:#d946a8;
+  --teal:#2dd4bf;
+  --ink:#fff;
+  --ink2:rgba(255,255,255,.7);
+  --ink3:rgba(255,255,255,.4);
+}
+html,body{
+  background:var(--bg);
+  color:var(--ink);
+  font-family:'Outfit',sans-serif;
+  min-height:100vh;
+  overflow:hidden;
+}
+body{
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  position:relative;
+}
+
+/* ── PARTICELLE SFONDO ──────────────────────────────────── */
+#particleCanvas{
+  position:fixed;
+  inset:0;
+  z-index:0;
+  pointer-events:none;
+}
+
+/* ── GLOW BACKGROUND ────────────────────────────────────── */
+.bg-glow{
+  position:fixed;
+  inset:0;
+  z-index:0;
+  pointer-events:none;
+  overflow:hidden;
+}
+.bg-glow span{
+  position:absolute;
+  border-radius:50%;
+  filter:blur(100px);
+  opacity:.25;
+  animation:drift 20s ease-in-out infinite;
+}
+.bg-glow span:nth-child(1){
+  width:700px;height:700px;
+  background:var(--punch);
+  top:-150px;left:-150px;
+  animation-duration:22s;
+}
+.bg-glow span:nth-child(2){
+  width:600px;height:600px;
+  background:#7c3aed;
+  bottom:-100px;right:-100px;
+  animation-duration:28s;
+  animation-delay:-9s;
+}
+.bg-glow span:nth-child(3){
+  width:400px;height:400px;
+  background:#3b82f6;
+  top:50%;left:50%;
+  transform:translate(-50%,-50%);
+  animation-duration:24s;
+  animation-delay:-5s;
+  opacity:.12;
+}
+@keyframes drift{
+  0%,100%{transform:translate(0,0) scale(1)}
+  50%{transform:translate(60px,40px) scale(1.15)}
+}
+
+/* ── GRIGLIA SVG SOTTILE (più discreta del mockup) ──────── */
+.bg-grid{
+  position:fixed;
+  inset:0;
+  z-index:1;
+  pointer-events:none;
+  background-image:
+    radial-gradient(circle at 20% 30%, rgba(217,70,168,0.04) 0%, transparent 50%),
+    radial-gradient(circle at 80% 70%, rgba(124,58,237,0.04) 0%, transparent 50%);
+}
+
+/* ── CONTENUTO PRINCIPALE ───────────────────────────────── */
+.hero{
+  position:relative;
+  z-index:10;
+  text-align:center;
+  padding:40px 20px;
+  max-width:800px;
+  width:100%;
+}
+
+.logo-wrap{
+  margin-bottom:32px;
+  animation:fadeInDown 1s ease;
+  position:relative;
+}
+.logo-img{
+  max-width:520px;
+  width:100%;
+  height:auto;
+  filter:drop-shadow(0 0 40px rgba(217,70,168,.5)) drop-shadow(0 0 80px rgba(217,70,168,.3));
+  animation:logoGlow 4s ease-in-out infinite;
+}
+@keyframes logoGlow{
+  0%,100%{filter:drop-shadow(0 0 40px rgba(217,70,168,.5)) drop-shadow(0 0 80px rgba(217,70,168,.3))}
+  50%{filter:drop-shadow(0 0 50px rgba(217,70,168,.7)) drop-shadow(0 0 100px rgba(217,70,168,.5))}
+}
+
+.tagline{
+  font-size:14px;
+  letter-spacing:8px;
+  color:#c084fc;
+  font-weight:500;
+  margin-bottom:8px;
+  text-transform:uppercase;
+  animation:fadeIn 1s ease .3s both;
+}
+
+.subtitle{
+  font-size:16px;
+  color:var(--ink2);
+  margin-bottom:48px;
+  max-width:480px;
+  margin-left:auto;
+  margin-right:auto;
+  line-height:1.6;
+  animation:fadeIn 1s ease .5s both;
+}
+.subtitle strong{
+  color:var(--punch);
+  font-weight:600;
+}
+
+/* ── PULSANTE ENTRA (cuoricino del design) ──────────────── */
+.cta-wrap{
+  display:flex;
+  justify-content:center;
+  animation:fadeInUp 1s ease .7s both;
+}
+.cta-btn{
+  position:relative;
+  background:linear-gradient(135deg, var(--punch) 0%, #7c3aed 100%);
+  color:#fff;
+  border:none;
+  padding:18px 56px;
+  font-family:inherit;
+  font-size:15px;
+  font-weight:700;
+  letter-spacing:5px;
+  text-transform:uppercase;
+  cursor:pointer;
+  text-decoration:none;
+  display:inline-flex;
+  align-items:center;
+  gap:14px;
+  border-radius:6px;
+  overflow:hidden;
+  transition:all .3s cubic-bezier(0.4, 0, 0.2, 1);
+  box-shadow:
+    0 0 0 1px rgba(217,70,168,.5),
+    0 0 30px rgba(217,70,168,.4),
+    0 0 60px rgba(217,70,168,.2),
+    inset 0 1px 0 rgba(255,255,255,.15);
+}
+.cta-btn::before{
+  content:'';
+  position:absolute;
+  top:0;left:-100%;
+  width:100%;
+  height:100%;
+  background:linear-gradient(90deg, transparent, rgba(255,255,255,.3), transparent);
+  transition:left .8s;
+}
+.cta-btn:hover{
+  transform:translateY(-3px);
+  box-shadow:
+    0 0 0 1px rgba(217,70,168,.7),
+    0 0 50px rgba(217,70,168,.6),
+    0 0 100px rgba(217,70,168,.3),
+    inset 0 1px 0 rgba(255,255,255,.2);
+}
+.cta-btn:hover::before{
+  left:100%;
+}
+.cta-btn:active{
+  transform:translateY(-1px);
+}
+.cta-btn .arrow{
+  font-size:18px;
+  transition:transform .3s;
+}
+.cta-btn:hover .arrow{
+  transform:translateX(5px);
+}
+
+/* ── FEATURES ROW IN BASSO ──────────────────────────────── */
+.features{
+  position:fixed;
+  bottom:32px;
+  left:50%;
+  transform:translateX(-50%);
+  display:flex;
+  gap:48px;
+  z-index:10;
+  animation:fadeIn 1s ease 1s both;
+}
+.feature{
+  display:flex;
+  align-items:center;
+  gap:8px;
+  font-size:11px;
+  color:var(--ink3);
+  letter-spacing:2px;
+  text-transform:uppercase;
+  font-weight:500;
+}
+.feature::before{
+  content:'';
+  width:6px;
+  height:6px;
+  border-radius:50%;
+  background:var(--punch);
+  box-shadow:0 0 8px var(--punch);
+  animation:pulse 2s ease-in-out infinite;
+}
+.feature:nth-child(2)::before{
+  background:#7c3aed;
+  box-shadow:0 0 8px #7c3aed;
+  animation-delay:.5s;
+}
+.feature:nth-child(3)::before{
+  background:#3b82f6;
+  box-shadow:0 0 8px #3b82f6;
+  animation-delay:1s;
+}
+@keyframes pulse{
+  0%,100%{opacity:1;transform:scale(1)}
+  50%{opacity:.5;transform:scale(1.3)}
+}
+
+/* ── ANIMAZIONI ─────────────────────────────────────────── */
+@keyframes fadeIn{
+  from{opacity:0}
+  to{opacity:1}
+}
+@keyframes fadeInDown{
+  from{opacity:0;transform:translateY(-30px)}
+  to{opacity:1;transform:translateY(0)}
+}
+@keyframes fadeInUp{
+  from{opacity:0;transform:translateY(30px)}
+  to{opacity:1;transform:translateY(0)}
+}
+
+/* ── RESPONSIVE ─────────────────────────────────────────── */
+@media (max-width:768px){
+  .hero{padding:20px}
+  .logo-img{max-width:90%}
+  .tagline{font-size:11px;letter-spacing:5px}
+  .subtitle{font-size:14px;margin-bottom:36px}
+  .cta-btn{padding:16px 40px;font-size:13px;letter-spacing:3px}
+  .features{
+    flex-direction:column;
+    gap:12px;
+    align-items:flex-start;
+    bottom:20px;
+    left:20px;
+    transform:none;
+  }
+  .feature{font-size:9px}
+}
+@media (max-width:480px){
+  .features{display:none}
+}
+</style>
+</head>
+<body>
+
+<canvas id="particleCanvas"></canvas>
+
+<div class="bg-glow">
+  <span></span>
+  <span></span>
+  <span></span>
+</div>
+
+<div class="bg-grid"></div>
+
+<div class="hero">
+  
+  <div class="logo-wrap">
+    <img src="logo.png" alt="Minimal Gamers" class="logo-img">
+  </div>
+  
+  <div class="tagline">PC Gaming Builder</div>
+  
+  <p class="subtitle">
+    Configura il tuo PC da gaming con <strong>componenti compatibili al 100%</strong>,<br>
+    validazione watt automatica e prezzi sempre aggiornati.
+  </p>
+  
+  <div class="cta-wrap">
+    <a href="configuratore.html" class="cta-btn">
+      <span>Entra</span>
+      <span class="arrow">→</span>
+    </a>
+  </div>
+  
+</div>
+
+<div class="features">
+  <div class="feature">3200+ Prodotti</div>
+  <div class="feature">PSU Auto-Check</div>
+  <div class="feature">Prezzi Live</div>
+</div>
+
+<script>
+/* ── PARTICELLE FLUTTUANTI ─────────────────────────────── */
+(function(){
+  const canvas = document.getElementById('particleCanvas');
+  if (!canvas) return;
+  const ctx = canvas.getContext('2d');
+  let particles = [];
+  
+  function resize(){
+    canvas.width = window.innerWidth;
+    canvas.height = window.innerHeight;
+  }
+  resize();
+  window.addEventListener('resize', resize);
+  
+  // Crea particelle
+  const colors = ['#d946a8', '#7c3aed', '#3b82f6', '#ffffff'];
+  const num = Math.min(80, Math.floor((canvas.width * canvas.height) / 18000));
+  for (let i = 0; i < num; i++) {
+    particles.push({
+      x: Math.random() * canvas.width,
+      y: Math.random() * canvas.height,
+      vx: (Math.random() - 0.5) * 0.3,
+      vy: (Math.random() - 0.5) * 0.3,
+      r: Math.random() * 1.8 + 0.3,
+      color: colors[Math.floor(Math.random() * colors.length)],
+      opacity: Math.random() * 0.5 + 0.2,
+      pulse: Math.random() * Math.PI * 2
+    });
+  }
+  
+  function animate(){
+    ctx.clearRect(0, 0, canvas.width, canvas.height);
+    
+    particles.forEach((p, i) => {
+      // Movimento
+      p.x += p.vx;
+      p.y += p.vy;
+      p.pulse += 0.02;
+      
+      // Bounce ai bordi
+      if (p.x < 0 || p.x > canvas.width) p.vx *= -1;
+      if (p.y < 0 || p.y > canvas.height) p.vy *= -1;
+      
+      // Disegna particella
+      const alpha = p.opacity * (0.7 + 0.3 * Math.sin(p.pulse));
+      ctx.beginPath();
+      ctx.arc(p.x, p.y, p.r, 0, Math.PI * 2);
+      ctx.fillStyle = p.color;
+      ctx.globalAlpha = alpha;
+      ctx.fill();
+      
+      // Glow
+      ctx.shadowBlur = 8;
+      ctx.shadowColor = p.color;
+      ctx.fill();
+      ctx.shadowBlur = 0;
+      
+      // Linee tra particelle vicine
+      for (let j = i + 1; j < particles.length; j++) {
+        const p2 = particles[j];
+        const dx = p.x - p2.x;
+        const dy = p.y - p2.y;
+        const dist = Math.sqrt(dx * dx + dy * dy);
+        if (dist < 120) {
+          ctx.beginPath();
+          ctx.moveTo(p.x, p.y);
+          ctx.lineTo(p2.x, p2.y);
+          ctx.strokeStyle = p.color;
+          ctx.globalAlpha = (1 - dist / 120) * 0.15;
+          ctx.lineWidth = 0.5;
+          ctx.stroke();
+        }
+      }
+    });
+    
+    ctx.globalAlpha = 1;
+    requestAnimationFrame(animate);
+  }
+  animate();
+})();
+</script>
+
+</body>
+</html>

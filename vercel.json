@@ -1,11 +1,17 @@
 {
   "version": 2,
   "builds": [
+    { "src": "home.html", "use": "@vercel/static" },
+    { "src": "configuratore.html", "use": "@vercel/static" },
     { "src": "index.html", "use": "@vercel/static" },
     { "src": "prodotti.json", "use": "@vercel/static" },
+    { "src": "logo.png", "use": "@vercel/static" },
     { "src": "foto/**", "use": "@vercel/static" }
   ],
   "routes": [
+    { "src": "/", "dest": "/home.html" },
+    { "src": "/configuratore", "dest": "/configuratore.html" },
+    { "src": "/configuratore.html", "dest": "/configuratore.html" },
     { "src": "/(.*)", "dest": "/$1" }
   ],
   "headers": [
@@ -21,6 +27,12 @@
       "headers": [
         { "key": "Cache-Control", "value": "public, max-age=86400, stale-while-revalidate=604800" },
         { "key": "Access-Control-Allow-Origin", "value": "*" }
+      ]
+    },
+    {
+      "source": "/logo.png",
+      "headers": [
+        { "key": "Cache-Control", "value": "public, max-age=86400, stale-while-revalidate=604800" }
       ]
     }
   ]

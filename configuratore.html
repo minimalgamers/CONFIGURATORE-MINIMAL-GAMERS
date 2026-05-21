@@ -76,16 +76,13 @@ html,body{background:var(--bg);color:var(--ink);font-family:var(--font);min-heig
 }
 .topbar-brand-text{display:flex;flex-direction:column;align-items:flex-start;line-height:1}
 .topbar-brand-title{
-  font-size:15px;font-weight:800;letter-spacing:.22em;
+  font-size:14px;font-weight:500;letter-spacing:.12em;
   text-transform:uppercase;color:#fff;
-  background:linear-gradient(90deg,#fff 0%,#fff 50%,var(--punch) 100%);
-  background-size:200% auto;
-  -webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;
 }
 .topbar-brand-sub{
-  font-size:9px;font-weight:600;letter-spacing:.14em;
+  font-size:9px;font-weight:500;letter-spacing:.16em;
   text-transform:uppercase;color:var(--punch);
-  margin-top:5px;opacity:.85;
+  margin-top:4px;opacity:.75;
 }
 .topbar-right{display:flex;align-items:center;justify-content:flex-end;gap:12px}
 .topbar-sounds{cursor:pointer;font-size:18px;background:none;border:none;color:var(--ink3);padding:6px;transition:color .2s}
@@ -164,6 +161,28 @@ html,body{background:var(--bg);color:var(--ink);font-family:var(--font);min-heig
 }
 @keyframes titleGrad{to{background-position:200%}}
 .step-subtitle{font-size:13px;color:var(--ink3);margin-top:8px;line-height:1.5;text-align:center;max-width:560px}
+
+/* ── BREADCRUMB SOTTOCATEGORIA ATTIVA ───────────────────── */
+.step-breadcrumb{
+  margin-top:18px;
+  display:inline-flex;align-items:center;gap:10px;flex-wrap:wrap;justify-content:center;
+  padding:10px 18px;
+  background:linear-gradient(135deg,rgba(45,212,191,.08),rgba(217,70,168,.06));
+  border:1px solid rgba(45,212,191,.25);
+  border-radius:24px;
+  max-width:680px;
+}
+.step-breadcrumb-label{
+  font-size:10px;font-weight:700;letter-spacing:.18em;text-transform:uppercase;
+  color:rgba(45,212,191,.7);
+}
+.step-breadcrumb-value{
+  font-size:14px;font-weight:800;color:#fff;letter-spacing:.02em;
+}
+.step-breadcrumb-desc{
+  font-size:11px;color:var(--ink3);font-weight:500;
+  padding-left:10px;border-left:1px solid rgba(255,255,255,.12);
+}
 
 /* ── PIATTAFORMA ────────────────────────────────────────── */
 /* ── PIATTAFORMA (AMD/INTEL) ─────────────────────────── */
@@ -2507,12 +2526,43 @@ function render() {
     const hasSel = !!selKey;
 
     const isOptional = ['ventole','monitor','mouse','keyboard','headset'].includes(sid);
+    
+    // Breadcrumb: se l'utente è dentro una sottocategoria, mostra il nome
+    let breadcrumbHtml = '';
+    const activeFilter = state.filters[sid];
+    if (activeFilter) {
+      // Cerca la "note"/descrizione della sottocategoria attiva
+      const sc = SUBCATS[sid];
+      let subDesc = '';
+      if (sc) {
+        let allItems = [];
+        if (sc.groups) {
+          sc.groups.forEach(g => allItems.push(...g.items));
+        } else if (sc.all) {
+          allItems = sc.all;
+        } else if (sc.amd || sc.intel) {
+          allItems = [...(sc.amd||[]), ...(sc.intel||[])];
+        } else if (sc.all_groups) {
+          Object.values(sc.all_groups).forEach(arr => allItems.push(...arr));
+        }
+        const match = allItems.find(it => it.val === activeFilter);
+        if (match && match.note) subDesc = match.note;
+      }
+      breadcrumbHtml = `
+        <div class="step-breadcrumb">
+          <span class="step-breadcrumb-label">Sezione:</span>
+          <span class="step-breadcrumb-value">${activeFilter}</span>
+          ${subDesc ? `<span class="step-breadcrumb-desc">${subDesc}</span>` : ''}
+        </div>
+      `;
+    }
 
     mc.innerHTML = `
       <div class="step-header">
         <div class="step-num">Step ${String(stepN).padStart(2,'0')}</div>
         <div class="step-title">${s.label}</div>
         <div class="step-subtitle">${isOptional ? 'Categoria opzionale — puoi saltarla se non ti serve.' : 'Scegli il componente. I prezzi includono IVA 22%.'}</div>
+        ${breadcrumbHtml}
       </div>
       ${renderProds(sid)}
       <div class="step-nav-bottom">

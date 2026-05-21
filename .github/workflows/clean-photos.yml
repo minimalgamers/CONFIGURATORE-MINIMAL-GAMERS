@@ -1,0 +1,97 @@
+name: 🧹 Clean Photos
+
+# Workflow manuale per ripulire le foto e filtrare prodotti
+# Si esegue cliccando "Run workflow" dalla tab Actions di GitHub
+#
+# Cosa fa:
+# 1. Analizza tutte le foto in /foto/
+# 2. Per ogni foto con sfondo bianco → la rende trasparente (PNG con alpha)
+# 3. Per ogni foto cattiva → rimuove il prodotto corrispondente da prodotti.json
+# 4. Committa le modifiche
+
+on:
+  workflow_dispatch:
+    inputs:
+      dry_run:
+        description: 'Dry run (solo simula, non modifica)'
+        required: false
+        default: false
+        type: boolean
+
+permissions:
+  contents: write  # serve per committare le modifiche
+
+jobs:
+  clean-photos:
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    
+    steps:
+      - name: 📥 Checkout repo
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 1
+      
+      - name: 🐍 Setup Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      
+      - name: 📦 Install dependencies
+        run: |
+          python -m pip install --upgrade pip
+          pip install Pillow numpy
+      
+      - name: 🧹 Run photo cleaner
+        env:
+          DRY_RUN: ${{ inputs.dry_run }}
+        run: |
+          python clean_photos.py
+      
+      - name: 📊 Show report summary
+        if: always()
+        run: |
+          if [ -f photo_cleanup_report.json ]; then
+            echo "=== REPORT SUMMARY ==="
+            python -c "
+          import json
+          with open('photo_cleanup_report.json') as f:
+              r = json.load(f)
+          print('Stats:')
+          for k, v in r['stats'].items():
+              if not k.startswith('bad_'):
+                  print(f'  {k}: {v}')
+          print()
+          print(f'Prodotti da rimuovere: {len(r[\"mpn_to_remove\"])}')
+          print(f'Tempo: {r[\"elapsed_seconds\"]}s')
+          "
+          fi
+      
+      - name: 💾 Commit changes
+        if: ${{ inputs.dry_run == false }}
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          
+          # Stage solo le modifiche reali
+          git add foto/ prodotti.json photo_cleanup_report.json
+          
+          # Commit solo se ci sono modifiche
+          if git diff --cached --quiet; then
+            echo "✅ Nessuna modifica da committare (foto già pulite)"
+          else
+            git commit -m "🧹 Auto-clean: ripulite foto + filtrato prodotti
+
+          Workflow: ${{ github.workflow }}
+          Run: ${{ github.run_id }}"
+            git push
+            echo "✅ Modifiche committate e pushate"
+          fi
+      
+      - name: 📤 Upload report as artifact
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: photo-cleanup-report
+          path: photo_cleanup_report.json
+          retention-days: 30

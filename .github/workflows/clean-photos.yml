@@ -1,13 +1,12 @@
-name: 🧹 Clean Photos
+name: 🧹 Clean Photos v3 (Smart)
 
-# Workflow manuale per ripulire le foto e filtrare prodotti
-# Si esegue cliccando "Run workflow" dalla tab Actions di GitHub
-#
-# Cosa fa:
-# 1. Analizza tutte le foto in /foto/
-# 2. Per ogni foto con sfondo bianco → la rende trasparente (PNG con alpha)
-# 3. Per ogni foto cattiva → rimuove il prodotto corrispondente da prodotti.json
-# 4. Committa le modifiche
+# Workflow MIGLIORATO con:
+# - Ripristino foto originali dal commit pre-cleanup
+# - Algoritmo edge-aware: case bianchi NON vengono mangiati
+# - Detection foto ambiente più severa (mani, scrivanie, schermo)
+# - Detection foto promo (sfondi colorati saturi)
+# - Detection video thumbnail YouTube
+# - Marcatura prodotti per re-download nel prossimo nightly
 
 on:
   workflow_dispatch:
@@ -17,20 +16,25 @@ on:
         required: false
         default: false
         type: boolean
+      restore_original_photos:
+        description: 'Ripristina foto originali pre-cleanup PRIMA di processare'
+        required: false
+        default: true
+        type: boolean
 
 permissions:
-  contents: write  # serve per committare le modifiche
+  contents: write
 
 jobs:
-  clean-photos:
+  clean-photos-smart:
     runs-on: ubuntu-latest
     timeout-minutes: 30
     
     steps:
-      - name: 📥 Checkout repo
+      - name: 📥 Checkout repo (full history)
         uses: actions/checkout@v4
         with:
-          fetch-depth: 1
+          fetch-depth: 0  # serve per accedere ai commit precedenti
       
       - name: 🐍 Setup Python
         uses: actions/setup-python@v5
@@ -42,7 +46,26 @@ jobs:
           python -m pip install --upgrade pip
           pip install Pillow numpy
       
-      - name: 🧹 Run photo cleaner
+      - name: 🔙 Restore original photos
+        if: ${{ inputs.restore_original_photos == true }}
+        run: |
+          echo "Ripristino foto al commit pre-cleanup..."
+          # Trovo il commit prima del bot auto-clean
+          BOT_COMMIT=$(git log --pretty=format:"%H %s" --all | grep "Auto-clean: ripulite foto" | head -1 | awk '{print $1}')
+          if [ -z "$BOT_COMMIT" ]; then
+            echo "❓ Non trovo commit del bot, salto restore"
+          else
+            echo "Commit bot: $BOT_COMMIT"
+            PARENT=$(git rev-parse "${BOT_COMMIT}^")
+            echo "Parent (pre-cleanup): $PARENT"
+            # Ripristino solo la cartella foto/ dal parent
+            git checkout "$PARENT" -- foto/
+            # Ripristino anche prodotti.json se è cambiato
+            git checkout "$PARENT" -- prodotti.json
+            echo "✓ Foto e prodotti.json ripristinati allo stato pre-cleanup"
+          fi
+      
+      - name: 🧹 Run smart photo cleaner
         env:
           DRY_RUN: ${{ inputs.dry_run }}
         run: |
@@ -62,7 +85,8 @@ jobs:
               if not k.startswith('bad_'):
                   print(f'  {k}: {v}')
           print()
-          print(f'Prodotti da rimuovere: {len(r[\"mpn_to_remove\"])}')
+          print(f'Prodotti da rimuovere subito: {len(r[\"mpn_to_remove\"])}')
+          print(f'Prodotti per re-download: {len(r[\"mpn_to_redownload\"])}')
           print(f'Tempo: {r[\"elapsed_seconds\"]}s')
           "
           fi
@@ -74,14 +98,14 @@ jobs:
           git config user.email "github-actions[bot]@users.noreply.github.com"
           
           # Stage solo le modifiche reali
-          git add foto/ prodotti.json photo_cleanup_report.json
+          git add foto/ prodotti.json photo_cleanup_report.json prodotti_redownload.json 2>/dev/null || true
           
           # Commit solo se ci sono modifiche
           if git diff --cached --quiet; then
-            echo "✅ Nessuna modifica da committare (foto già pulite)"
+            echo "✅ Nessuna modifica da committare"
           else
-            git commit -m "🧹 Auto-clean: ripulite foto + filtrato prodotti
-
+            git commit -m "🧹 Smart auto-clean v3: edge-aware bg removal + filtro prodotti
+          
           Workflow: ${{ github.workflow }}
           Run: ${{ github.run_id }}"
             git push
@@ -92,6 +116,8 @@ jobs:
         if: always()
         uses: actions/upload-artifact@v4
         with:
-          name: photo-cleanup-report
-          path: photo_cleanup_report.json
+          name: photo-cleanup-report-v3
+          path: |
+            photo_cleanup_report.json
+            prodotti_redownload.json
           retention-days: 30

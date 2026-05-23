@@ -5,7 +5,7 @@
     "categoria": "RAM",
     "desc": "ADATA 32GB XPG Lancer Blade RGB DDR5-6400 RAM, CL38, AMD EXPO, Intel XMP - 32 GB",
     "img": "foto/adata_ax5u6400c3816g-dtlabrwh.png",
-    "reason": "video_thumbnail"
+    "reason": "dark_environment_complex_scene"
   },
   {
     "mpn": "AK-CC6607EP01",
@@ -96,14 +96,6 @@
     "reason": "saturated_promo_background"
   },
   {
-    "mpn": "CC-9011274-WW",
-    "brand": "Corsair",
-    "categoria": "Case",
-    "desc": "Corsair iCUE 9000D RGB Airflow Big-Tower - weiß",
-    "img": "foto/corsair_cc-9011274-ww.png",
-    "reason": "dark_environment_complex_scene"
-  },
-  {
     "mpn": "CSSD-F4000GBMP700PNH",
     "brand": "Corsair",
     "categoria": "SSD",
@@ -141,22 +133,6 @@
     "categoria": "RAM",
     "desc": "Crucial SO-DIMM DDR5-5600 96GB Kit (2x 48GB)",
     "img": "foto/crucial_ct2k48g56c46s5.png",
-    "reason": "dark_environment_complex_scene"
-  },
-  {
-    "mpn": "CT32G48C40S5",
-    "brand": "Crucial",
-    "categoria": "RAM",
-    "desc": "Crucial SO-DIMM DDR5-4800 32GB",
-    "img": "foto/crucial_ct32g48c40s5.png",
-    "reason": "dark_environment_complex_scene"
-  },
-  {
-    "mpn": "CT32G48C40S5",
-    "brand": "Crucial",
-    "categoria": "RAM",
-    "desc": "Crucial SO-DIMM DDR5-4800 32GB",
-    "img": "crucial_ct32g48c40s5.png",
     "reason": "dark_environment_complex_scene"
   },
   {
@@ -272,14 +248,6 @@
     "reason": "human_skin_detected"
   },
   {
-    "mpn": "G2771QS-B1",
-    "brand": "IIYAMA",
-    "categoria": "Monitor",
-    "desc": "iiyama G-MASTER G2771QS-B1 computer monitor 68.6 cm (27\") 2560 x 1440 pixels Wid",
-    "img": "foto/iiyama_g2771qs-b1.png",
-    "reason": "dark_environment_complex_scene"
-  },
-  {
     "mpn": "BX80768265K",
     "brand": "Intel",
     "categoria": "CPU",
@@ -309,14 +277,6 @@
     "categoria": "Case",
     "desc": "Jonsplus Z20 Mesh PC-Gehäuse, Mini Tower, Micro-ATX, mit Tragegriff - weiß",
     "img": "foto/jonsbo_z20_mesh_white.png",
-    "reason": "no_solid_bg_likely_environment"
-  },
-  {
-    "mpn": "KVR56S46BD8-32",
-    "brand": "Kingston",
-    "categoria": "RAM",
-    "desc": "Kingston SO-DIMM DDR5-5600 32GB",
-    "img": "foto/kingston_kvr56s46bd8-32.png",
     "reason": "no_solid_bg_likely_environment"
   },
   {
@@ -509,7 +469,7 @@
     "categoria": "SSD",
     "desc": "MSI SPATIUM M571 DLP PCIe 5.0 NVMe M.2 2TB PCI Express 5.0 3D NAND",
     "img": "foto/msi_s78-440q1k0-p83.png",
-    "reason": "dark_environment_complex_scene"
+    "reason": "no_solid_bg_likely_environment"
   },
   {
     "mpn": "X870E GAMING PLUS WIFI",
@@ -584,14 +544,6 @@
     "reason": "dark_environment_complex_scene"
   },
   {
-    "mpn": "PH-ES524XTG_DBK01",
-    "brand": "PHANTEKS",
-    "categoria": "Case",
-    "desc": "PHANTEKS Evolv X2 PC-Gehäuse, Midi-Tower, E-ATX, Tempered Glass, DRGB - schwarz",
-    "img": "foto/phanteks_ph-es524xtg_dbk01.png",
-    "reason": "dark_environment_complex_scene"
-  },
-  {
     "mpn": "PH-GO420D30_DBK02",
     "brand": "PHANTEKS",
     "categoria": "Dissipatore",
@@ -614,14 +566,6 @@
     "desc": "Silicon Power P34A80 M.2 2000 GB PCI Express 3.0 SLC NVMe",
     "img": "foto/silicon_power_sp002tbp34a80m28.png",
     "reason": "light_environment_not_pure_white"
-  },
-  {
-    "mpn": "SP008GBLFU266X02",
-    "brand": "Silicon Power",
-    "categoria": "RAM",
-    "desc": "Silicon Power SP008GBLFU266X02 memory module 8 GB 1 x 8 GB DDR4 2666 MHz",
-    "img": "foto/silicon_power_sp008gblfu266x02.png",
-    "reason": "aspect_extreme"
   },
   {
     "mpn": "SP008GBLFU320X02",
@@ -1872,14 +1816,6 @@
     "reason": "no_photo_file_at_all"
   },
   {
-    "mpn": "G2771HS-B1",
-    "brand": "IIYAMA",
-    "categoria": "Monitor",
-    "desc": "iiyama G-MASTER G2771HS-B1 computer monitor 68.6 cm (27\") 1920 x 1080 pixels Ful",
-    "img": null,
-    "reason": "no_photo_file_at_all"
-  },
-  {
     "mpn": "68559",
     "brand": "Xiaomi",
     "categoria": "Monitor",
@@ -2688,14 +2624,6 @@
     "reason": "no_photo_file_at_all"
   },
   {
-    "mpn": "CB16GS3200",
-    "brand": "Crucial",
-    "categoria": "RAM",
-    "desc": "Crucial SO-DIMM DDR4-3200 16GB",
-    "img": null,
-    "reason": "no_photo_file_at_all"
-  },
-  {
     "mpn": "CT48G56C46S5T",
     "brand": "Crucial",
     "categoria": "RAM",
@@ -2892,14 +2820,6 @@
     "brand": "Lexar",
     "categoria": "SSD",
     "desc": "Lexar NQ710 NVMe SSD, PCIe Gen4x4 M.2, Typ 2280 - 500GB",
-    "img": null,
-    "reason": "no_photo_file_at_all"
-  },
-  {
-    "mpn": "PS-TPT-0850FNFAGE-3",
-    "brand": "Thermaltake",
-    "categoria": "PSU",
-    "desc": "Thermaltake Toughpower GT 80 PLUS Gold Netzteil, modular, ATX 3.1, PCIe 5.1 - 85",
     "img": null,
     "reason": "no_photo_file_at_all"
   },
@@ -3140,14 +3060,6 @@
     "brand": "Aerocool",
     "categoria": "PSU",
     "desc": "Aerocool Smart G1 80 PLUS Gold Netzteil, PCIe 5.1, ATX 3.1 - 1000 Watt, schwarz",
-    "img": null,
-    "reason": "no_photo_file_at_all"
-  },
-  {
-    "mpn": "PH-EC500GA_DMW01A",
-    "brand": "PHANTEKS",
-    "categoria": "Case",
-    "desc": "PHANTEKS Eclipse G500A D-RGB Mid-Tower, Tempered Glass - white",
     "img": null,
     "reason": "no_photo_file_at_all"
   },
@@ -6600,14 +6512,6 @@
     "reason": "no_photo_file_at_all"
   },
   {
-    "mpn": "LNM790X002T-RNNNG",
-    "brand": "Lexar",
-    "categoria": "SSD",
-    "desc": "Lexar NM790 NVMe SSD, PCIe 4.0 M.2 Typ 2280 - 2 TB",
-    "img": "foto/lexar_lnm790x002t-rnnng.png",
-    "reason": "no_solid_bg_likely_environment"
-  },
-  {
     "mpn": "900-2G171-0000-100",
     "brand": "Nvidia",
     "categoria": "GPU",
@@ -6648,11 +6552,35 @@
     "reason": "saturated_promo_background"
   },
   {
-    "mpn": "AT-DART-PRO-ARGB-20",
-    "brand": "LOGIC",
-    "categoria": "Case",
-    "desc": "Logic DART PRO ARGB MIDI USB-C PC Case White",
-    "img": "foto/logic_at-dart-pro-argb-20.png",
-    "reason": "very_light_low_variance_brand"
+    "mpn": "CT32G48C40S5",
+    "brand": "Crucial",
+    "categoria": "RAM",
+    "desc": "Crucial SO-DIMM DDR5-4800 32GB",
+    "img": "foto/crucial_ct32g48c40s5.png",
+    "reason": "dark_environment_complex_scene"
+  },
+  {
+    "mpn": "LNM790X002T-RNNNG",
+    "brand": "Lexar",
+    "categoria": "SSD",
+    "desc": "Lexar NM790 NVMe SSD, PCIe 4.0 M.2 Typ 2280 - 2 TB",
+    "img": "foto/lexar_lnm790x002t-rnnng.png",
+    "reason": "no_solid_bg_likely_environment"
+  },
+  {
+    "mpn": "BX8071512500",
+    "brand": "Intel",
+    "categoria": "CPU",
+    "desc": "Core i5-12500 3.30/18.00MB/LGA1700",
+    "img": "foto/intel_bx8071512500.png",
+    "reason": "saturated_promo_background"
+  },
+  {
+    "mpn": "CT64G56C46S5",
+    "brand": "Crucial",
+    "categoria": "RAM",
+    "desc": "Crucial SO-DIMM DDR5-5600 64GB",
+    "img": "foto/crucial_ct64g56c46s5.png",
+    "reason": "saturated_promo_background"
   }
 ]

@@ -5,7 +5,7 @@
     "categoria": "RAM",
     "desc": "ADATA 32GB XPG Lancer Blade RGB DDR5-6400 RAM, CL38, AMD EXPO, Intel XMP - 32 GB",
     "img": "foto/adata_ax5u6400c3816g-dtlabrwh.png",
-    "reason": "dark_environment_complex_scene"
+    "reason": "video_thumbnail"
   },
   {
     "mpn": "AK-CC6607EP01",
@@ -72,14 +72,6 @@
     "reason": "human_skin_detected"
   },
   {
-    "mpn": "ACFRE00184A",
-    "brand": "Arctic",
-    "categoria": "Dissipatore",
-    "desc": "ARCTIC Liquid Freezer III Pro A-RGB 360 AiO Wasserkühlung - 360mm, schwarz",
-    "img": "foto/arctic_acfre00184a.png",
-    "reason": "no_solid_bg_likely_environment"
-  },
-  {
     "mpn": "90YV0MI0-M0NA00",
     "brand": "ASUS",
     "categoria": "GPU",
@@ -93,14 +85,6 @@
     "categoria": "SSD",
     "desc": "Corsair MP700 Pro NVMe SSD, PCIe 5.0 M.2 Typ 2280 - 4 TB",
     "img": "corsair_cssd-f4000gbmp700pnh.png",
-    "reason": "dark_environment_complex_scene"
-  },
-  {
-    "mpn": "CP2K16G4DFRA32A",
-    "brand": "Crucial",
-    "categoria": "RAM",
-    "desc": "Crucial Pro DDR4-3200 RAM, CL22 - 32 GB Dual-Kit, schwarz",
-    "img": "foto/crucial_cp2k16g4dfra32a.png",
     "reason": "dark_environment_complex_scene"
   },
   {
@@ -125,7 +109,7 @@
     "categoria": "RAM",
     "desc": "Crucial SO-DIMM DDR5-5600 96GB Kit (2x 48GB)",
     "img": "foto/crucial_ct2k48g56c46s5.png",
-    "reason": "dark_environment_complex_scene"
+    "reason": "saturated_promo_background"
   },
   {
     "mpn": "CT32G56C46U5",
@@ -557,14 +541,6 @@
     "categoria": "RAM",
     "desc": "S/O 16GB DDR4 PC 3200 Team Elite retail TED416G3200C22-S01",
     "img": "foto/teamgroup_ted416g3200c22-s01.png",
-    "reason": "dark_environment_complex_scene"
-  },
-  {
-    "mpn": "ROYAL PRETOR 130",
-    "brand": "Thermalright",
-    "categoria": "Dissipatore",
-    "desc": "Thermalright Royal Pretor CPU-Kühler, Dual Tower - 120mm und 130mm, schwarz",
-    "img": "foto/thermalright_royal_pretor_130.png",
     "reason": "dark_environment_complex_scene"
   },
   {
@@ -2533,7 +2509,7 @@
     "categoria": "CPU",
     "desc": "Intel Core i9 14900KF 3.2GHz 36MB 1700 no fan Box",
     "img": "foto/intel_bx8071514900kf.png",
-    "reason": "saturated_promo_background"
+    "reason": "human_skin_detected"
   },
   {
     "mpn": "BX80768265",
@@ -6512,27 +6488,11 @@
     "reason": "saturated_promo_background"
   },
   {
-    "mpn": "CT32G48C40S5",
-    "brand": "Crucial",
-    "categoria": "RAM",
-    "desc": "Crucial SO-DIMM DDR5-4800 32GB",
-    "img": "foto/crucial_ct32g48c40s5.png",
-    "reason": "saturated_promo_background"
-  },
-  {
     "mpn": "7E62-002R",
     "brand": "MSI",
     "categoria": "Scheda Madre",
     "desc": "MSI MAG B850 Tomahawk Max WiFi Mainboard, Sockel AM5, AMD B850, ATX, DDR5",
     "img": "foto/msi_7e62-002r.png",
-    "reason": "dark_environment_complex_scene"
-  },
-  {
-    "mpn": "7E76-002R",
-    "brand": "MSI",
-    "categoria": "Scheda Madre",
-    "desc": "MSI B840M B Pro (AM5)",
-    "img": "foto/msi_7e76-002r.png",
     "reason": "dark_environment_complex_scene"
   },
   {
@@ -6590,5 +6550,13 @@
     "desc": "MSI PRO B840-P WiFi Mainboard, Sockel AM5, AMD B840, ATX, DDR5",
     "img": "foto/msi_7e57-001r.png",
     "reason": "dark_environment_complex_scene"
+  },
+  {
+    "mpn": "CT32G48C40S5",
+    "brand": "Crucial",
+    "categoria": "RAM",
+    "desc": "Crucial SO-DIMM DDR5-4800 32GB",
+    "img": "foto/crucial_ct32g48c40s5.png",
+    "reason": "saturated_promo_background"
   }
 ]

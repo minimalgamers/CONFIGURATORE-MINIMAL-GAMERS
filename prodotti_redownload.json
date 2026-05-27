@@ -5,7 +5,7 @@
     "categoria": "RAM",
     "desc": "ADATA 32GB XPG Lancer Blade RGB DDR5-6400 RAM, CL38, AMD EXPO, Intel XMP - 32 GB",
     "img": "foto/adata_ax5u6400c3816g-dtlabrwh.png",
-    "reason": "video_thumbnail"
+    "reason": "dark_environment_complex_scene"
   },
   {
     "mpn": "AK-CC6607EP01",
@@ -62,14 +62,6 @@
     "desc": "AMD Ryzen 5 9500F Processor - Tray",
     "img": "foto/amd_100-000001406.png",
     "reason": "dark_environment_complex_scene"
-  },
-  {
-    "mpn": "100-000001764",
-    "brand": "AMD",
-    "categoria": "CPU",
-    "desc": "AMD EPYC 4545P Processor (16/32) 3.0GHz (Up to 5.4 GHz) Socket AM5 TDP 65W tray",
-    "img": "foto/amd_100-000001764.png",
-    "reason": "human_skin_detected"
   },
   {
     "mpn": "90YV0MI0-M0NA00",
@@ -184,14 +176,6 @@
     "reason": "saturated_promo_background"
   },
   {
-    "mpn": "A620M GAMING X",
-    "brand": "Gigabyte",
-    "categoria": "Scheda Madre",
-    "desc": "GIGABYTE A620M Gaming X, AMD A620 Mainboard, Sockel AM5, DDR5",
-    "img": "foto/gigabyte_a620m_gaming_x.png",
-    "reason": "dark_environment_complex_scene"
-  },
-  {
     "mpn": "MO27Q2A ICE",
     "brand": "Gigabyte",
     "categoria": "Monitor",
@@ -222,14 +206,6 @@
     "desc": "HP Netzteil NB 150W zbook Smart Slim 4.5mm AC Adapter",
     "img": "foto/hp_4sc18aa_abb.png",
     "reason": "human_skin_detected"
-  },
-  {
-    "mpn": "BX80768265K",
-    "brand": "Intel",
-    "categoria": "CPU",
-    "desc": "Intel Core Ultra 7 Desktop 265K processor",
-    "img": "foto/intel_bx80768265k.png",
-    "reason": "dark_environment_complex_scene"
   },
   {
     "mpn": "CM8071505093012",
@@ -307,7 +283,7 @@
     "mpn": "7E06-026R",
     "brand": "MSI",
     "categoria": "Scheda Madre",
-    "desc": "MSI Z790 Gaming Plus WiFi, Intel Z790 Mainboard - Sockel 1700, DDR5",
+    "desc": "MSI Z790 GAMING PLUS WIFI motherboard Intel Z790 LGA 1700 ATX",
     "img": "foto/msi_7e06-026r.png",
     "reason": "dark_environment_complex_scene"
   },
@@ -504,14 +480,6 @@
     "reason": "dark_environment_complex_scene"
   },
   {
-    "mpn": "SP002TBP34A80M28",
-    "brand": "Silicon Power",
-    "categoria": "SSD",
-    "desc": "Silicon Power P34A80 M.2 2000 GB PCI Express 3.0 SLC NVMe",
-    "img": "foto/silicon_power_sp002tbp34a80m28.png",
-    "reason": "light_environment_not_pure_white"
-  },
-  {
     "mpn": "SP008GBLFU320X02",
     "brand": "Silicon Power",
     "categoria": "RAM",
@@ -526,14 +494,6 @@
     "desc": "SILICON POWER DDR4 UDIMM RAM memory 2666 MHz CL19 16 GB (SP016GBLFU266X02) Black",
     "img": "foto/silicon_power_sp016gblfu266x02.png",
     "reason": "aspect_extreme"
-  },
-  {
-    "mpn": "SP032GXLWU60AFDJ",
-    "brand": "Silicon Power",
-    "categoria": "RAM",
-    "desc": "Silicon Power XPOWER Pulse memory module 32 GB 2 x 16 GB DDR5 6000 MHz ECC",
-    "img": "foto/silicon_power_sp032gxlwu60afdj.png",
-    "reason": "dark_environment_complex_scene"
   },
   {
     "mpn": "TED416G3200C22-S01",
@@ -1416,14 +1376,6 @@
     "reason": "no_photo_file_at_all"
   },
   {
-    "mpn": "910-005282",
-    "brand": "Logitech",
-    "categoria": "Mouse",
-    "desc": "Logitech G G305 LIGHTSPEED Wireless Gaming Mouse",
-    "img": null,
-    "reason": "no_photo_file_at_all"
-  },
-  {
     "mpn": "910-005824",
     "brand": "Logitech",
     "categoria": "Mouse",
@@ -1624,14 +1576,6 @@
     "reason": "no_photo_file_at_all"
   },
   {
-    "mpn": "25738",
-    "brand": "Trust",
-    "categoria": "Cuffie",
-    "desc": "Trust GXT 415SM Zirox Headset Wired Head-band Gaming Blue, Red",
-    "img": null,
-    "reason": "no_photo_file_at_all"
-  },
-  {
     "mpn": "EGH330B",
     "brand": "Esperanza",
     "categoria": "Cuffie",
@@ -1756,14 +1700,6 @@
     "brand": "Xiaomi",
     "categoria": "Monitor",
     "desc": "Xiaomi G27i 2026 computer monitor 68.6 cm (27\") 1920 x 1080 pixels Full HD LCD B",
-    "img": null,
-    "reason": "no_photo_file_at_all"
-  },
-  {
-    "mpn": "27G411A-B",
-    "brand": "LG",
-    "categoria": "Monitor",
-    "desc": "LG 27G411A-B computer monitor 68.6 cm (27\") 1920 x 1080 pixels Full HD LCD Black",
     "img": null,
     "reason": "no_photo_file_at_all"
   },
@@ -3424,14 +3360,6 @@
     "reason": "no_photo_file_at_all"
   },
   {
-    "mpn": "306-7ZP8D11-CE0",
-    "brand": "MSI",
-    "categoria": "PSU",
-    "desc": "MSI MAG A850GL 850W PCIE5 II 80+ Gold Power Supply (306-7ZP8D11-CE0)",
-    "img": null,
-    "reason": "no_photo_file_at_all"
-  },
-  {
     "mpn": "FF3D532G6000HC30DC01",
     "brand": "Team Group",
     "categoria": "RAM",
@@ -3604,14 +3532,6 @@
     "brand": "Silverstone",
     "categoria": "PSU",
     "desc": "SilverStone SST-TX500-G TFX Netzteil, 80 PLUS Gold - 500 Watt",
-    "img": null,
-    "reason": "no_photo_file_at_all"
-  },
-  {
-    "mpn": "BW026",
-    "brand": "be quiet!",
-    "categoria": "Dissipatore",
-    "desc": "be quiet! Silent Loop 3 AiO Wasserkühlung, ARGB - 420mm, schwarz",
     "img": null,
     "reason": "no_photo_file_at_all"
   },
@@ -4264,14 +4184,6 @@
     "reason": "no_photo_file_at_all"
   },
   {
-    "mpn": "BW026",
-    "brand": "BE QUIET!",
-    "categoria": "Dissipatore",
-    "desc": "be quiet! Silent Loop 3 420 mm Processor All-in-one liquid cooler 14 cm Black 1 ",
-    "img": null,
-    "reason": "no_photo_file_at_all"
-  },
-  {
     "mpn": "BW024",
     "brand": "BE QUIET!",
     "categoria": "Dissipatore",
@@ -4352,26 +4264,10 @@
     "reason": "no_photo_file_at_all"
   },
   {
-    "mpn": "ASU650SS-256GT-R",
-    "brand": "ADATA",
-    "categoria": "SSD",
-    "desc": "ADATA Ultimate SU650 2.5\" 256 GB Serial ATA III 3D NAND",
-    "img": null,
-    "reason": "no_photo_file_at_all"
-  },
-  {
     "mpn": "ASU630SS-480GQ-R",
     "brand": "ADATA",
     "categoria": "SSD",
     "desc": "ADATA Ultimate SU630 2.5\" 480 GB Serial ATA QLC 3D NAND",
-    "img": null,
-    "reason": "no_photo_file_at_all"
-  },
-  {
-    "mpn": "ASU650SS-240GT-R",
-    "brand": "ADATA",
-    "categoria": "SSD",
-    "desc": "ADATA Ultimate SU650 240 GB 2.5\" Serial ATA III SLC",
     "img": null,
     "reason": "no_photo_file_at_all"
   },
@@ -4468,14 +4364,6 @@
     "brand": "DAHUA",
     "categoria": "SSD",
     "desc": "Dahua Technology DHI-SSD-C900VN1TB internal solid state drive M.2 1000 GB PCI Ex",
-    "img": null,
-    "reason": "no_photo_file_at_all"
-  },
-  {
-    "mpn": "P220S2TB25",
-    "brand": "Patriot Memory",
-    "categoria": "SSD",
-    "desc": "Patriot Memory P220 2TB 2.5\" Serial ATA III",
     "img": null,
     "reason": "no_photo_file_at_all"
   },
@@ -4664,14 +4552,6 @@
     "reason": "no_photo_file_at_all"
   },
   {
-    "mpn": "Noctis Glass RGB",
-    "brand": "SAVIO",
-    "categoria": "Case",
-    "desc": "Savio Noctis Glass RGB Cube Black",
-    "img": null,
-    "reason": "no_photo_file_at_all"
-  },
-  {
     "mpn": "TACMARS-MCVORTEX",
     "brand": "TACENS",
     "categoria": "Case",
@@ -4856,60 +4736,12 @@
     "reason": "no_photo_file_at_all"
   },
   {
-    "mpn": "CCC-FC-K300",
-    "brand": "GEMBIRD",
-    "categoria": "Case",
-    "desc": "Gembird Mini-tower computer case Fornax K300, Micro-ATX, 2x USB 3.0 + 2x USB 2.0",
-    "img": null,
-    "reason": "no_photo_file_at_all"
-  },
-  {
-    "mpn": "CCC-FC-2500",
-    "brand": "GEMBIRD",
-    "categoria": "Case",
-    "desc": "Gembird Fornax 2500 ARGB Gaming ATX computer case, Midi Tower, backlight,  Black",
-    "img": null,
-    "reason": "no_photo_file_at_all"
-  },
-  {
-    "mpn": "CCC-FC-4000",
-    "brand": "GEMBIRD",
-    "categoria": "Case",
-    "desc": "Gembird Fornax 4000 ARGB gaming ATX computer case, Midi Tower, backlight, Black",
-    "img": null,
-    "reason": "no_photo_file_at_all"
-  },
-  {
     "mpn": "CCC-FC-4000W",
     "brand": "GEMBIRD",
     "categoria": "Case",
     "desc": "Gembird Fornax 4000W ARGB gaming ATX computer case, Midi Tower, backlight, White",
-    "img": null,
-    "reason": "no_photo_file_at_all"
-  },
-  {
-    "mpn": "CCC-FC-K500",
-    "brand": "GEMBIRD",
-    "categoria": "Case",
-    "desc": "Gembird Fornax K500 ATX computer case, Midi Tower, Black",
-    "img": null,
-    "reason": "no_photo_file_at_all"
-  },
-  {
-    "mpn": "CCC-FC-160",
-    "brand": "GEMBIRD",
-    "categoria": "Case",
-    "desc": "Gembird CCC-FC-160 Computer office case Fornax 160, black",
-    "img": null,
-    "reason": "no_photo_file_at_all"
-  },
-  {
-    "mpn": "CCC-FC-400X",
-    "brand": "GEMBIRD",
-    "categoria": "Case",
-    "desc": "Gembird CCC-FC-400X Gaming ARGB computer case Fornax 400X, black",
-    "img": null,
-    "reason": "no_photo_file_at_all"
+    "img": "foto/gembird_ccc-fc-4000w.png",
+    "reason": "dark_environment_complex_scene"
   },
   {
     "mpn": "CCC-FC-900ARGB",
@@ -4996,14 +4828,6 @@
     "brand": "Thermaltake",
     "categoria": "Case",
     "desc": "Thermaltake Ceres 500 TG ARGB Midi Tower Black",
-    "img": null,
-    "reason": "no_photo_file_at_all"
-  },
-  {
-    "mpn": "NPC-2171",
-    "brand": "NATEC",
-    "categoria": "Case",
-    "desc": "NATEC NPC-2171computer case Desktop Black",
     "img": null,
     "reason": "no_photo_file_at_all"
   },
@@ -5620,14 +5444,6 @@
     "brand": "Silicon Power",
     "categoria": "RAM",
     "desc": "Silicon Power XPOWER Pulse Gaming memory module 32 GB 1 x 32 GB DDR5 5600 MHz EC",
-    "img": null,
-    "reason": "no_photo_file_at_all"
-  },
-  {
-    "mpn": "PVV564G640C32K",
-    "brand": "Patriot Memory",
-    "categoria": "RAM",
-    "desc": "DDR5 Patriot Viper Venom memory 2 x 32GB 6400 Mhz CL32 XMP3 (PVV564G640C32K)",
     "img": null,
     "reason": "no_photo_file_at_all"
   },
@@ -6324,30 +6140,6 @@
     "brand": "Supermicro",
     "categoria": "PSU",
     "desc": "Supermicro PWS-202-1H power supply unit 200 W 1U Stainless steel",
-    "img": null,
-    "reason": "no_photo_file_at_all"
-  },
-  {
-    "mpn": "CCC-PSUBRONZE-650W",
-    "brand": "GEMBIRD",
-    "categoria": "PSU",
-    "desc": "Gembird CCC-PSUBRONZE-650W Power supply unit Fornax Power 650W active PFC 12cm f",
-    "img": null,
-    "reason": "no_photo_file_at_all"
-  },
-  {
-    "mpn": "CCC-PSUBRONZE-750W",
-    "brand": "GEMBIRD",
-    "categoria": "PSU",
-    "desc": "Gembird CCC-PSUBRONZE-750W Power supply unit Fornax Power 750W active PFC 12cm f",
-    "img": null,
-    "reason": "no_photo_file_at_all"
-  },
-  {
-    "mpn": "CCC-PSUBRONZE-850W",
-    "brand": "GEMBIRD",
-    "categoria": "PSU",
-    "desc": "Gembird CCC-PSUBRONZE-850W Power supply unit Fornax Power 850W active PFC 12cm f",
     "img": null,
     "reason": "no_photo_file_at_all"
   },

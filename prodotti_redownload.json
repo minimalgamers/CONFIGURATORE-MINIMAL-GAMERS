@@ -224,14 +224,6 @@
     "reason": "no_solid_bg_likely_environment"
   },
   {
-    "mpn": "KVR56U46BD8-32",
-    "brand": "Kingston",
-    "categoria": "RAM",
-    "desc": "Kingston Technology ValueRAM memory module 32 GB 1 x 32 GB DDR5 5600 MT/s",
-    "img": "foto/kingston_kvr56u46bd8-32.png",
-    "reason": "no_solid_bg_likely_environment"
-  },
-  {
     "mpn": "SFYR2D/8T1",
     "brand": "Kingston",
     "categoria": "SSD",
@@ -392,22 +384,6 @@
     "reason": "dark_environment_complex_scene"
   },
   {
-    "mpn": "MPG B850 EDGE TI WIFI",
-    "brand": "MSI",
-    "categoria": "Scheda Madre",
-    "desc": "MSI MPG B850 EDGE TI WIFI motherboard AMD B850 Socket AM5 ATX",
-    "img": "foto/msi_mpg_b850_edge_ti_wifi.png",
-    "reason": "dark_environment_complex_scene"
-  },
-  {
-    "mpn": "S78-440Q1K0-P83",
-    "brand": "MSI",
-    "categoria": "SSD",
-    "desc": "MSI SPATIUM M571 DLP PCIe 5.0 NVMe M.2 2TB PCI Express 5.0 3D NAND",
-    "img": "foto/msi_s78-440q1k0-p83.png",
-    "reason": "no_solid_bg_likely_environment"
-  },
-  {
     "mpn": "X870E GAMING PLUS WIFI",
     "brand": "MSI",
     "categoria": "Scheda Madre",
@@ -440,14 +416,6 @@
     "reason": "light_environment_not_pure_white"
   },
   {
-    "mpn": "PSP416G3200KH1",
-    "brand": "Patriot Memory",
-    "categoria": "RAM",
-    "desc": "Patriot Memory Signature Premium PSP416G2666KH1 memory module 16 GB 2 x 8 GB DDR",
-    "img": "foto/patriot_memory_psp416g3200kh1.png",
-    "reason": "video_thumbnail"
-  },
-  {
     "mpn": "PVP301TB28UDG",
     "brand": "Patriot Memory",
     "categoria": "SSD",
@@ -461,14 +429,6 @@
     "categoria": "SSD",
     "desc": "Patriot Viper PV593 SSD PCIe 5.0 M.2 2280 - 2 TB",
     "img": "foto/patriot_pv593p2tbm28h.png",
-    "reason": "no_solid_bg_likely_environment"
-  },
-  {
-    "mpn": "PH-GO420D30_DBK02",
-    "brand": "PHANTEKS",
-    "categoria": "Dissipatore",
-    "desc": "PHANTEKS Glacier One 420D30 X2 DRGB AiO Wasserkühlung - 420mm, schwarz",
-    "img": "foto/phanteks_ph-go420d30_dbk02.png",
     "reason": "no_solid_bg_likely_environment"
   },
   {
@@ -526,14 +486,6 @@
     "desc": "Zalman P30 V2 PC-Gehäuse, Mini-Tower, mATX, RGB, Tempered Glass - weiß",
     "img": "foto/zalman_p30_white_v2.png",
     "reason": "light_environment_not_pure_white"
-  },
-  {
-    "mpn": "CM8070104291810",
-    "brand": "Intel",
-    "categoria": "CPU",
-    "desc": "Intel Pentium G6400 4.0GHz 4MB 1200 Tray",
-    "img": null,
-    "reason": "no_photo_file_at_all"
   },
   {
     "mpn": "TG-WV-P28R",
@@ -792,14 +744,6 @@
     "reason": "no_photo_file_at_all"
   },
   {
-    "mpn": "HAT3310-12T",
-    "brand": "Synology",
-    "categoria": "Extra",
-    "desc": "Synology HAT3310-12T internal hard drive 3.5\" 12 TB Serial ATA",
-    "img": null,
-    "reason": "no_photo_file_at_all"
-  },
-  {
     "mpn": "ST32000NT000",
     "brand": "Seagate",
     "categoria": "Extra",
@@ -928,14 +872,6 @@
     "reason": "no_photo_file_at_all"
   },
   {
-    "mpn": "WD20EZBX",
-    "brand": "WD",
-    "categoria": "Extra",
-    "desc": "Western Digital Blue internal hard drive 2 TB 7200 RPM 256 MB 3.5\" Serial ATA",
-    "img": null,
-    "reason": "no_photo_file_at_all"
-  },
-  {
     "mpn": "WD181PURP",
     "brand": "WD",
     "categoria": "Extra",
@@ -1036,14 +972,6 @@
     "brand": "Seagate",
     "categoria": "Extra",
     "desc": "Seagate IronWolf Pro internal hard drive 10 TB 256 MB 3.5\" Serial ATA III (ST100",
-    "img": null,
-    "reason": "no_photo_file_at_all"
-  },
-  {
-    "mpn": "WD40EZZX",
-    "brand": "WD",
-    "categoria": "Extra",
-    "desc": "Western Digital WD Blue 3.5-Inch PC HDD internal hard drive 4 TB 5400 RPM 128 MB",
     "img": null,
     "reason": "no_photo_file_at_all"
   },
@@ -1364,14 +1292,6 @@
     "brand": "HAVIT",
     "categoria": "Mouse",
     "desc": "Havit MS979WB - gaming wireless mouse with charging station",
-    "img": null,
-    "reason": "no_photo_file_at_all"
-  },
-  {
-    "mpn": "910-007295",
-    "brand": "Logitech",
-    "categoria": "Mouse",
-    "desc": "Logitech G 910-007295 mouse Gaming Ambidextrous RF Wireless Optical 32000 DPI",
     "img": null,
     "reason": "no_photo_file_at_all"
   },
@@ -1780,14 +1700,6 @@
     "brand": "Gigabyte",
     "categoria": "Monitor",
     "desc": "Gigabyte G27FC A computer monitor 68.6 cm (27\") 1920 x 1080 pixels Full HD LED B",
-    "img": null,
-    "reason": "no_photo_file_at_all"
-  },
-  {
-    "mpn": "GS27FC",
-    "brand": "Gigabyte",
-    "categoria": "Monitor",
-    "desc": "Gigabyte GS27FC computer monitor 68.6 cm (27\") 1920 x 1080 pixels Full HD LCD Bl",
     "img": null,
     "reason": "no_photo_file_at_all"
   },
@@ -2368,14 +2280,6 @@
     "reason": "no_photo_file_at_all"
   },
   {
-    "mpn": "GP-P650SS ICE",
-    "brand": "Gigabyte",
-    "categoria": "PSU",
-    "desc": "GIGABYTE P650SS ICE Power Supply - PCIe 5.0, 80 PLUS Silver, 120mm Fan, ATX 3.0 ",
-    "img": null,
-    "reason": "no_photo_file_at_all"
-  },
-  {
     "mpn": "R-PF500X-HD0B-JGEU",
     "brand": "DEEPCOOL",
     "categoria": "PSU",
@@ -2400,14 +2304,6 @@
     "reason": "no_photo_file_at_all"
   },
   {
-    "mpn": "YD3200C5M4MFH",
-    "brand": "AMD",
-    "categoria": "CPU",
-    "desc": "AMD Ryzen 3 3200G processor 3.6 GHz 4 MB L3 Tray",
-    "img": null,
-    "reason": "no_photo_file_at_all"
-  },
-  {
     "mpn": "CM8071505093011",
     "brand": "Intel",
     "categoria": "CPU",
@@ -2420,14 +2316,6 @@
     "brand": "Intel",
     "categoria": "CPU",
     "desc": "Intel Core i5 14500 5.0GHz 24MB 1700 Tray",
-    "img": null,
-    "reason": "no_photo_file_at_all"
-  },
-  {
-    "mpn": "CM8071504820817",
-    "brand": "Intel",
-    "categoria": "CPU",
-    "desc": "Intel Core i7 14700 5.4GHz 33MB 1700 Tray",
     "img": null,
     "reason": "no_photo_file_at_all"
   },
@@ -2820,14 +2708,6 @@
     "brand": "ASUS",
     "categoria": "Scheda Madre",
     "desc": "ASUS PRIME B450M-K II, AMD B450 Mainboard - Sockel AM4",
-    "img": null,
-    "reason": "no_photo_file_at_all"
-  },
-  {
-    "mpn": "V530-060R",
-    "brand": "MSI",
-    "categoria": "GPU",
-    "desc": "MSI VENTUS GEFORCE RTX 5090 32G 3X OC graphics card NVIDIA 32 GB GDDR7",
     "img": null,
     "reason": "no_photo_file_at_all"
   },
@@ -3668,14 +3548,6 @@
     "brand": "Alphacool",
     "categoria": "Dissipatore",
     "desc": "Alphacool Core Ocean T38 240mm AiO Wasserkühlung - schwarz",
-    "img": null,
-    "reason": "no_photo_file_at_all"
-  },
-  {
-    "mpn": "NE75090019R5-GB2020G",
-    "brand": "Palit",
-    "categoria": "GPU",
-    "desc": "Palit GeForce RTX 5090 GameRock, 32768 MB GDDR7",
     "img": null,
     "reason": "no_photo_file_at_all"
   },
@@ -4684,14 +4556,6 @@
     "brand": "MSI",
     "categoria": "Case",
     "desc": "MSI MPG VELOX 100P AIRFLOW Mid Tower Gaming Computer Case 'Black, 3x 120mm Fan +",
-    "img": null,
-    "reason": "no_photo_file_at_all"
-  },
-  {
-    "mpn": "306-7G20A21-809",
-    "brand": "MSI",
-    "categoria": "Case",
-    "desc": "MSI MAG Forge M100A Micro Tower Black, Transparent",
     "img": null,
     "reason": "no_photo_file_at_all"
   },
@@ -5880,14 +5744,6 @@
     "reason": "no_photo_file_at_all"
   },
   {
-    "mpn": "BX8071513700F",
-    "brand": "Intel",
-    "categoria": "CPU",
-    "desc": "Intel Core i7-13700F processor 30 MB Smart Cache Box",
-    "img": null,
-    "reason": "no_photo_file_at_all"
-  },
-  {
     "mpn": "100-000000022",
     "brand": "AMD",
     "categoria": "CPU",
@@ -6048,14 +5904,6 @@
     "reason": "no_photo_file_at_all"
   },
   {
-    "mpn": "CM8071506036801",
-    "brand": "Intel",
-    "categoria": "CPU",
-    "desc": "Intel Xeon 6315P processor 2.8 GHz 12 MB Tray",
-    "img": null,
-    "reason": "no_photo_file_at_all"
-  },
-  {
     "mpn": "11322-01-40G",
     "brand": "Sapphire",
     "categoria": "GPU",
@@ -6120,14 +5968,6 @@
     "reason": "no_photo_file_at_all"
   },
   {
-    "mpn": "BN346",
-    "brand": "BE QUIET!",
-    "categoria": "PSU",
-    "desc": "be quiet! PURE POWER 12 M | 1200W power supply unit 20+4 pin ATX ATX Black",
-    "img": null,
-    "reason": "no_photo_file_at_all"
-  },
-  {
     "mpn": "BN338",
     "brand": "BE QUIET!",
     "categoria": "PSU",
@@ -6156,14 +5996,6 @@
     "brand": "Akyga",
     "categoria": "PSU",
     "desc": "Akyga AK-B1-700 power supply unit 700 W 20+4 pin ATX ATX Grey",
-    "img": null,
-    "reason": "no_photo_file_at_all"
-  },
-  {
-    "mpn": "GP-AE1000PM",
-    "brand": "Gigabyte",
-    "categoria": "PSU",
-    "desc": "Power Supply Gigabyte Aorus Elite Platinum ATX 3.1 1000W",
     "img": null,
     "reason": "no_photo_file_at_all"
   },
@@ -6264,14 +6096,6 @@
     "reason": "dark_environment_complex_scene"
   },
   {
-    "mpn": "100-000001404",
-    "brand": "AMD",
-    "categoria": "CPU",
-    "desc": "AMD Ryzen 7 9700X processor 3.8 GHz 40 MB L2 & L3 (100-000001404) Tray",
-    "img": "foto/amd_100-000001404.png",
-    "reason": "saturated_promo_background"
-  },
-  {
     "mpn": "CT64G56C46S5",
     "brand": "Crucial",
     "categoria": "RAM",
@@ -6350,5 +6174,13 @@
     "desc": "Crucial SO-DIMM DDR5-4800 32GB",
     "img": "foto/crucial_ct32g48c40s5.png",
     "reason": "saturated_promo_background"
+  },
+  {
+    "mpn": "BX8071514700F",
+    "brand": "Intel",
+    "categoria": "CPU",
+    "desc": "Intel Core i7-14700F processor 33 MB Smart Cache Box",
+    "img": "foto/intel_bx8071514700f.png",
+    "reason": "no_solid_bg_likely_environment"
   }
 ]

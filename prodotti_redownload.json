@@ -120,14 +120,6 @@
     "reason": "saturated_promo_background"
   },
   {
-    "mpn": "CT8G56C46U5",
-    "brand": "Crucial",
-    "categoria": "RAM",
-    "desc": "Crucial DDR5-5600   8GB",
-    "img": "foto/crucial_ct8g56c46u5.png",
-    "reason": "aspect_extreme"
-  },
-  {
     "mpn": "R-PN850M-FC0W-JGEU",
     "brand": "DEEPCOOL",
     "categoria": "PSU",
@@ -205,14 +197,6 @@
     "categoria": "PSU",
     "desc": "HP Netzteil NB 150W zbook Smart Slim 4.5mm AC Adapter",
     "img": "foto/hp_4sc18aa_abb.png",
-    "reason": "human_skin_detected"
-  },
-  {
-    "mpn": "CM8071505093012",
-    "brand": "Intel",
-    "categoria": "CPU",
-    "desc": "Intel Core i5 14400 4.7GHz 20MB 1700 Tray",
-    "img": "foto/intel_cm8071505093012.png",
     "reason": "human_skin_detected"
   },
   {
@@ -784,14 +768,6 @@
     "reason": "no_photo_file_at_all"
   },
   {
-    "mpn": "WD142KFGX",
-    "brand": "WD",
-    "categoria": "Extra",
-    "desc": "Western Digital Red WD142KFGX internal hard drive 14 TB 7200 RPM 512 MB 3.5\" Ser",
-    "img": null,
-    "reason": "no_photo_file_at_all"
-  },
-  {
     "mpn": "WD85PURZ",
     "brand": "WD",
     "categoria": "Extra",
@@ -1036,14 +1012,6 @@
     "brand": "RAZER",
     "categoria": "Tastiera",
     "desc": "Razer BlackWidow V4 X - Fortnite Edition keyboard Gaming USB US English Black",
-    "img": null,
-    "reason": "no_photo_file_at_all"
-  },
-  {
-    "mpn": "STYX Outemu Red",
-    "brand": "SAVIO",
-    "categoria": "Tastiera",
-    "desc": "SAVIO STYX Mechanical Keyboard Outemu Red, Hot Swap, RGB",
     "img": null,
     "reason": "no_photo_file_at_all"
   },
@@ -1768,14 +1736,6 @@
     "reason": "no_photo_file_at_all"
   },
   {
-    "mpn": "100-000001553",
-    "brand": "AMD",
-    "categoria": "CPU",
-    "desc": "AMD EPYC 9015 processor 3.6 GHz 64 MB L3",
-    "img": null,
-    "reason": "no_photo_file_at_all"
-  },
-  {
     "mpn": "100-000001523",
     "brand": "AMD",
     "categoria": "CPU",
@@ -2300,14 +2260,6 @@
     "brand": "AMD",
     "categoria": "CPU",
     "desc": "AMD Ryzen 5 7600 processor 3.8 GHz 32 MB L3",
-    "img": null,
-    "reason": "no_photo_file_at_all"
-  },
-  {
-    "mpn": "CM8071505093011",
-    "brand": "Intel",
-    "categoria": "CPU",
-    "desc": "Intel Core i5 14400F 4.7GHz 20MB 1700 Tray",
     "img": null,
     "reason": "no_photo_file_at_all"
   },
@@ -6168,19 +6120,19 @@
     "reason": "dark_environment_complex_scene"
   },
   {
-    "mpn": "CT32G48C40S5",
-    "brand": "Crucial",
-    "categoria": "RAM",
-    "desc": "Crucial SO-DIMM DDR5-4800 32GB",
-    "img": "foto/crucial_ct32g48c40s5.png",
-    "reason": "saturated_promo_background"
-  },
-  {
     "mpn": "BX8071514700F",
     "brand": "Intel",
     "categoria": "CPU",
     "desc": "Intel Core i7-14700F processor 33 MB Smart Cache Box",
     "img": "foto/intel_bx8071514700f.png",
     "reason": "no_solid_bg_likely_environment"
+  },
+  {
+    "mpn": "CT32G48C40S5",
+    "brand": "Crucial",
+    "categoria": "RAM",
+    "desc": "Crucial SO-DIMM DDR5-4800 32GB",
+    "img": "foto/crucial_ct32g48c40s5.png",
+    "reason": "saturated_promo_background"
   }
 ]

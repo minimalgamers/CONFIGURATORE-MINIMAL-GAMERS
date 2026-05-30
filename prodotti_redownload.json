@@ -144,14 +144,6 @@
     "reason": "saturated_promo_background"
   },
   {
-    "mpn": "FD-C-POR1X-01",
-    "brand": "Fractal Design",
-    "categoria": "Case",
-    "desc": "Fractal Design Pop XL Air RGB Clear Tint E-ATX-Gehäuse, Tempered Glass - weiß",
-    "img": "foto/fractal_design_fd-c-por1x-01.png",
-    "reason": "saturated_promo_background"
-  },
-  {
     "mpn": "F4-3600C18D-32GVK",
     "brand": "G.SKILL",
     "categoria": "RAM",
@@ -206,14 +198,6 @@
     "desc": "Jonsplus Z20 Mesh PC-Gehäuse, Mini Tower, Micro-ATX, mit Tragegriff - weiß",
     "img": "foto/jonsbo_z20_mesh_white.png",
     "reason": "no_solid_bg_likely_environment"
-  },
-  {
-    "mpn": "SFYR2D/8T1",
-    "brand": "Kingston",
-    "categoria": "SSD",
-    "desc": "Kingston FURY Renegade G5 SSD 8TB, M.2 2280 / M-Key / PCIe 5.0 x4",
-    "img": "foto/kingston_sfyr2d_8t1.png",
-    "reason": "light_environment_not_pure_white"
   },
   {
     "mpn": "SFYRDK/2000G",
@@ -392,14 +376,6 @@
     "reason": "no_solid_bg_likely_environment"
   },
   {
-    "mpn": "P400LP2KGM28H",
-    "brand": "Patriot Memory",
-    "categoria": "SSD",
-    "desc": "SSD Patriot Viper P400 Lite M.2 PCI-Ex4 NVMe 2000GB",
-    "img": "foto/patriot_memory_p400lp2kgm28h.png",
-    "reason": "light_environment_not_pure_white"
-  },
-  {
     "mpn": "PVP301TB28UDG",
     "brand": "Patriot Memory",
     "categoria": "SSD",
@@ -564,14 +540,6 @@
     "brand": "Hyte",
     "categoria": "GPU",
     "desc": "HYTE PCIE 5.0 Hyper Riser Kabel - Snow White",
-    "img": null,
-    "reason": "no_photo_file_at_all"
-  },
-  {
-    "mpn": "SB580T-12GOC",
-    "brand": "Sparkle",
-    "categoria": "GPU",
-    "desc": "Sparkle Arc B580 Titan OC Grafikkarte, 12288 MB GDDR6",
     "img": null,
     "reason": "no_photo_file_at_all"
   },
@@ -2216,14 +2184,6 @@
     "reason": "no_photo_file_at_all"
   },
   {
-    "mpn": "SB580T-12GOC",
-    "brand": "SPARKLE",
-    "categoria": "GPU",
-    "desc": "SPARKLE Intel Arc B580 TITAN OC 12 GB graphics card",
-    "img": null,
-    "reason": "no_photo_file_at_all"
-  },
-  {
     "mpn": "SB580G-12G",
     "brand": "SPARKLE",
     "categoria": "GPU",
@@ -2286,14 +2246,6 @@
     "desc": "Intel Core i9 14900KF 3.2GHz 36MB 1700 no fan Box",
     "img": "foto/intel_bx8071514900kf.png",
     "reason": "human_skin_detected"
-  },
-  {
-    "mpn": "BX80768265",
-    "brand": "Intel",
-    "categoria": "CPU",
-    "desc": "Intel Core Ultra 7 265 CPU, 20 Kerne, 5,3 GHz, Sockel 1851 (Arrow Lake) - boxed,",
-    "img": null,
-    "reason": "no_photo_file_at_all"
   },
   {
     "mpn": "CT2K8G48C40U5",
@@ -2640,14 +2592,6 @@
     "reason": "no_photo_file_at_all"
   },
   {
-    "mpn": "FD-C-RID1N-12",
-    "brand": "Fractal Design",
-    "categoria": "Case",
-    "desc": "Fractal Design Ridge Mini-ITX Tower, PCIe 4.0 - weiß",
-    "img": null,
-    "reason": "no_photo_file_at_all"
-  },
-  {
     "mpn": "CW-9061001-WW",
     "brand": "Corsair",
     "categoria": "Dissipatore",
@@ -2784,14 +2728,6 @@
     "reason": "no_photo_file_at_all"
   },
   {
-    "mpn": "FD-C-TOR1A-05",
-    "brand": "Fractal Design",
-    "categoria": "Case",
-    "desc": "Fractal Design Torrent Solid Midi-Tower, schwarz",
-    "img": null,
-    "reason": "no_photo_file_at_all"
-  },
-  {
     "mpn": "SST-FA313-B",
     "brand": "Silverstone",
     "categoria": "Case",
@@ -2812,14 +2748,6 @@
     "brand": "ASUS",
     "categoria": "Scheda Madre",
     "desc": "ASUS ROG Strix Z790-F Gaming WiFi, Intel Z790 Mainboard - Sockel 1700, DDR5",
-    "img": null,
-    "reason": "no_photo_file_at_all"
-  },
-  {
-    "mpn": "H810M GAMING WIFI6",
-    "brand": "Gigabyte",
-    "categoria": "Scheda Madre",
-    "desc": "GIGABYTE H810M Gaming WiFi 6 Mainboard, Sockel LGA 1851, Intel H810, Micro-ATX, ",
     "img": null,
     "reason": "no_photo_file_at_all"
   },
@@ -2916,14 +2844,6 @@
     "brand": "EK Water Blocks",
     "categoria": "Dissipatore",
     "desc": "EK Water Blocks EK-Nucleus AIO CR240 Lux D-RGB AiO Wasserkühlung - 240 mm, schwa",
-    "img": null,
-    "reason": "no_photo_file_at_all"
-  },
-  {
-    "mpn": "100-100001350WOF",
-    "brand": "AMD",
-    "categoria": "CPU",
-    "desc": "AMD Ryzen Threadripper 7980X 3,2 GHz (Storm Peak) Sockel sTR5 - boxed ohne Kühle",
     "img": null,
     "reason": "no_photo_file_at_all"
   },
@@ -3184,14 +3104,6 @@
     "reason": "no_photo_file_at_all"
   },
   {
-    "mpn": "DK07X",
-    "brand": "Lian Li",
-    "categoria": "Case",
-    "desc": "Lian Li DK07 Tischgehäuse, Dual-System-fähig, 2x E-ATX, höhenverstellbar - schwa",
-    "img": null,
-    "reason": "no_photo_file_at_all"
-  },
-  {
     "mpn": "FF3D532G6000HC30DC01",
     "brand": "Team Group",
     "categoria": "RAM",
@@ -3236,14 +3148,6 @@
     "brand": "Silverstone",
     "categoria": "PSU",
     "desc": "SilverStone SST-FX600-PT FX600 Platinum Netzteil - 600 Watt",
-    "img": null,
-    "reason": "no_photo_file_at_all"
-  },
-  {
-    "mpn": "FD-C-EPO1X-02",
-    "brand": "Fractal Design",
-    "categoria": "Case",
-    "desc": "Fractal Design Epoch XL Black TG Light Tint PC-Gehäuse, Midi-Tower, E-ATX, Tempe",
     "img": null,
     "reason": "no_photo_file_at_all"
   },
@@ -4196,8 +4100,8 @@
     "brand": "Patriot Memory",
     "categoria": "SSD",
     "desc": "SSD Patriot Viper P400 Lite M.2 PCI-Ex4 NVMe 1000GB",
-    "img": null,
-    "reason": "no_photo_file_at_all"
+    "img": "foto/patriot_memory_p400lp1kgm28h.png",
+    "reason": "light_environment_not_pure_white"
   },
   {
     "mpn": "SD250-480GQN",
@@ -4364,14 +4268,6 @@
     "brand": "SAVIO",
     "categoria": "Case",
     "desc": "SAVIO PC Case Prime X1 ARGB Glass Black",
-    "img": null,
-    "reason": "no_photo_file_at_all"
-  },
-  {
-    "mpn": "Noctis Flow RGB",
-    "brand": "SAVIO",
-    "categoria": "Case",
-    "desc": "Savio Noctis Flow RGB Cube Black",
     "img": null,
     "reason": "no_photo_file_at_all"
   },
@@ -6134,5 +6030,37 @@
     "desc": "Crucial SO-DIMM DDR5-4800 32GB",
     "img": "foto/crucial_ct32g48c40s5.png",
     "reason": "saturated_promo_background"
+  },
+  {
+    "mpn": "CM8071504821112",
+    "brand": "Intel",
+    "categoria": "CPU",
+    "desc": "Intel Core i5 14400 4.7GHz 20MB 1700 Tray",
+    "img": "foto/intel_cm8071504821112.png",
+    "reason": "human_skin_detected"
+  },
+  {
+    "mpn": "CT4000P310SSD5",
+    "brand": "Crucial",
+    "categoria": "SSD",
+    "desc": "Crucial SSD P310 4TB PCie 4.0 NVMe w/Heatsink",
+    "img": "foto/crucial_ct4000p310ssd5.png",
+    "reason": "dark_environment_complex_scene"
+  },
+  {
+    "mpn": "FD-C-NOR1X-04",
+    "brand": "Fractal Design",
+    "categoria": "Case",
+    "desc": "Fractal Design North XL Chalk Gehäuse TG Clear - weiß",
+    "img": "foto/fractal_design_fd-c-nor1x-04.png",
+    "reason": "human_skin_detected"
+  },
+  {
+    "mpn": "R-LP240-WHMSMC-G-1",
+    "brand": "DEEPCOOL",
+    "categoria": "Dissipatore",
+    "desc": "DeepCool LP240 Computer case, Processor All-in-one liquid cooler 12 cm White 1 p",
+    "img": "foto/deepcool_r-lp240-whmsmc-g-1.png",
+    "reason": "file_too_small"
   }
 ]

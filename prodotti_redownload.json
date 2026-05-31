@@ -8,14 +8,6 @@
     "reason": "dark_environment_complex_scene"
   },
   {
-    "mpn": "AK-CC6607EP01",
-    "brand": "Akasa",
-    "categoria": "Dissipatore",
-    "desc": "Akasa AK-CC6607EP01 Low Profile CPU-Kühler - Sockel LGA 1700, 64,5 mm Höhe",
-    "img": "foto/akasa_ak-cc6607ep01.png",
-    "reason": "light_environment_not_pure_white"
-  },
-  {
     "mpn": "100-000000478",
     "brand": "AMD",
     "categoria": "CPU",
@@ -104,14 +96,6 @@
     "reason": "saturated_promo_background"
   },
   {
-    "mpn": "CT32G56C46U5",
-    "brand": "Crucial",
-    "categoria": "RAM",
-    "desc": "Crucial DIMM 32GB, DDR5-5600, CL46-45-45",
-    "img": "foto/crucial_ct32g56c46u5.png",
-    "reason": "aspect_extreme"
-  },
-  {
     "mpn": "CT8G4SFRA32A",
     "brand": "Crucial",
     "categoria": "RAM",
@@ -163,7 +147,7 @@
     "mpn": "MO27Q2A ICE",
     "brand": "Gigabyte",
     "categoria": "Monitor",
-    "desc": "MONITOR GIGABYTE OLED 27” MO27Q2A ICE 280Hz",
+    "desc": "GIGABYTE MO27Q2A ICE 27” OLED 2K QHD Gaming Monitor - 2560 x 1440, 280Hz, 0.03ms",
     "img": "foto/gigabyte_mo27q2a_ice.png",
     "reason": "saturated_promo_background"
   },
@@ -720,14 +704,6 @@
     "reason": "no_photo_file_at_all"
   },
   {
-    "mpn": "WD11PURZ",
-    "brand": "WD",
-    "categoria": "Extra",
-    "desc": "Western Digital Purple internal hard drive 1 TB 5400 RPM 64 MB 3.5\" Serial ATA I",
-    "img": null,
-    "reason": "no_photo_file_at_all"
-  },
-  {
     "mpn": "WD142PURP",
     "brand": "WD",
     "categoria": "Extra",
@@ -816,14 +792,6 @@
     "reason": "no_photo_file_at_all"
   },
   {
-    "mpn": "WD181PURP",
-    "brand": "WD",
-    "categoria": "Extra",
-    "desc": "Western Digital Purple Pro internal hard drive 18 TB 7200 RPM 512 MB 3.5\" Serial",
-    "img": null,
-    "reason": "no_photo_file_at_all"
-  },
-  {
     "mpn": "WD201KFGX",
     "brand": "WD",
     "categoria": "Extra",
@@ -860,14 +828,6 @@
     "brand": "WD",
     "categoria": "Extra",
     "desc": "Western Digital Blue Purple internal hard drive 3 TB 5400 RPM 64 MB 3.5\" Serial ",
-    "img": null,
-    "reason": "no_photo_file_at_all"
-  },
-  {
-    "mpn": "WD23PURZ",
-    "brand": "WD",
-    "categoria": "Extra",
-    "desc": "Western Digital Purple internal hard drive 2 TB 3.5\" Serial ATA",
     "img": null,
     "reason": "no_photo_file_at_all"
   },
@@ -916,14 +876,6 @@
     "brand": "Seagate",
     "categoria": "Extra",
     "desc": "Seagate IronWolf Pro internal hard drive 10 TB 256 MB 3.5\" Serial ATA III (ST100",
-    "img": null,
-    "reason": "no_photo_file_at_all"
-  },
-  {
-    "mpn": "WD34PURZ",
-    "brand": "WD",
-    "categoria": "Extra",
-    "desc": "Western Digital Purple internal hard drive 3 TB 5400 RPM 128 MB 3.5\" Serial ATA ",
     "img": null,
     "reason": "no_photo_file_at_all"
   },
@@ -2160,14 +2112,6 @@
     "reason": "no_photo_file_at_all"
   },
   {
-    "mpn": "SBP60W-24G",
-    "brand": "SPARKLE",
-    "categoria": "GPU",
-    "desc": "Sparkle Technology Arc Pro B60 Blower Intel 24 GB GDDR6",
-    "img": null,
-    "reason": "no_photo_file_at_all"
-  },
-  {
     "mpn": "SA770R-16GOC",
     "brand": "SPARKLE",
     "categoria": "GPU",
@@ -2484,14 +2428,6 @@
     "brand": "Lexar",
     "categoria": "SSD",
     "desc": "Lexar NQ710 NVMe SSD, PCIe Gen4x4 M.2, Typ 2280 - 500GB",
-    "img": null,
-    "reason": "no_photo_file_at_all"
-  },
-  {
-    "mpn": "306-7ZP8E11-CE0",
-    "brand": "MSI",
-    "categoria": "PSU",
-    "desc": "MSI MAG  A750GL 750W PCIE5 II 80+ Gold Power Supply (306-7ZP8D11-CE0)",
     "img": null,
     "reason": "no_photo_file_at_all"
   },
@@ -4064,14 +4000,6 @@
     "reason": "no_photo_file_at_all"
   },
   {
-    "mpn": "ME300-256GN",
-    "brand": "AFOX",
-    "categoria": "SSD",
-    "desc": "AFOX ME300-256GN internal solid state drive M.2 256 GB PCI Express 3.0 3D NAND N",
-    "img": null,
-    "reason": "no_photo_file_at_all"
-  },
-  {
     "mpn": "ME300-128GN",
     "brand": "AFOX",
     "categoria": "SSD",
@@ -4396,14 +4324,6 @@
     "brand": "LOGIC",
     "categoria": "Case",
     "desc": "LOGIC ATOS ARGB Mini USB 3.0 enclosure",
-    "img": null,
-    "reason": "no_photo_file_at_all"
-  },
-  {
-    "mpn": "306-7G18P25-809",
-    "brand": "MSI",
-    "categoria": "Case",
-    "desc": "MSI MPG VELOX 100P AIRFLOW Mid Tower Gaming Computer Case 'Black, 3x 120mm Fan +",
     "img": null,
     "reason": "no_photo_file_at_all"
   },
@@ -5792,14 +5712,6 @@
     "reason": "no_photo_file_at_all"
   },
   {
-    "mpn": "V812-055R",
-    "brand": "MSI",
-    "categoria": "GPU",
-    "desc": "Graphics card. MSI GeForce RTX 3050 VENTUS 2X E 6G OC",
-    "img": null,
-    "reason": "no_photo_file_at_all"
-  },
-  {
     "mpn": "PS-TPG-1050F1FAPE-1",
     "brand": "Thermaltake",
     "categoria": "PSU",
@@ -5836,14 +5748,6 @@
     "brand": "ENDORFY",
     "categoria": "PSU",
     "desc": "Endorfy Supremo FM6 850W (EY7A012) Black",
-    "img": null,
-    "reason": "no_photo_file_at_all"
-  },
-  {
-    "mpn": "AK-B1-700",
-    "brand": "Akyga",
-    "categoria": "PSU",
-    "desc": "Akyga AK-B1-700 power supply unit 700 W 20+4 pin ATX ATX Grey",
     "img": null,
     "reason": "no_photo_file_at_all"
   },
@@ -6024,14 +5928,6 @@
     "reason": "no_solid_bg_likely_environment"
   },
   {
-    "mpn": "CT32G48C40S5",
-    "brand": "Crucial",
-    "categoria": "RAM",
-    "desc": "Crucial SO-DIMM DDR5-4800 32GB",
-    "img": "foto/crucial_ct32g48c40s5.png",
-    "reason": "saturated_promo_background"
-  },
-  {
     "mpn": "CM8071504821112",
     "brand": "Intel",
     "categoria": "CPU",
@@ -6062,5 +5958,21 @@
     "desc": "DeepCool LP240 Computer case, Processor All-in-one liquid cooler 12 cm White 1 p",
     "img": "foto/deepcool_r-lp240-whmsmc-g-1.png",
     "reason": "file_too_small"
+  },
+  {
+    "mpn": "CT32G48C40S5",
+    "brand": "Crucial",
+    "categoria": "RAM",
+    "desc": "Crucial SO-DIMM DDR5-4800 32GB",
+    "img": "foto/crucial_ct32g48c40s5.png",
+    "reason": "saturated_promo_background"
+  },
+  {
+    "mpn": "RL-KR360-W2",
+    "brand": "NZXT",
+    "categoria": "Dissipatore",
+    "desc": "NZXT Kraken Plus 360 RGB AiO Wasserkühlung - 360mm, weiß",
+    "img": "foto/nzxt_rl-kr360-w2.png",
+    "reason": "dark_environment_complex_scene"
   }
 ]

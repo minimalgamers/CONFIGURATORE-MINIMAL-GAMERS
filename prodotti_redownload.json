@@ -5,7 +5,7 @@
     "categoria": "RAM",
     "desc": "ADATA 32GB XPG Lancer Blade RGB DDR5-6400 RAM, CL38, AMD EXPO, Intel XMP - 32 GB",
     "img": "foto/adata_ax5u6400c3816g-dtlabrwh.png",
-    "reason": "dark_environment_complex_scene"
+    "reason": "video_thumbnail"
   },
   {
     "mpn": "100-000000478",
@@ -54,14 +54,6 @@
     "desc": "AMD Ryzen 5 9500F Processor - Tray",
     "img": "foto/amd_100-000001406.png",
     "reason": "dark_environment_complex_scene"
-  },
-  {
-    "mpn": "90YV0MI0-M0NA00",
-    "brand": "ASUS",
-    "categoria": "GPU",
-    "desc": "ASUS Prime Radeon RX 9060 XT, 8192 MB GDDR6",
-    "img": "foto/asus_90yv0mi0-m0na00.png",
-    "reason": "saturated_promo_background"
   },
   {
     "mpn": "CSSD-F4000GBMP700PNH",
@@ -616,26 +608,10 @@
     "reason": "no_photo_file_at_all"
   },
   {
-    "mpn": "WD120EFGX",
-    "brand": "WD",
-    "categoria": "Extra",
-    "desc": "Western Digital Red Plus WD120EFGX internal hard drive 12 TB 7200 RPM 512 MB 3.5",
-    "img": null,
-    "reason": "no_photo_file_at_all"
-  },
-  {
     "mpn": "WD202KFGX",
     "brand": "WD",
     "categoria": "Extra",
     "desc": "Western Digital Red Pro WD202KFGX internal hard drive 20 TB 7200 RPM 512 MB 3.5\"",
-    "img": null,
-    "reason": "no_photo_file_at_all"
-  },
-  {
-    "mpn": "WD241KFGX",
-    "brand": "WD",
-    "categoria": "Extra",
-    "desc": "WD Red Pro WD241KFGX HDD (24 TB; 3.5\"; 512 MB; 7200 rpm)",
     "img": null,
     "reason": "no_photo_file_at_all"
   },
@@ -744,14 +720,6 @@
     "reason": "no_photo_file_at_all"
   },
   {
-    "mpn": "WD8002PURP",
-    "brand": "WD",
-    "categoria": "Extra",
-    "desc": "Western Digital Purple Pro Smart Video HDD 8TB internal hard drive 7200 RPM 3.5\"",
-    "img": null,
-    "reason": "no_photo_file_at_all"
-  },
-  {
     "mpn": "WD4005FFBX",
     "brand": "WD",
     "categoria": "Extra",
@@ -800,26 +768,10 @@
     "reason": "no_photo_file_at_all"
   },
   {
-    "mpn": "WD40EFPX",
-    "brand": "WD",
-    "categoria": "Extra",
-    "desc": "Western Digital Red Plus WD40EFPX internal hard drive 3.5\" 4000 GB Serial ATA II",
-    "img": null,
-    "reason": "no_photo_file_at_all"
-  },
-  {
     "mpn": "WD221KFGX",
     "brand": "WD",
     "categoria": "Extra",
     "desc": "Western Digital Red Pro 3.5\" 22000 GB Serial ATA III",
-    "img": null,
-    "reason": "no_photo_file_at_all"
-  },
-  {
-    "mpn": "WD60EFPX",
-    "brand": "WD",
-    "categoria": "Extra",
-    "desc": "Western Digital Red Plus internal hard drive 6 TB 5400 RPM 256 MB 3.5\" Serial AT",
     "img": null,
     "reason": "no_photo_file_at_all"
   },
@@ -1052,14 +1004,6 @@
     "brand": "GENESIS",
     "categoria": "Tastiera",
     "desc": "GENESIS Rhod 300 RGB keyboard Gaming USB QWERTY English Black",
-    "img": null,
-    "reason": "no_photo_file_at_all"
-  },
-  {
-    "mpn": "25510",
-    "brand": "Trust",
-    "categoria": "Tastiera",
-    "desc": "Trust GXT 871 Zora QWERTY US English - USB gaming keyboard (black)",
     "img": null,
     "reason": "no_photo_file_at_all"
   },
@@ -1448,38 +1392,6 @@
     "reason": "no_photo_file_at_all"
   },
   {
-    "mpn": "25784",
-    "brand": "Trust",
-    "categoria": "Cuffie",
-    "desc": "Trust 25784 headphones/headset Wired Head-band Gaming Black, Yellow",
-    "img": null,
-    "reason": "no_photo_file_at_all"
-  },
-  {
-    "mpn": "25089",
-    "brand": "Trust",
-    "categoria": "Cuffie",
-    "desc": "Trust Ayda Headset Wired Head-band Calls/Music USB Type-A Black",
-    "img": null,
-    "reason": "no_photo_file_at_all"
-  },
-  {
-    "mpn": "24990",
-    "brand": "Trust",
-    "categoria": "Cuffie",
-    "desc": "Trust GXT 415 Zirox Headset Wired Head-band Gaming Black",
-    "img": null,
-    "reason": "no_photo_file_at_all"
-  },
-  {
-    "mpn": "22973",
-    "brand": "Trust",
-    "categoria": "Cuffie",
-    "desc": "Trust GXT 260 Cendor Headphone holder",
-    "img": null,
-    "reason": "no_photo_file_at_all"
-  },
-  {
     "mpn": "SHPIX8MV",
     "brand": "IBOX",
     "categoria": "Cuffie",
@@ -1524,14 +1436,6 @@
     "brand": "Samsung",
     "categoria": "Monitor",
     "desc": "Samsung G97NC computer monitor 139.7 cm (55\") 3840 x 2160 pixels 4K Ultra HD LED",
-    "img": null,
-    "reason": "no_photo_file_at_all"
-  },
-  {
-    "mpn": "LS34DG850SUXDU",
-    "brand": "Samsung",
-    "categoria": "Monitor",
-    "desc": "Samsung LS34DG850SUXDU computer monitor 86.4 cm (34\") 3440 x 1440 pixels OLED Si",
     "img": null,
     "reason": "no_photo_file_at_all"
   },
@@ -2764,14 +2668,6 @@
     "brand": "MSI",
     "categoria": "Scheda Madre",
     "desc": "MSI MAG X870 TOMAHAWK WIFI motherboard AMD X870 Socket AM5 ATX",
-    "img": null,
-    "reason": "no_photo_file_at_all"
-  },
-  {
-    "mpn": "90MB1JL0-M0EAY0",
-    "brand": "ASUS",
-    "categoria": "Scheda Madre",
-    "desc": "ASUS TUF GAMING B860-PLUS WIFI Intel B860 LGA 1851 (Socket V1) ATX motherboard",
     "img": null,
     "reason": "no_photo_file_at_all"
   },
@@ -4024,14 +3920,6 @@
     "reason": "no_photo_file_at_all"
   },
   {
-    "mpn": "P400LP1KGM28H",
-    "brand": "Patriot Memory",
-    "categoria": "SSD",
-    "desc": "SSD Patriot Viper P400 Lite M.2 PCI-Ex4 NVMe 1000GB",
-    "img": "foto/patriot_memory_p400lp1kgm28h.png",
-    "reason": "light_environment_not_pure_white"
-  },
-  {
     "mpn": "SD250-480GQN",
     "brand": "AFOX",
     "categoria": "SSD",
@@ -4172,14 +4060,6 @@
     "brand": "MSI",
     "categoria": "SSD",
     "desc": "MSI SPATIUM M450 PCIe 4.0 NVMe M.2 1000GB PCI Express 4.0 3D NAND",
-    "img": null,
-    "reason": "no_photo_file_at_all"
-  },
-  {
-    "mpn": "25894",
-    "brand": "Trust",
-    "categoria": "PSU",
-    "desc": "Trust GXT 833W Thado TKL Keyboard",
     "img": null,
     "reason": "no_photo_file_at_all"
   },
@@ -4348,14 +4228,6 @@
     "brand": "BE QUIET!",
     "categoria": "Case",
     "desc": "be quiet! DARK BASE PRO 901 | Black Full Tower",
-    "img": null,
-    "reason": "no_photo_file_at_all"
-  },
-  {
-    "mpn": "90DC00S3-B19000",
-    "brand": "ASUS",
-    "categoria": "Case",
-    "desc": "Asus A32 PLUS TG ARGB WHITE case",
     "img": null,
     "reason": "no_photo_file_at_all"
   },
@@ -4612,14 +4484,6 @@
     "brand": "G.SKILL",
     "categoria": "RAM",
     "desc": "G.Skill Trident Z RGB F4-3600C16D-64GTZR memory module 64 GB 2 x 32 GB DDR4 3600",
-    "img": null,
-    "reason": "no_photo_file_at_all"
-  },
-  {
-    "mpn": "PSD48G240081",
-    "brand": "Patriot Memory",
-    "categoria": "RAM",
-    "desc": "Patriot Memory 8GB DDR4 memory module 1 x 8 GB 2400 MHz",
     "img": null,
     "reason": "no_photo_file_at_all"
   },
@@ -5440,14 +5304,6 @@
     "reason": "no_photo_file_at_all"
   },
   {
-    "mpn": "90MB1M70-M0EAY0",
-    "brand": "ASUS",
-    "categoria": "Scheda Madre",
-    "desc": "ASUS TUF GAMING X870E-PLUS WIFI7 AMD X870E Socket AM5 ATX",
-    "img": null,
-    "reason": "no_photo_file_at_all"
-  },
-  {
     "mpn": "B650MT",
     "brand": "Biostar",
     "categoria": "Scheda Madre",
@@ -5460,22 +5316,6 @@
     "brand": "Biostar",
     "categoria": "Scheda Madre",
     "desc": "Biostar A620MS motherboard AMD A620 Socket AM5 micro ATX",
-    "img": null,
-    "reason": "no_photo_file_at_all"
-  },
-  {
-    "mpn": "90MB1P60-M0EAY0",
-    "brand": "ASUS",
-    "categoria": "Scheda Madre",
-    "desc": "ASUS PROART B850-CREATOR WIFI NEO AMD B850 Socket AM5 ATX",
-    "img": null,
-    "reason": "no_photo_file_at_all"
-  },
-  {
-    "mpn": "90MB1PR0-M0EAY0",
-    "brand": "ASUS",
-    "categoria": "Scheda Madre",
-    "desc": "ASUS B850 MAX GAMING WIFI AMD B850 Socket AM5 ATX",
     "img": null,
     "reason": "no_photo_file_at_all"
   },
@@ -5700,14 +5540,6 @@
     "brand": "Biostar",
     "categoria": "GPU",
     "desc": "BIOSTAR GeForce RTX 3050 6GB graphics card",
-    "img": null,
-    "reason": "no_photo_file_at_all"
-  },
-  {
-    "mpn": "VN3606RML9",
-    "brand": "Biostar",
-    "categoria": "GPU",
-    "desc": "BIOSTAR RTX 3060 12GB graphics card",
     "img": null,
     "reason": "no_photo_file_at_all"
   },
@@ -5952,12 +5784,12 @@
     "reason": "human_skin_detected"
   },
   {
-    "mpn": "R-LP240-WHMSMC-G-1",
-    "brand": "DEEPCOOL",
+    "mpn": "RL-KR360-W2",
+    "brand": "NZXT",
     "categoria": "Dissipatore",
-    "desc": "DeepCool LP240 Computer case, Processor All-in-one liquid cooler 12 cm White 1 p",
-    "img": "foto/deepcool_r-lp240-whmsmc-g-1.png",
-    "reason": "file_too_small"
+    "desc": "NZXT Kraken Plus 360 RGB AiO Wasserkühlung - 360mm, weiß",
+    "img": "foto/nzxt_rl-kr360-w2.png",
+    "reason": "dark_environment_complex_scene"
   },
   {
     "mpn": "CT32G48C40S5",
@@ -5966,13 +5798,5 @@
     "desc": "Crucial SO-DIMM DDR5-4800 32GB",
     "img": "foto/crucial_ct32g48c40s5.png",
     "reason": "saturated_promo_background"
-  },
-  {
-    "mpn": "RL-KR360-W2",
-    "brand": "NZXT",
-    "categoria": "Dissipatore",
-    "desc": "NZXT Kraken Plus 360 RGB AiO Wasserkühlung - 360mm, weiß",
-    "img": "foto/nzxt_rl-kr360-w2.png",
-    "reason": "dark_environment_complex_scene"
   }
 ]

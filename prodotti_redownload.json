@@ -5,7 +5,7 @@
     "categoria": "RAM",
     "desc": "ADATA 32GB XPG Lancer Blade RGB DDR5-6400 RAM, CL38, AMD EXPO, Intel XMP - 32 GB",
     "img": "foto/adata_ax5u6400c3816g-dtlabrwh.png",
-    "reason": "video_thumbnail"
+    "reason": "dark_environment_complex_scene"
   },
   {
     "mpn": "100-000000478",
@@ -344,14 +344,6 @@
     "reason": "very_light_low_variance_brand"
   },
   {
-    "mpn": "P310P240GM28",
-    "brand": "Patriot Memory",
-    "categoria": "SSD",
-    "desc": "SSD Patriot P310 240GB M.2 2280",
-    "img": "foto/patriot_memory_p310p240gm28.png",
-    "reason": "no_solid_bg_likely_environment"
-  },
-  {
     "mpn": "PVP301TB28UDG",
     "brand": "Patriot Memory",
     "categoria": "SSD",
@@ -380,7 +372,7 @@
     "brand": "Silicon Power",
     "categoria": "RAM",
     "desc": "Silicon Power SP008GBLFU320X02 memory module 8 GB 1 x 8 GB DDR4 3200 MHz",
-    "img": "silicon_power_sp008gblfu320x02.png",
+    "img": "foto/silicon_power_sp008gblfu320x02.png",
     "reason": "aspect_extreme"
   },
   {
@@ -492,8 +484,8 @@
     "brand": "ASUS",
     "categoria": "GPU",
     "desc": "ASUS TURBO Radeon AI PRO R9700 32G Grafikkarte, 32768 MB GDDR6",
-    "img": null,
-    "reason": "no_photo_file_at_all"
+    "img": "foto/asus_90yv0mn0-m0na00.png",
+    "reason": "no_solid_bg_likely_environment"
   },
   {
     "mpn": "ACC-HYTE-PCIE50-BB",
@@ -2320,14 +2312,6 @@
     "reason": "no_photo_file_at_all"
   },
   {
-    "mpn": "90-MXBEG0-A0UAYZ",
-    "brand": "ASRock",
-    "categoria": "Scheda Madre",
-    "desc": "ASRock B450M PRO4 R2.0 Mainboard - B450-Chipsatz, Sockel AM4, DDR4",
-    "img": null,
-    "reason": "no_photo_file_at_all"
-  },
-  {
     "mpn": "LNQ710X500G-RNNNG",
     "brand": "Lexar",
     "categoria": "SSD",
@@ -2956,14 +2940,6 @@
     "brand": "Kolink",
     "categoria": "Case",
     "desc": "Kolink Horizon RGB Mid Tower, Tempered Glass - Black",
-    "img": null,
-    "reason": "no_photo_file_at_all"
-  },
-  {
-    "mpn": "KL-R1200FG",
-    "brand": "Kolink",
-    "categoria": "PSU",
-    "desc": "Kolink Regulator 80 PLUS Gold PSU, ATX 3.0, PCIe 5.0, modular - 1200 Watts",
     "img": null,
     "reason": "no_photo_file_at_all"
   },
@@ -3664,14 +3640,6 @@
     "reason": "no_photo_file_at_all"
   },
   {
-    "mpn": "EY3A009",
-    "brand": "ENDORFY",
-    "categoria": "Dissipatore",
-    "desc": "ENDORFY FORTIS 5 DUAL FAN SPC307 CPU cooling PC Fan Radiator 14/12 cm Black",
-    "img": null,
-    "reason": "no_photo_file_at_all"
-  },
-  {
     "mpn": "R-AG400-BKAMMN-GJD",
     "brand": "DEEPCOOL",
     "categoria": "Dissipatore",
@@ -3896,14 +3864,6 @@
     "reason": "no_photo_file_at_all"
   },
   {
-    "mpn": "ME300-128GN",
-    "brand": "AFOX",
-    "categoria": "SSD",
-    "desc": "AFOX ME300 SSD M.2 PCI-EX4 128GB TLC 1.6 GB/S NVME",
-    "img": null,
-    "reason": "no_photo_file_at_all"
-  },
-  {
     "mpn": "S160-256GB",
     "brand": "Biostar",
     "categoria": "SSD",
@@ -3920,34 +3880,10 @@
     "reason": "no_photo_file_at_all"
   },
   {
-    "mpn": "SD250-480GQN",
-    "brand": "AFOX",
-    "categoria": "SSD",
-    "desc": "AFOX SSD 480GB INTEL QLC 560 MB/S",
-    "img": null,
-    "reason": "no_photo_file_at_all"
-  },
-  {
     "mpn": "SD250-240GN",
     "brand": "AFOX",
     "categoria": "SSD",
     "desc": "AFOX SSD 240GB TLC 555 MB/S",
-    "img": null,
-    "reason": "no_photo_file_at_all"
-  },
-  {
-    "mpn": "SD250-512GQN",
-    "brand": "AFOX",
-    "categoria": "SSD",
-    "desc": "AFOX SSD 512GB QLC 560 MB/S",
-    "img": null,
-    "reason": "no_photo_file_at_all"
-  },
-  {
-    "mpn": "SD250-256GQN",
-    "brand": "AFOX",
-    "categoria": "SSD",
-    "desc": "AFOX SSD 256GB QLC 560 MB/S",
     "img": null,
     "reason": "no_photo_file_at_all"
   },
@@ -4932,8 +4868,8 @@
     "brand": "Silicon Power",
     "categoria": "RAM",
     "desc": "Silicon Power XPOWER Pulse memory module 16 GB 1 x 16 GB DDR5 6400 MHz ECC",
-    "img": null,
-    "reason": "no_photo_file_at_all"
+    "img": "foto/silicon_power_sp016gxlwu64afsj.png",
+    "reason": "aspect_extreme"
   },
   {
     "mpn": "SP032GXLWU560FSJ",
@@ -5798,5 +5734,37 @@
     "desc": "Crucial SO-DIMM DDR5-4800 32GB",
     "img": "foto/crucial_ct32g48c40s5.png",
     "reason": "saturated_promo_background"
+  },
+  {
+    "mpn": "RX-96TSW16BQ",
+    "brand": "XFX",
+    "categoria": "GPU",
+    "desc": "XFX Swift Radeon RX 9060 XT OC Gaming Edition, 16384 MB GDDR6",
+    "img": "foto/xfx_rx-96tsw16bq.png",
+    "reason": "saturated_promo_background"
+  },
+  {
+    "mpn": "3831109897850",
+    "brand": "EK Water Blocks",
+    "categoria": "Dissipatore",
+    "desc": "EK Water Blocks EK-Nucleus AIO CR360 Lux D-RGB AiO Wasserkühlung - 360 mm, Weiß",
+    "img": "foto/ek_water_blocks_3831109897850.png",
+    "reason": "dark_environment_complex_scene"
+  },
+  {
+    "mpn": "ASU630SS-240GQ-R",
+    "brand": "ADATA",
+    "categoria": "SSD",
+    "desc": "ADATA ULTIMATE SU630 2.5\" 240 GB Serial ATA QLC 3D NAND",
+    "img": "foto/adata_asu630ss-240gq-r.png",
+    "reason": "no_solid_bg_likely_environment"
+  },
+  {
+    "mpn": "NPC-1518",
+    "brand": "GENESIS",
+    "categoria": "Case",
+    "desc": "GENESIS CASE MIDI TOWER IRID 505 ARGB (USB 3.0)",
+    "img": "foto/genesis_npc-1518.png",
+    "reason": "no_solid_bg_likely_environment"
   }
 ]

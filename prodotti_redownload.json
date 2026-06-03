@@ -480,14 +480,6 @@
     "reason": "no_photo_file_at_all"
   },
   {
-    "mpn": "90YV0MN0-M0NA00",
-    "brand": "ASUS",
-    "categoria": "GPU",
-    "desc": "ASUS TURBO Radeon AI PRO R9700 32G Grafikkarte, 32768 MB GDDR6",
-    "img": "foto/asus_90yv0mn0-m0na00.png",
-    "reason": "no_solid_bg_likely_environment"
-  },
-  {
     "mpn": "ACC-HYTE-PCIE50-BB",
     "brand": "Hyte",
     "categoria": "GPU",
@@ -508,14 +500,6 @@
     "brand": "Hyte",
     "categoria": "GPU",
     "desc": "HYTE PCIE 5.0 Hyper Riser Kabel - Snow White",
-    "img": null,
-    "reason": "no_photo_file_at_all"
-  },
-  {
-    "mpn": "32358-01-20G",
-    "brand": "SAPPHIRE",
-    "categoria": "GPU",
-    "desc": "Sapphire Radeon AI Pro R9700 32GB Grafikkarte, 32768 MB GDDR6",
     "img": null,
     "reason": "no_photo_file_at_all"
   },
@@ -2120,14 +2104,6 @@
     "reason": "no_photo_file_at_all"
   },
   {
-    "mpn": "BX8071513900",
-    "brand": "Intel",
-    "categoria": "CPU",
-    "desc": "Intel Core i9 13900 2.0GHz 36MB 1700 Box",
-    "img": null,
-    "reason": "no_photo_file_at_all"
-  },
-  {
     "mpn": "CT48G56C46S5T",
     "brand": "Crucial",
     "categoria": "RAM",
@@ -2720,14 +2696,6 @@
     "reason": "no_photo_file_at_all"
   },
   {
-    "mpn": "RX-76PSWFTFY",
-    "brand": "XFX",
-    "categoria": "GPU",
-    "desc": "XFX SPEEDSTER SWFT 210 AMD Radeon RX 7600 Core Edition 8 GB GDDR6",
-    "img": null,
-    "reason": "no_photo_file_at_all"
-  },
-  {
     "mpn": "7E03-001R",
     "brand": "MSI",
     "categoria": "Scheda Madre",
@@ -3260,14 +3228,6 @@
     "brand": "Silverstone",
     "categoria": "Case",
     "desc": "SilverStone SST-RM41-506 Rackmount Server - 4U - schwarz",
-    "img": null,
-    "reason": "no_photo_file_at_all"
-  },
-  {
-    "mpn": "CM8071504820406",
-    "brand": "Intel",
-    "categoria": "CPU",
-    "desc": "Intel Core i9-14900T 1,1 GHz (Raptor Lake Refresh) Sockel 1700 - tray",
     "img": null,
     "reason": "no_photo_file_at_all"
   },
@@ -3912,14 +3872,6 @@
     "reason": "no_photo_file_at_all"
   },
   {
-    "mpn": "SP004TBSS3A55S25",
-    "brand": "Silicon Power",
-    "categoria": "SSD",
-    "desc": "Silicon Power Ace A55 2.5\" 4000 GB Serial ATA III",
-    "img": null,
-    "reason": "no_photo_file_at_all"
-  },
-  {
     "mpn": "SDSSDE61-1T00-G25",
     "brand": "SanDisk",
     "categoria": "SSD",
@@ -3932,14 +3884,6 @@
     "brand": "TEAMGROUP",
     "categoria": "SSD",
     "desc": "Team Group NV5000 1 TB M.2 PCI Express 4.0 NVMe 3D NAND",
-    "img": null,
-    "reason": "no_photo_file_at_all"
-  },
-  {
-    "mpn": "SP002TBSS3A55S25",
-    "brand": "Silicon Power",
-    "categoria": "SSD",
-    "desc": "Silicon Power Ace A55 2.5\" 2000 GB Serial ATA III 3D NAND",
     "img": null,
     "reason": "no_photo_file_at_all"
   },
@@ -4268,14 +4212,6 @@
     "brand": "Thermaltake",
     "categoria": "Case",
     "desc": "Thermaltake Ceres 500 TG ARGB Midi Tower Black",
-    "img": null,
-    "reason": "no_photo_file_at_all"
-  },
-  {
-    "mpn": "NPC-2326",
-    "brand": "NATEC",
-    "categoria": "Case",
-    "desc": "NATEC Aracanta Midi Tower Black",
     "img": null,
     "reason": "no_photo_file_at_all"
   },
@@ -4862,14 +4798,6 @@
     "desc": "Kingston Technology FURY Beast 128GB 5600MT/s DDR5 CL36 DIMM (Kit of 2) Black",
     "img": null,
     "reason": "no_photo_file_at_all"
-  },
-  {
-    "mpn": "SP016GXLWU64AFSJ",
-    "brand": "Silicon Power",
-    "categoria": "RAM",
-    "desc": "Silicon Power XPOWER Pulse memory module 16 GB 1 x 16 GB DDR5 6400 MHz ECC",
-    "img": "foto/silicon_power_sp016gxlwu64afsj.png",
-    "reason": "aspect_extreme"
   },
   {
     "mpn": "SP032GXLWU560FSJ",
@@ -5728,28 +5656,12 @@
     "reason": "dark_environment_complex_scene"
   },
   {
-    "mpn": "CT32G48C40S5",
-    "brand": "Crucial",
-    "categoria": "RAM",
-    "desc": "Crucial SO-DIMM DDR5-4800 32GB",
-    "img": "foto/crucial_ct32g48c40s5.png",
-    "reason": "saturated_promo_background"
-  },
-  {
     "mpn": "RX-96TSW16BQ",
     "brand": "XFX",
     "categoria": "GPU",
     "desc": "XFX Swift Radeon RX 9060 XT OC Gaming Edition, 16384 MB GDDR6",
     "img": "foto/xfx_rx-96tsw16bq.png",
     "reason": "saturated_promo_background"
-  },
-  {
-    "mpn": "3831109897850",
-    "brand": "EK Water Blocks",
-    "categoria": "Dissipatore",
-    "desc": "EK Water Blocks EK-Nucleus AIO CR360 Lux D-RGB AiO Wasserkühlung - 360 mm, Weiß",
-    "img": "foto/ek_water_blocks_3831109897850.png",
-    "reason": "dark_environment_complex_scene"
   },
   {
     "mpn": "ASU630SS-240GQ-R",
@@ -5766,5 +5678,13 @@
     "desc": "GENESIS CASE MIDI TOWER IRID 505 ARGB (USB 3.0)",
     "img": "foto/genesis_npc-1518.png",
     "reason": "no_solid_bg_likely_environment"
+  },
+  {
+    "mpn": "CT32G48C40S5",
+    "brand": "Crucial",
+    "categoria": "RAM",
+    "desc": "Crucial SO-DIMM DDR5-4800 32GB",
+    "img": "foto/crucial_ct32g48c40s5.png",
+    "reason": "saturated_promo_background"
   }
 ]

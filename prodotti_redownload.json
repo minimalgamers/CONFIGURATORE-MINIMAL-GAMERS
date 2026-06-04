@@ -224,22 +224,6 @@
     "reason": "dark_environment_complex_scene"
   },
   {
-    "mpn": "7E26-001R",
-    "brand": "MSI",
-    "categoria": "Scheda Madre",
-    "desc": "MSI MPG B650 GAMING PLUS WIFI (AM5) (D)",
-    "img": "foto/msi_7e26-001r.png",
-    "reason": "dark_environment_complex_scene"
-  },
-  {
-    "mpn": "7E26-001R",
-    "brand": "MSI",
-    "categoria": "Scheda Madre",
-    "desc": "MSI B650 Gaming Plus WiFi, AMD B650 Mainboard - Sockel AM5, DDR5",
-    "img": "msi_7e26-001r.png",
-    "reason": "dark_environment_complex_scene"
-  },
-  {
     "mpn": "7E32-001R",
     "brand": "MSI",
     "categoria": "Scheda Madre",
@@ -251,7 +235,7 @@
     "mpn": "7E36-001R",
     "brand": "MSI",
     "categoria": "Scheda Madre",
-    "desc": "MSI PRO A620AM-B EVO Mainboard, Sockel AM5, AMD A620, mATX, DDR5",
+    "desc": "MSI A620AM-B PRO EVO (AM5) (D)",
     "img": "foto/msi_7e36-001r.png",
     "reason": "dark_environment_complex_scene"
   },
@@ -528,14 +512,6 @@
     "reason": "no_photo_file_at_all"
   },
   {
-    "mpn": "R-AG620-BKAMMN-GJD",
-    "brand": "DEEPCOOL",
-    "categoria": "Scheda Madre",
-    "desc": "DeepCool AG620 BK ARGB V2 Chipset, Motherboard Air cooler 12 cm Black 1 pc(s)",
-    "img": null,
-    "reason": "no_photo_file_at_all"
-  },
-  {
     "mpn": "ST16000VE005",
     "brand": "Seagate",
     "categoria": "Extra",
@@ -572,14 +548,6 @@
     "brand": "WD",
     "categoria": "Extra",
     "desc": "Western Digital Red Pro internal hard drive 12 TB 7200 RPM 512 MB 3.5\" Serial AT",
-    "img": null,
-    "reason": "no_photo_file_at_all"
-  },
-  {
-    "mpn": "WD100EFGX",
-    "brand": "WD",
-    "categoria": "Extra",
-    "desc": "Western Digital Red WD100EFGX internal hard drive 3.5\" 10 TB Serial ATA III",
     "img": null,
     "reason": "no_photo_file_at_all"
   },
@@ -1104,14 +1072,6 @@
     "reason": "no_photo_file_at_all"
   },
   {
-    "mpn": "910-005824",
-    "brand": "Logitech",
-    "categoria": "Mouse",
-    "desc": "Logitech G G203 LIGHTSYNC Gaming Mouse",
-    "img": null,
-    "reason": "no_photo_file_at_all"
-  },
-  {
     "mpn": "MR05DCINBL001-0",
     "brand": "Madcatz",
     "categoria": "Mouse",
@@ -1440,22 +1400,6 @@
     "reason": "no_photo_file_at_all"
   },
   {
-    "mpn": "90LM0BZ0-B01171",
-    "brand": "ASUS",
-    "categoria": "Monitor",
-    "desc": "ASUS ROG Strix XG27AQWMG computer monitor 67.3 cm (26.5\") 2560 x 1440 pixels Qua",
-    "img": null,
-    "reason": "no_photo_file_at_all"
-  },
-  {
-    "mpn": "GS32QA EU",
-    "brand": "Gigabyte",
-    "categoria": "Monitor",
-    "desc": "GIGABYTE GS32QA 32” QHD Gaming Monitor - 2560 x 1440, 180Hz, 1ms, 300 cd/m2, Fre",
-    "img": null,
-    "reason": "no_photo_file_at_all"
-  },
-  {
     "mpn": "MO34WQC2",
     "brand": "Gigabyte",
     "categoria": "Monitor",
@@ -1488,14 +1432,6 @@
     "reason": "no_photo_file_at_all"
   },
   {
-    "mpn": "9H.LNALA.TBE",
-    "brand": "BenQ",
-    "categoria": "Monitor",
-    "desc": "BenQ MOBIUZ EX271 computer monitor 68.6 cm (27\") 1920 x 1080 pixels Full HD LED ",
-    "img": null,
-    "reason": "no_photo_file_at_all"
-  },
-  {
     "mpn": "Q24G4RE",
     "brand": "AOC",
     "categoria": "Monitor",
@@ -1508,14 +1444,6 @@
     "brand": "Dell",
     "categoria": "Monitor",
     "desc": "Alienware AW2524HF computer monitor 62.2 cm (24.5\") 1920 x 1080 pixels Full HD L",
-    "img": null,
-    "reason": "no_photo_file_at_all"
-  },
-  {
-    "mpn": "AFLD48FK1P",
-    "brand": "AFOX",
-    "categoria": "RAM",
-    "desc": "AFOX RAM DDR4 8G 2666MHZ",
     "img": null,
     "reason": "no_photo_file_at_all"
   },
@@ -2032,14 +1960,6 @@
     "reason": "no_photo_file_at_all"
   },
   {
-    "mpn": "R-PF600X-HD0B-JGEU",
-    "brand": "DEEPCOOL",
-    "categoria": "PSU",
-    "desc": "DeepCool PF600X power supply unit",
-    "img": null,
-    "reason": "no_photo_file_at_all"
-  },
-  {
     "mpn": "100-000001015",
     "brand": "AMD",
     "categoria": "CPU",
@@ -2052,8 +1972,8 @@
     "brand": "Intel",
     "categoria": "CPU",
     "desc": "Intel Core i5 14500 5.0GHz 24MB 1700 Tray",
-    "img": null,
-    "reason": "no_photo_file_at_all"
+    "img": "foto/intel_cm8071505093104.png",
+    "reason": "saturated_promo_background"
   },
   {
     "mpn": null,
@@ -5678,13 +5598,5 @@
     "desc": "GENESIS CASE MIDI TOWER IRID 505 ARGB (USB 3.0)",
     "img": "foto/genesis_npc-1518.png",
     "reason": "no_solid_bg_likely_environment"
-  },
-  {
-    "mpn": "CT32G48C40S5",
-    "brand": "Crucial",
-    "categoria": "RAM",
-    "desc": "Crucial SO-DIMM DDR5-4800 32GB",
-    "img": "foto/crucial_ct32g48c40s5.png",
-    "reason": "saturated_promo_background"
   }
 ]

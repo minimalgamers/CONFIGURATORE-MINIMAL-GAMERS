@@ -2975,6 +2975,10 @@ function updateRisparmio() {
 }
 
 // ── ACHIEVEMENTS ─────────────────────────────────────────
+// Convenzione: gli achievement "specifici" (Team Red, No Mercy, Premium Board, ecc.)
+// hanno priorità. I "generici di categoria" (Il Cervello, Connesso, Casa Dolce Casa, ecc.)
+// hanno fallback:'<categoria>' — scattano SOLO se nessun specifico della stessa
+// categoria si è già attivato per quel componente. Così è sempre 1 trofeo per scelta.
 const ACHIEVEMENTS = {
   // Piattaforma
   'team_red':   { icon:'🔴', title:'Team Red',   desc:'Hai scelto il lato AMD',   trigger: b => b.piattaforma === 'AMD' },
@@ -2983,27 +2987,27 @@ const ACHIEVEMENTS = {
   'hunter_3d':      { icon:'🎮', title:'3D Hunter',      desc:'V-Cache: il segreto dei pro',  trigger: b => { const p = b.cpu && PRODS.find(x=>x.k===b.cpu); return p && p.d.toLowerCase().includes('x3d'); } },
   'no_mercy':       { icon:'💀', title:'No Mercy',       desc:'Ryzen 9 — nessuno ti ferma',   trigger: b => { const p = b.cpu && PRODS.find(x=>x.k===b.cpu); return p && p.d.toLowerCase().includes('ryzen 9'); } },
   'overclock_king': { icon:'⚡', title:'Overclock King', desc:'Intel i9 — potenza bruta',     trigger: b => { const p = b.cpu && PRODS.find(x=>x.k===b.cpu); return p && p.d.toLowerCase().includes('i9'); } },
-  'il_cervello':    { icon:'🧠', title:'Il Cervello',    desc:'CPU installata nella build',   trigger: b => !!b.cpu },
+  'il_cervello':    { icon:'🧠', title:'Il Cervello',    desc:'CPU installata nella build',   trigger: b => !!b.cpu, fallback:'cpu' },
   // Mobo
   'premium_board': { icon:'👑', title:'Premium Board', desc:'X870/Z790 — solo il meglio', trigger: b => { const p = b.mobo && PRODS.find(x=>x.k===b.mobo); return p && (p.d.toLowerCase().includes('x870') || p.d.toLowerCase().includes('z790')); } },
-  'connesso':      { icon:'🔌', title:'Connesso',      desc:'Scheda madre installata',    trigger: b => !!b.mobo },
+  'connesso':      { icon:'🔌', title:'Connesso',      desc:'Scheda madre installata',    trigger: b => !!b.mobo, fallback:'mobo' },
   // Case
   'the_castle':  { icon:'🏰', title:'The Castle',       desc:'Full Tower — grande e maestoso', trigger: b => { const p = b.case && PRODS.find(x=>x.k===b.case); return p && p.d.toLowerCase().includes('full'); } },
   'small_deadly':{ icon:'💎', title:'Small but Deadly', desc:'ITX — piccolo e letale',         trigger: b => { const p = b.case && PRODS.find(x=>x.k===b.case); return p && p.d.toLowerCase().includes('itx'); } },
-  'casa_dolce':  { icon:'🏠', title:'Casa Dolce Casa',  desc:'Il tuo PC ha trovato dimora',    trigger: b => !!b.case },
+  'casa_dolce':  { icon:'🏠', title:'Casa Dolce Casa',  desc:'Il tuo PC ha trovato dimora',    trigger: b => !!b.case, fallback:'case' },
   // RAM
   'speed_demon': { icon:'🚀', title:'Speed Demon', desc:'DDR5-6000+ — oltre i limiti', trigger: b => { const p = b.ram && PRODS.find(x=>x.k===b.ram); return p && (p.d.includes('6000')||p.d.includes('6400')||p.d.includes('6600')||p.d.includes('7200')); } },
   'elefante':    { icon:'🐘', title:'Elefante',    desc:'64GB+ — memoria infinita',    trigger: b => { const p = b.ram && PRODS.find(x=>x.k===b.ram); return p && (p.d.toLowerCase().includes('64gb')||p.d.toLowerCase().includes('128gb')||p.d.toLowerCase().includes('64 gb')); } },
-  'il_dna':      { icon:'🧬', title:'Il DNA',      desc:'RAM installata nella build',  trigger: b => !!b.ram },
+  'il_dna':      { icon:'🧬', title:'Il DNA',      desc:'RAM installata nella build',  trigger: b => !!b.ram, fallback:'ram' },
   // GPU
   'vulcano':    { icon:'🌋', title:'Vulcano',    desc:'RTX 5080+ — potenza eruttiva',       trigger: b => { const p = b.gpu && PRODS.find(x=>x.k===b.gpu); return p && (p.d.toLowerCase().includes('5080')||p.d.toLowerCase().includes('5090')); } },
   'high_roller':{ icon:'🔥', title:'High Roller',desc:'GPU top-tier senza compromessi',     trigger: b => { const p = b.gpu && PRODS.find(x=>x.k===b.gpu); return p && (p.d.toLowerCase().includes('5070 ti')||p.d.toLowerCase().includes('9070 xt')||p.d.toLowerCase().includes('4090')); } },
   'sweet_spot': { icon:'🎯', title:'Sweet Spot', desc:'Massimo valore per ogni euro',        trigger: b => { const p = b.gpu && PRODS.find(x=>x.k===b.gpu); return p && (p.d.toLowerCase().includes('5060')||p.d.toLowerCase().includes('4070')||p.d.toLowerCase().includes('9060')); } },
-  'la_visione': { icon:'👁️', title:'La Visione', desc:'GPU installata nella build',         trigger: b => !!b.gpu },
+  'la_visione': { icon:'👁️', title:'La Visione', desc:'GPU installata nella build',         trigger: b => !!b.gpu, fallback:'gpu' },
   // SSD
   'ludicrous':   { icon:'💨', title:'Ludicrous Speed', desc:'Gen 5 — Spaceballs approved',    trigger: b => { const p = b.ssd && PRODS.find(x=>x.k===b.ssd); return p && (p._tipo==='NVMe Gen 5'||p.d.toLowerCase().includes('gen 5')||p.d.toLowerCase().includes('gen5')); } },
   'flash':       { icon:'⚡', title:'Flash',           desc:'Gen 4 — caricamenti? cosa sono?',trigger: b => { const p = b.ssd && PRODS.find(x=>x.k===b.ssd); return p && (p._tipo==='NVMe Gen 4'||p.d.toLowerCase().includes('gen 4')||p.d.toLowerCase().includes('gen4')); } },
-  'archiviato':  { icon:'💾', title:'Archiviato',      desc:'SSD installato nella build',     trigger: b => !!b.ssd },
+  'archiviato':  { icon:'💾', title:'Archiviato',      desc:'SSD installato nella build',     trigger: b => !!b.ssd, fallback:'ssd' },
   // PSU
   'nuclear_power': { icon:'☢️', title:'Nuclear Power', desc:'1000W+ — centrale elettrica', trigger: b => { const p = b.psu && PRODS.find(x=>x.k===b.psu); return p && getPSUWatt(p.d, p) >= 1000; } },
   'equilibrio':    { icon:'✅', title:'Equilibrio Perfetto', desc:'PSU perfettamente dimensionata', trigger: b => {
@@ -3013,11 +3017,11 @@ const ACHIEVEMENTS = {
     const {minPSU} = calcBuildTDP();
     return w >= minPSU && w <= minPSU + 150;
   }},
-  'alimentato': { icon:'🔋', title:'Alimentato', desc:'PSU installata nella build', trigger: b => !!b.psu },
+  'alimentato': { icon:'🔋', title:'Alimentato', desc:'PSU installata nella build', trigger: b => !!b.psu, fallback:'psu' },
   // Dissipatore
   'arctic_circle':  { icon:'❄️', title:'Arctic Circle',  desc:'AIO 360mm — freddo polare',      trigger: b => { const p = b.cooler && PRODS.find(x=>x.k===b.cooler); return p && p.d.toLowerCase().includes('360'); } },
   'silent_thunder': { icon:'🌬️', title:'Silent Thunder', desc:'Dual tower — silenzioso ma letale',trigger: b => { const p = b.cooler && PRODS.find(x=>x.k===b.cooler); return p && p.d.toLowerCase().includes('dual'); } },
-  'sotto_controllo':{ icon:'🌡️', title:'Sotto Controllo',desc:'Dissipatore installato',           trigger: b => !!b.cooler },
+  'sotto_controllo':{ icon:'🌡️', title:'Sotto Controllo',desc:'Dissipatore installato',           trigger: b => !!b.cooler, fallback:'cooler' },
   // Build completa
   'build_complete': { icon:'🏆', title:'Build Complete', desc:'Sei ufficialmente un PC Builder', trigger: b => Object.keys(b).filter(k => b[k]).length >= 8 },
   'no_budget': { icon:'💸', title:'No Budget No Party', desc:'Build da oltre €3.000', trigger: b => {
@@ -3036,24 +3040,24 @@ const ACHIEVEMENTS = {
 
   // ══ STEP OPZIONALI 10-14 ════════════════════════════════
   // Archiviazione (HDD/SSD secondari)
-  'data_hoarder':   { icon:'🗄️', title:'Data Hoarder',   desc:'Storage extra — più spazio, più potere', trigger: b => !!b.ventole },
+  'data_hoarder':   { icon:'🗄️', title:'Data Hoarder',   desc:'Storage extra — più spazio, più potere', trigger: b => !!b.ventole, fallback:'ventole' },
   // Monitor
   'high_refresh':   { icon:'⚡', title:'High Refresh',    desc:'Monitor 144Hz+ — frame perfetti',         trigger: b => { const p = b.monitor && PRODS.find(x=>x.k===b.monitor); return p && /\b(144|165|180|240|360|480)\s*hz/i.test(p.d); } },
   'oled_gang':      { icon:'🌈', title:'OLED Gang',       desc:'Monitor OLED — neri assoluti',            trigger: b => { const p = b.monitor && PRODS.find(x=>x.k===b.monitor); return p && /oled|qd-oled/i.test(p.d); } },
   'ultrawide':      { icon:'🎬', title:'Ultrawide Master',desc:'21:9 o 32:9 — il cinema sulla scrivania', trigger: b => { const p = b.monitor && PRODS.find(x=>x.k===b.monitor); return p && /(21:9|32:9|ultrawide|uwqhd|dqhd)/i.test(p.d); } },
-  'finestra_mondo': { icon:'🖥️', title:'Finestra sul Mondo', desc:'Monitor installato',                  trigger: b => !!b.monitor },
+  'finestra_mondo': { icon:'🖥️', title:'Finestra sul Mondo', desc:'Monitor installato',                  trigger: b => !!b.monitor, fallback:'monitor' },
   // Mouse
   'pixel_perfect':  { icon:'🎯', title:'Pixel Perfect',  desc:'Mouse da pro — aim impeccabile',  trigger: b => { const p = b.mouse && PRODS.find(x=>x.k===b.mouse); return p && /(superlight|x2|viper|deathadder|g pro|aerox|harpoon)/i.test(p.d); } },
   'wireless_freedom':{icon:'📡', title:'Wireless Freedom',desc:'Mouse wireless — niente catene',  trigger: b => { const p = b.mouse && PRODS.find(x=>x.k===b.mouse); return p && /wireless|wifi|wl\b/i.test(p.d); } },
-  'click_master':   { icon:'🖱️', title:'Click Master',    desc:'Mouse pronto all\'azione',         trigger: b => !!b.mouse },
+  'click_master':   { icon:'🖱️', title:'Click Master',    desc:'Mouse pronto all\'azione',         trigger: b => !!b.mouse, fallback:'mouse' },
   // Tastiera
   'mechanical':     { icon:'⌨️', title:'Mechanical Soul', desc:'Switch meccanici — clack clack clack', trigger: b => { const p = b.keyboard && PRODS.find(x=>x.k===b.keyboard); return p && /mecca|mechanical|cherry|switch|red|blue|brown|black|gateron|kailh/i.test(p.d); } },
   'tkl_minimalist': { icon:'📏', title:'TKL Minimalist',  desc:'Senza tastierino — più spazio per il mouse', trigger: b => { const p = b.keyboard && PRODS.find(x=>x.k===b.keyboard); return p && /tkl|tenkeyless|60%|65%|75%|80%/i.test(p.d); } },
-  'tasti_armati':   { icon:'🎹', title:'Tasti Armati',    desc:'Tastiera installata',              trigger: b => !!b.keyboard },
+  'tasti_armati':   { icon:'🎹', title:'Tasti Armati',    desc:'Tastiera installata',              trigger: b => !!b.keyboard, fallback:'keyboard' },
   // Cuffie
   'audiophile':     { icon:'🎧', title:'Audiophile',      desc:'Cuffie premium — ogni suono conta',  trigger: b => { const p = b.headset && PRODS.find(x=>x.k===b.headset); return p && /(arctis|cloud|gsp|kraken|virtuoso|nova|h9|maxwell)/i.test(p.d); } },
   'surround_sound': { icon:'🔊', title:'Surround Sound',  desc:'7.1 — immerso nel gioco',            trigger: b => { const p = b.headset && PRODS.find(x=>x.k===b.headset); return p && /(7\.1|surround|dolby|spatial)/i.test(p.d); } },
-  'in_ascolto':     { icon:'👂', title:'In Ascolto',       desc:'Cuffie installate',                  trigger: b => !!b.headset },
+  'in_ascolto':     { icon:'👂', title:'In Ascolto',       desc:'Cuffie installate',                  trigger: b => !!b.headset, fallback:'headset' },
 
   // ══ BRAND APPRECIATION (divertenti) ══════════════════════
   'noctua_disciple':{ icon:'🟫', title:'Noctua Disciple',  desc:'Marrone è il nuovo nero',           trigger: b => Object.values(b).filter(Boolean).some(k => { const p=PRODS.find(x=>x.k===k); return p && /noctua/i.test(p.b||''); }) },
@@ -3077,12 +3081,78 @@ const unlockedAchievements = new Set();
 
 function checkAchievements() {
   const b = {...state.build, piattaforma: state.piattaforma};
+
+  // 1) Trova TUTTI gli achievement che ora sono triggerati (e non già sbloccati)
+  const newlyTriggered = [];
   Object.entries(ACHIEVEMENTS).forEach(([key, ach]) => {
     if(!unlockedAchievements.has(key) && ach.trigger(b)) {
-      unlockedAchievements.add(key);
-      showAchievement(ach);
+      newlyTriggered.push([key, ach]);
     }
   });
+  if (newlyTriggered.length === 0) return;
+
+  // 2) Separa specifici (priorità) da fallback (generici di categoria)
+  const specifici = newlyTriggered.filter(([, a]) => !a.fallback);
+  const fallback  = newlyTriggered.filter(([,  a]) =>  a.fallback);
+
+  // 3) Decidi cosa mostrare:
+  //    - Se ci sono specifici → mostra solo il PRIMO specifico (quello con più "carattere")
+  //    - Se nessuno specifico → mostra il primo fallback
+  //    - Tutti gli altri vengono marcati come sbloccati silenziosamente (non popup-pati)
+  let toShow = null;
+  if (specifici.length > 0) {
+    toShow = specifici[0];
+  } else if (fallback.length > 0) {
+    // Mostra solo fallback delle categorie per cui nessun specifico è MAI stato sbloccato
+    const fb = fallback.find(([, a]) => {
+      // Cerca se esiste un achievement già sbloccato (non fallback) per la stessa categoria
+      const cat = a.fallback;
+      return !Array.from(unlockedAchievements).some(k => {
+        const other = ACHIEVEMENTS[k];
+        return other && !other.fallback && categoryOfAchievement(k) === cat;
+      });
+    });
+    toShow = fb || null;
+  }
+
+  // 4) Marca TUTTI i triggerati come sbloccati (anche quelli che non mostriamo,
+  //    altrimenti continuerebbero a tentare il popup ad ogni click successivo)
+  newlyTriggered.forEach(([key]) => unlockedAchievements.add(key));
+
+  // 5) Mostra solo quello scelto
+  if (toShow) {
+    showAchievement(toShow[1]);
+  }
+}
+
+// Mappa: dato un key di achievement, ritorna la "categoria di componente" associata.
+// Usata per evitare che il fallback "Connesso" (mobo) scatti se Premium Board (mobo) è già stato sbloccato.
+function categoryOfAchievement(key) {
+  const m = {
+    // CPU
+    hunter_3d:'cpu', no_mercy:'cpu', overclock_king:'cpu', il_cervello:'cpu',
+    // Mobo
+    premium_board:'mobo', connesso:'mobo',
+    // Case
+    the_castle:'case', small_deadly:'case', casa_dolce:'case',
+    // RAM
+    speed_demon:'ram', elefante:'ram', il_dna:'ram',
+    // GPU
+    vulcano:'gpu', high_roller:'gpu', sweet_spot:'gpu', la_visione:'gpu',
+    // SSD
+    ludicrous:'ssd', flash:'ssd', archiviato:'ssd',
+    // PSU
+    nuclear_power:'psu', equilibrio:'psu', alimentato:'psu',
+    // Cooler
+    arctic_circle:'cooler', silent_thunder:'cooler', sotto_controllo:'cooler',
+    // Step opzionali
+    data_hoarder:'ventole',
+    high_refresh:'monitor', oled_gang:'monitor', ultrawide:'monitor', finestra_mondo:'monitor',
+    pixel_perfect:'mouse', wireless_freedom:'mouse', click_master:'mouse',
+    mechanical:'keyboard', tkl_minimalist:'keyboard', tasti_armati:'keyboard',
+    audiophile:'headset', surround_sound:'headset', in_ascolto:'headset',
+  };
+  return m[key] || null;
 }
 
 function showAchievement(ach) {
@@ -3538,83 +3608,4 @@ function sparkEffect(e) {
     particles.forEach((p, i) => {
       p.x += p.vx + Math.sin(Date.now()*.001 + p.phase) * .3;
       p.y += p.vy;
-      if (p.y < -10) { p.y = H + 10; p.x = Math.random() * W; }
-      if (p.x < -10) p.x = W + 10;
-      if (p.x > W + 10) p.x = -10;
-
-      // Glow
-      const grad = ctx.createRadialGradient(p.x, p.y, 0, p.x, p.y, p.r * 4);
-      grad.addColorStop(0, p.color + p.alpha + ')');
-      grad.addColorStop(1, p.color + '0)');
-      ctx.beginPath();
-      ctx.arc(p.x, p.y, p.r * 4, 0, Math.PI * 2);
-      ctx.fillStyle = grad;
-      ctx.fill();
-
-      // Nucleo
-      ctx.beginPath();
-      ctx.arc(p.x, p.y, p.r, 0, Math.PI * 2);
-      ctx.fillStyle = p.color + (p.alpha * 1.5).toFixed(2) + ')';
-      ctx.fill();
-
-      // Connessioni
-      for (let j = i + 1; j < Math.min(i + 6, particles.length); j++) {
-        const p2 = particles[j];
-        const dx = p.x - p2.x, dy = p.y - p2.y;
-        const dist = Math.sqrt(dx*dx + dy*dy);
-        if (dist < 100) {
-          ctx.beginPath();
-          ctx.moveTo(p.x, p.y);
-          ctx.lineTo(p2.x, p2.y);
-          ctx.strokeStyle = `rgba(45,212,191,${(.15 * (1 - dist/100)).toFixed(3)})`;
-          ctx.lineWidth = .5;
-          ctx.stroke();
-        }
-      }
-    });
-    requestAnimationFrame(draw);
-  }
-  draw();
-})();
-
-// ══ URL PARAMS ═══════════════════════════════════════════
-function loadFromUrl() {
-  const p = new URLSearchParams(location.search);
-  if (p.get('pf')) state.piattaforma = p.get('pf');
-  if (p.get('sk')) state.socket = p.get('sk');
-  Object.keys(state.build).forEach(k => { if(p.get(k)) state.build[k] = p.get(k); });
-}
-
-// ══ ALIAS COMPATIBILITÀ ═══════════════════════════════════
-function buildResoconto() {
-  if (typeof getResocontoAlerts === 'function') return getResocontoAlerts();
-  return [];
-}
-// ══ FETCH PRODOTTI ═══════════════════════════════════════
-async function fetchProdotti() {
-  // Mostra loading
-  const mc = document.getElementById('mainContent');
-  if (mc) mc.innerHTML = '<div style="text-align:center;padding:60px 0;color:var(--ink3)"><div style="font-size:32px;margin-bottom:12px">⚙️</div><div style="font-size:14px;font-weight:600;letter-spacing:.08em;text-transform:uppercase">Caricamento prodotti...</div></div>';
-
-  try {
-    const r = await fetch('prodotti.json?v=' + Date.now());
-    if (!r.ok) throw new Error('HTTP ' + r.status);
-    const data = await r.json();
-    PRODS = data;
-    console.log('✓ Prodotti caricati:', PRODS.length);
-  } catch(e) {
-    console.error('Errore fetch prodotti.json:', e.message);
-    // In locale/artifact senza server: mostra messaggio utile
-    if (mc) mc.innerHTML = '<div style="text-align:center;padding:60px 24px;color:var(--ink3);max-width:480px;margin:0 auto"><div style="font-size:32px;margin-bottom:16px">📦</div><div style="font-size:15px;font-weight:700;color:#fff;margin-bottom:8px">Prodotti non disponibili</div><div style="font-size:13px;line-height:1.6">Carica questo file su <strong style="color:var(--teal)">Vercel</strong> insieme al <code style="background:rgba(255,255,255,.08);padding:2px 6px;border-radius:4px">prodotti.json</code> aggiornato per vedere i prodotti del listino.</div><div style="margin-top:20px;font-size:12px;color:var(--ink4)">GitHub Actions aggiorna il listino ogni mattina alle 10:00.</div></div>';
-  }
-}
-
-// ══ INIT ════════════════════════════════════════════════
-(async () => {
-  loadFromUrl();
-  await fetchProdotti();
-  render();
-})();
-</script>
-</body>
-</html>
+     

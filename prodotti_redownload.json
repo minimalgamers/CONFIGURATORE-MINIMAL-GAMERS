@@ -5,7 +5,7 @@
     "categoria": "CPU",
     "desc": "AMD EPYC 9454 Processor (48C/96T) 2.75GHz (3.8GHz Turbo) Socket SP5 TDP 290W",
     "img": "foto/amd_100-000000478.png",
-    "reason": "dark_environment_complex_scene"
+    "reason": "saturated_promo_background"
   },
   {
     "mpn": "100-000000480",
@@ -96,14 +96,6 @@
     "reason": "saturated_promo_background"
   },
   {
-    "mpn": "F4-3600C18D-32GVK",
-    "brand": "G.SKILL",
-    "categoria": "RAM",
-    "desc": "G.Skill Ripjaws V F4-3600C18D-32GVK memory module 32 GB 2 x 16 GB DDR4",
-    "img": "foto/g.skill_f4-3600c18d-32gvk.png",
-    "reason": "video_thumbnail"
-  },
-  {
     "mpn": "NE75080S19T2-GB2031X",
     "brand": "Gainward",
     "categoria": "GPU",
@@ -142,14 +134,6 @@
     "desc": "Jonsplus Z20 Mesh PC-Gehäuse, Mini Tower, Micro-ATX, mit Tragegriff - weiß",
     "img": "foto/jonsbo_z20_mesh_white.png",
     "reason": "no_solid_bg_likely_environment"
-  },
-  {
-    "mpn": "SFYRDK/2000G",
-    "brand": "Kingston",
-    "categoria": "SSD",
-    "desc": "Kingston Technology 2000G RENEGADE PCIe 4.0 NVMe SSD W/ HEATSINK",
-    "img": "foto/kingston_sfyrdk_2000g.png",
-    "reason": "video_thumbnail"
   },
   {
     "mpn": "SFYRDK/4000G",
@@ -448,22 +432,6 @@
     "reason": "light_environment_not_pure_white"
   },
   {
-    "mpn": "WD102PURP",
-    "brand": "WD",
-    "categoria": "Extra",
-    "desc": "Western Digital Purple Pro WD102PURP internal hard drive 10 TB 7200 RPM 512 MB 3",
-    "img": null,
-    "reason": "no_photo_file_at_all"
-  },
-  {
-    "mpn": "WD122PURP",
-    "brand": "WD",
-    "categoria": "Extra",
-    "desc": "Western Digital Purple Pro WD122PURP internal hard drive 12 TB 7200 RPM 512 MB 3",
-    "img": null,
-    "reason": "no_photo_file_at_all"
-  },
-  {
     "mpn": "WD103KFBX",
     "brand": "WD",
     "categoria": "Extra",
@@ -472,26 +440,10 @@
     "reason": "no_photo_file_at_all"
   },
   {
-    "mpn": "WD122KFBX",
-    "brand": "WD",
-    "categoria": "Extra",
-    "desc": "Western Digital Red Pro internal hard drive 12 TB 7200 RPM 512 MB 3.5\" Serial AT",
-    "img": null,
-    "reason": "no_photo_file_at_all"
-  },
-  {
     "mpn": "WD202KFGX",
     "brand": "WD",
     "categoria": "Extra",
     "desc": "Western Digital Red Pro WD202KFGX internal hard drive 20 TB 7200 RPM 512 MB 3.5\"",
-    "img": null,
-    "reason": "no_photo_file_at_all"
-  },
-  {
-    "mpn": "WD260PURP",
-    "brand": "WD",
-    "categoria": "Extra",
-    "desc": "Western Digital Purple Pro WD240PURP internal hard drive 26 TB 7200 RPM 3.5\" Ser",
     "img": null,
     "reason": "no_photo_file_at_all"
   },
@@ -544,34 +496,10 @@
     "reason": "no_photo_file_at_all"
   },
   {
-    "mpn": "WD64PURZ",
-    "brand": "WD",
-    "categoria": "Extra",
-    "desc": "Western Digital WD64PURZ internal hard drive 3.5\" 6000 GB Serial ATA III",
-    "img": null,
-    "reason": "no_photo_file_at_all"
-  },
-  {
     "mpn": "WD142PURP",
     "brand": "WD",
     "categoria": "Extra",
     "desc": "Western Digital Purple Pro internal hard drive 14 TB 7200 RPM 512 MB 3.5\" Serial",
-    "img": null,
-    "reason": "no_photo_file_at_all"
-  },
-  {
-    "mpn": "WD85PURZ",
-    "brand": "WD",
-    "categoria": "Extra",
-    "desc": "Western Digital Blue 8TB WD PURPL 8TB WD PURPLE 3.5\" Serial ATA III",
-    "img": null,
-    "reason": "no_photo_file_at_all"
-  },
-  {
-    "mpn": "WD80EFPX",
-    "brand": "WD",
-    "categoria": "Extra",
-    "desc": "Western Digital Red Plus 3.5\" 8 TB Serial ATA III",
     "img": null,
     "reason": "no_photo_file_at_all"
   },
@@ -640,14 +568,6 @@
     "reason": "no_photo_file_at_all"
   },
   {
-    "mpn": "WD221KFGX",
-    "brand": "WD",
-    "categoria": "Extra",
-    "desc": "Western Digital Red Pro 3.5\" 22000 GB Serial ATA III",
-    "img": null,
-    "reason": "no_photo_file_at_all"
-  },
-  {
     "mpn": "WD33PURZ",
     "brand": "WD",
     "categoria": "Extra",
@@ -700,14 +620,6 @@
     "brand": "Seagate",
     "categoria": "Extra",
     "desc": "Seagate IronWolf Pro internal hard drive 10 TB 256 MB 3.5\" Serial ATA III (ST100",
-    "img": null,
-    "reason": "no_photo_file_at_all"
-  },
-  {
-    "mpn": "WD44PURZ",
-    "brand": "WD",
-    "categoria": "Extra",
-    "desc": "Western Digital Purple internal hard drive 4 TB 5400 RPM 128 MB 3.5\" Serial ATA ",
     "img": null,
     "reason": "no_photo_file_at_all"
   },
@@ -1304,14 +1216,6 @@
     "reason": "no_photo_file_at_all"
   },
   {
-    "mpn": "LS32DG702EUXDU",
-    "brand": "Samsung",
-    "categoria": "Monitor",
-    "desc": "Samsung LS32DG702EU computer monitor 81.3 cm (32\") 3840 x 2160 pixels 4K Ultra H",
-    "img": null,
-    "reason": "no_photo_file_at_all"
-  },
-  {
     "mpn": "32M1C5200W/00",
     "brand": "Philips",
     "categoria": "Monitor",
@@ -1356,14 +1260,6 @@
     "brand": "MSI",
     "categoria": "Monitor",
     "desc": "MSI MPG 346CQRF X24 computer monitor 86.4 cm (34\") 3440 x 1440 pixels UltraWide ",
-    "img": null,
-    "reason": "no_photo_file_at_all"
-  },
-  {
-    "mpn": "Q24G4RE",
-    "brand": "AOC",
-    "categoria": "Monitor",
-    "desc": "AOC G4 Q24G4RE computer monitor 60.5 cm (23.8\") 2560 x 1440 pixels Quad HD LED B",
     "img": null,
     "reason": "no_photo_file_at_all"
   },
@@ -1856,22 +1752,6 @@
     "reason": "no_photo_file_at_all"
   },
   {
-    "mpn": "SA750RW-8GOC",
-    "brand": "SPARKLE",
-    "categoria": "GPU",
-    "desc": "Sparkle Intel Arc A750 ROC Luna OC Edition 8GB GDDR6",
-    "img": null,
-    "reason": "no_photo_file_at_all"
-  },
-  {
-    "mpn": "SB580G-12G",
-    "brand": "SPARKLE",
-    "categoria": "GPU",
-    "desc": "Graphics card SPARKLE Intel Arc B580 GUARDIAN 12G",
-    "img": null,
-    "reason": "no_photo_file_at_all"
-  },
-  {
     "mpn": "SB580TB-12GOC",
     "brand": "SPARKLE",
     "categoria": "GPU",
@@ -1910,14 +1790,6 @@
     "desc": "Intel Core i7 14700F Box",
     "img": null,
     "reason": "no_photo_file_at_all"
-  },
-  {
-    "mpn": "BX8071514900KF",
-    "brand": "Intel",
-    "categoria": "CPU",
-    "desc": "Intel Core i9 14900KF 3.2GHz 36MB 1700 no fan Box",
-    "img": "foto/intel_bx8071514900kf.png",
-    "reason": "human_skin_detected"
   },
   {
     "mpn": "CT2K8G48C40U5",
@@ -3224,14 +3096,6 @@
     "reason": "no_photo_file_at_all"
   },
   {
-    "mpn": "R-ASN4-BKNNMT-G",
-    "brand": "DEEPCOOL",
-    "categoria": "Dissipatore",
-    "desc": "DeepCool ASSASSIN IV Processor Air cooler 14 cm Black 1 pc(s)",
-    "img": null,
-    "reason": "no_photo_file_at_all"
-  },
-  {
     "mpn": "RC-TN120-B1",
     "brand": "NZXT",
     "categoria": "Dissipatore",
@@ -3300,14 +3164,6 @@
     "brand": "DEEPCOOL",
     "categoria": "Dissipatore",
     "desc": "DeepCool LE240 V2 Processor All-in-one liquid cooler 12 cm Black",
-    "img": null,
-    "reason": "no_photo_file_at_all"
-  },
-  {
-    "mpn": "R-LE360-BKAMMC-G-2",
-    "brand": "DEEPCOOL",
-    "categoria": "Dissipatore",
-    "desc": "DeepCool LE360 V2 Processor All-in-one liquid cooler 12 cm Black 1 pc(s)",
     "img": null,
     "reason": "no_photo_file_at_all"
   },
@@ -3444,14 +3300,6 @@
     "brand": "DAHUA",
     "categoria": "SSD",
     "desc": "Dahua Technology DHI-SSD-C900VN1TB internal solid state drive M.2 1000 GB PCI Ex",
-    "img": null,
-    "reason": "no_photo_file_at_all"
-  },
-  {
-    "mpn": "SD250-240GN",
-    "brand": "AFOX",
-    "categoria": "SSD",
-    "desc": "AFOX SSD 240GB TLC 555 MB/S",
     "img": null,
     "reason": "no_photo_file_at_all"
   },
@@ -3596,8 +3444,8 @@
     "brand": "Corsair",
     "categoria": "Case",
     "desc": "Corsair 3500X ARGB Midi Tower Black",
-    "img": null,
-    "reason": "no_photo_file_at_all"
+    "img": "foto/corsair_cc-9011278-ww.png",
+    "reason": "dark_environment_complex_scene"
   },
   {
     "mpn": "CC-9011270-WW",
@@ -3612,14 +3460,6 @@
     "brand": "Chieftec",
     "categoria": "Case",
     "desc": "Chieftec XT-01B Midi Tower",
-    "img": null,
-    "reason": "no_photo_file_at_all"
-  },
-  {
-    "mpn": "CC-9011273-WW",
-    "brand": "Corsair",
-    "categoria": "Case",
-    "desc": "Corsair 9000D RGB AIRFLOW Full Tower Black",
     "img": null,
     "reason": "no_photo_file_at_all"
   },
@@ -3768,34 +3608,10 @@
     "reason": "no_photo_file_at_all"
   },
   {
-    "mpn": "R-CH170-BKNGM0-G",
-    "brand": "DEEPCOOL",
-    "categoria": "Case",
-    "desc": "DeepCool CH170 PLUS Tower Black",
-    "img": null,
-    "reason": "no_photo_file_at_all"
-  },
-  {
     "mpn": "R-CG530-BKNDA0-G-1",
     "brand": "DEEPCOOL",
     "categoria": "Case",
     "desc": "DeepCool CG530 black case",
-    "img": null,
-    "reason": "no_photo_file_at_all"
-  },
-  {
-    "mpn": "R-CG530-WHNDA0-G-1",
-    "brand": "DEEPCOOL",
-    "categoria": "Case",
-    "desc": "DeepCool CG530 WH Midi Tower White",
-    "img": null,
-    "reason": "no_photo_file_at_all"
-  },
-  {
-    "mpn": "R-CH170-WHNPI0D-G-1",
-    "brand": "DEEPCOOL",
-    "categoria": "Case",
-    "desc": "DeepCool R-CH170-WHNPI0D-G-1 computer case Tower White",
     "img": null,
     "reason": "no_photo_file_at_all"
   },
@@ -3840,14 +3656,6 @@
     "reason": "no_photo_file_at_all"
   },
   {
-    "mpn": "R-CC360-BKAPM3-G-1",
-    "brand": "DEEPCOOL",
-    "categoria": "Case",
-    "desc": "DeepCool CC360 ARGB Mini Tower Black",
-    "img": null,
-    "reason": "no_photo_file_at_all"
-  },
-  {
     "mpn": "R-CC560-WHGAA4-G-2",
     "brand": "DEEPCOOL",
     "categoria": "Case",
@@ -3868,14 +3676,6 @@
     "brand": "DEEPCOOL",
     "categoria": "Case",
     "desc": "DeepCool MATREXX 40 3FS Micro Tower Black",
-    "img": null,
-    "reason": "no_photo_file_at_all"
-  },
-  {
-    "mpn": "AEROPGSGLIDER-2RGB-A",
-    "brand": "Aerocool",
-    "categoria": "Case",
-    "desc": "Aerocool Glider Cosmo-A-BK-v2 Midi Tower Black",
     "img": null,
     "reason": "no_photo_file_at_all"
   },
@@ -4624,14 +4424,6 @@
     "reason": "no_photo_file_at_all"
   },
   {
-    "mpn": "F5-6000J3038F8GH1-FX5",
-    "brand": "G.SKILL",
-    "categoria": "RAM",
-    "desc": "G.Skill Flare X5 F5-6000J3038F8GH1-FX5 memory module 8 GB 1 x 8 GB DDR5 6000 MT/",
-    "img": null,
-    "reason": "no_photo_file_at_all"
-  },
-  {
     "mpn": "M323R1GB4BB0-CQK",
     "brand": "Samsung SemiConductor",
     "categoria": "RAM",
@@ -4764,14 +4556,6 @@
     "brand": "Biostar",
     "categoria": "Scheda Madre",
     "desc": "Biostar Z590MHP Intel Z590 LGA 1200 (Socket H5) micro ATX",
-    "img": null,
-    "reason": "no_photo_file_at_all"
-  },
-  {
-    "mpn": "B860M-X GEN5",
-    "brand": "Asrock",
-    "categoria": "Scheda Madre",
-    "desc": "Motherboard Asrock B860M-X GEN5",
     "img": null,
     "reason": "no_photo_file_at_all"
   },
@@ -5004,14 +4788,6 @@
     "brand": "ZOTAC",
     "categoria": "GPU",
     "desc": "Zotac ZT-D40720E-10M graphics card NVIDIA GeForce RTX 4070 SUPER 12 GB GDDR6X",
-    "img": null,
-    "reason": "no_photo_file_at_all"
-  },
-  {
-    "mpn": "RTX3050-6GB",
-    "brand": "Biostar",
-    "categoria": "GPU",
-    "desc": "BIOSTAR GeForce RTX 3050 6GB graphics card",
     "img": null,
     "reason": "no_photo_file_at_all"
   },
@@ -5310,5 +5086,29 @@
     "desc": "TRYX FLOVA F50 PC-Gehäuse, Midi-Tower, ATX, Tempered Glass - weiß",
     "img": "foto/tryx_c-f500f-fm1e-g0w.png",
     "reason": "very_light_low_variance_brand"
+  },
+  {
+    "mpn": "CB8GS3200",
+    "brand": "Crucial",
+    "categoria": "RAM",
+    "desc": "Crucial SO-DIMM DDR4-3200  8GB",
+    "img": "foto/crucial_cb8gs3200.png",
+    "reason": "saturated_promo_background"
+  },
+  {
+    "mpn": "V532-006R",
+    "brand": "MSI",
+    "categoria": "GPU",
+    "desc": "MSI GeForce RTX 5070 12G INSPIRE 3X OC NVIDIA 12 GB GDDR7",
+    "img": "foto/msi_v532-006r.png",
+    "reason": "human_skin_detected"
+  },
+  {
+    "mpn": "CC-9011302-WW",
+    "brand": "Corsair",
+    "categoria": "Case",
+    "desc": "Corsair FRAME 4000X RS PC-Gehäuse, Midi-Tower, E-ATX - 4x RS120-Lüfter, schwarz",
+    "img": "foto/corsair_cc-9011302-ww.png",
+    "reason": "no_solid_bg_likely_environment"
   }
 ]

@@ -2088,14 +2088,6 @@
     "reason": "no_photo_file_at_all"
   },
   {
-    "mpn": "SST-CS351B",
-    "brand": "Silverstone",
-    "categoria": "Case",
-    "desc": "SilverStone SST-CS351B SAS-12G-/SATA-6G-NAS-Gehäuse mit 5 Einschüben",
-    "img": "foto/silverstone_sst-cs351b.png",
-    "reason": "light_environment_not_pure_white"
-  },
-  {
     "mpn": "SST-RM52",
     "brand": "Silverstone",
     "categoria": "Case",
@@ -2124,14 +2116,6 @@
     "brand": "ASUS",
     "categoria": "Scheda Madre",
     "desc": "ASUS TUF B450M-Plus II Gaming, AMD B450 Mainboard - Sockel AM4",
-    "img": null,
-    "reason": "no_photo_file_at_all"
-  },
-  {
-    "mpn": "G99.O11VMX.00",
-    "brand": "Lian Li",
-    "categoria": "Case",
-    "desc": "Lian Li O11 Vision-M PC-Gehäuse, Micro-ATX, Tempered Glass - schwarz",
     "img": null,
     "reason": "no_photo_file_at_all"
   },
@@ -3068,14 +3052,6 @@
     "brand": "be quiet!",
     "categoria": "Case",
     "desc": "be quiet! Pure Base 500 PC-Gehäuse, Midi-Tower, ATX - anthrazit",
-    "img": null,
-    "reason": "no_photo_file_at_all"
-  },
-  {
-    "mpn": "A-ITX38U3-M1B",
-    "brand": "Akasa",
-    "categoria": "Case",
-    "desc": "Akasa Cypher MX3 Thin Mini-ITX Gehäuse, OEM - schwarz",
     "img": null,
     "reason": "no_photo_file_at_all"
   },
@@ -5102,13 +5078,5 @@
     "desc": "MSI GeForce RTX 5070 12G INSPIRE 3X OC NVIDIA 12 GB GDDR7",
     "img": "foto/msi_v532-006r.png",
     "reason": "human_skin_detected"
-  },
-  {
-    "mpn": "CC-9011302-WW",
-    "brand": "Corsair",
-    "categoria": "Case",
-    "desc": "Corsair FRAME 4000X RS PC-Gehäuse, Midi-Tower, E-ATX - 4x RS120-Lüfter, schwarz",
-    "img": "foto/corsair_cc-9011302-ww.png",
-    "reason": "no_solid_bg_likely_environment"
   }
 ]

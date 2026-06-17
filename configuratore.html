@@ -347,6 +347,29 @@ html,body{background:var(--bg);color:var(--ink);font-family:var(--font);min-heig
   box-shadow:0 0 24px rgba(217,70,168,.25);
 }
 
+/* ── PULSANTE SALTA in CIMA (step opzionali 10-14) ── */
+.step-skip-btn-top{
+  display:inline-flex;align-items:center;gap:10px;
+  margin-top:14px;
+  padding:12px 24px;
+  background:linear-gradient(135deg,rgba(217,70,168,.18),rgba(45,212,191,.08));
+  border:2px solid rgba(217,70,168,.45);
+  color:#fff;
+  font-family:var(--font);
+  font-size:13px;font-weight:800;letter-spacing:.06em;
+  text-transform:uppercase;
+  border-radius:10px;cursor:pointer;
+  transition:all .25s ease;
+  box-shadow:0 0 18px rgba(217,70,168,.15);
+}
+.step-skip-btn-top:hover{
+  background:linear-gradient(135deg,rgba(217,70,168,.3),rgba(45,212,191,.15));
+  border-color:var(--punch);
+  transform:translateY(-2px);
+  box-shadow:0 0 28px rgba(217,70,168,.35);
+}
+.step-skip-btn-top span:first-child{font-size:16px}
+
 /* ── PULSANTE CONTINUA (quando hai scelto un componente) ── */
 .step-continue-btn{
   display:inline-flex;align-items:center;gap:10px;
@@ -381,10 +404,11 @@ html,body{background:var(--bg);color:var(--ink);font-family:var(--font);min-heig
 
 /* Card sottocategoria */
 .subcat-card{
-  padding:18px 16px 16px;border-radius:var(--r);cursor:pointer;position:relative;overflow:hidden;
+  padding:22px 18px 18px;border-radius:var(--r);cursor:pointer;position:relative;overflow:hidden;
   background:linear-gradient(135deg,rgba(12,5,14,.9) 0%,rgba(20,8,24,.8) 100%);
   border:1px solid rgba(45,212,191,.12);
   transition:all .25s;
+  text-align:center;
 }
 .subcat-card::before{
   content:'';position:absolute;bottom:0;left:0;right:0;height:3px;
@@ -395,22 +419,22 @@ html,body{background:var(--bg);color:var(--ink);font-family:var(--font);min-heig
 .subcat-card:hover::before{opacity:1}
 .subcat-card.selected{border-color:var(--teal);background:linear-gradient(135deg,rgba(45,212,191,.08),rgba(217,70,168,.04))}
 .subcat-icon{
-  width:40px;height:40px;border-radius:10px;margin-bottom:12px;
+  width:40px;height:40px;border-radius:10px;margin:0 auto 12px;
   display:flex;align-items:center;justify-content:center;
   background:linear-gradient(135deg,rgba(45,212,191,.15),rgba(217,70,168,.1));
 }
 .subcat-icon svg{width:22px;height:22px}
 .subcat-name{
-  font-family:'Barlow Condensed',var(--font);font-size:14px;font-weight:800;
+  font-family:'Barlow Condensed',var(--font);font-size:26px;font-weight:800;
   text-transform:uppercase;letter-spacing:.04em;
-  color:#fff;line-height:1.2;margin-bottom:4px;
+  color:#fff;line-height:1.1;margin-bottom:8px;
 }
 .subcat-note{font-size:10px;color:var(--ink3);line-height:1.4;margin-bottom:8px}
 .subcat-count{
   font-size:9px;font-weight:700;letter-spacing:.06em;
   color:var(--teal);opacity:.7;
 }
-.subcat-tags{display:flex;flex-wrap:wrap;gap:4px;margin-top:6px}
+.subcat-tags{display:flex;flex-wrap:wrap;gap:4px;margin-top:6px;justify-content:center}
 .subcat-tag{
   font-size:9px;font-weight:600;padding:2px 7px;border-radius:8px;
   background:rgba(45,212,191,.08);color:rgba(45,212,191,.7);border:1px solid rgba(45,212,191,.12);
@@ -875,10 +899,10 @@ html,body{background:var(--bg);color:var(--ink);font-family:var(--font);min-heig
   /* ── Subcategorie: 1 colonna su mobile stretto, 2 su largo ── */
   .subcat-grid{gap:8px}
   .subcat-grid > .subcat-card{flex:1 1 calc(50% - 4px);min-width:0}
-  .subcat-card{padding:14px 12px 12px}
-  .subcat-icon{width:32px;height:32px;margin-bottom:8px;border-radius:8px}
+  .subcat-card{padding:16px 12px 14px}
+  .subcat-icon{width:32px;height:32px;margin:0 auto 8px;border-radius:8px}
   .subcat-icon svg{width:16px;height:16px}
-  .subcat-name{font-size:12px}
+  .subcat-name{font-size:20px}
   .subcat-note{font-size:9px}
 
   /* ── Prodotti: griglia adattiva ── */
@@ -1771,7 +1795,6 @@ const SUBCATS = {
     field: '_tipo_cool',
     groups: [
       { group: 'Raffreddamento a liquido AIO', items: [
-        { val:'AIO 420mm', icon:'\ud83d\udca7', note:'Massimo raffreddamento. Per CPU >170W TDP (9950X, i9-14900K). Require case supporto 420mm', tag:'Extreme' },
         { val:'AIO 360mm', icon:'\ud83d\udca7', note:'Ottimo per CPU 105-170W TDP. Standard per gaming high-end. Silenzioso',                      tag:'Consigliato' },
         { val:'AIO 280mm', icon:'\ud83d\udca7', note:'Buon compromesso: silenzioso e compatto',                                                     tag:'Mid' },
         { val:'AIO 240mm', icon:'\ud83d\udca7', note:'Entry AIO: silenzioso per CPU fino a 105W TDP. Compatibile con la maggior parte dei case',   tag:'Entry' },
@@ -2421,6 +2444,10 @@ function selProd(sid, key, evt) {
   }
   renderSidebar();
   render();
+  // Check achievements DOPO render (così state.build è aggiornato)
+  if (state.build[sid] && typeof updateAllExtras === 'function') {
+    updateAllExtras();
+  }
   // Scroll al btn continua
   setTimeout(() => {
     const btn = document.getElementById('btnNext');
@@ -2563,6 +2590,13 @@ function render() {
         <div class="step-title">${s.label}</div>
         <div class="step-subtitle">${isOptional ? 'Categoria opzionale — puoi saltarla se non ti serve.' : 'Scegli il componente. I prezzi includono IVA 22%.'}</div>
         ${breadcrumbHtml}
+        ${isOptional && !hasSel ? `
+          <button class="step-skip-btn-top" onclick="nextStep()">
+            <span>⏭️</span>
+            <span>Salta questo step</span>
+            <span>→</span>
+          </button>
+        ` : ''}
       </div>
       ${renderProds(sid)}
       <div class="step-nav-bottom">
@@ -2603,6 +2637,7 @@ function selPlatform(pl) {
   playClick();
 
   render();
+  if (typeof updateAllExtras === 'function') updateAllExtras();
 }
 
 function renderSocketGrid() {
@@ -2997,7 +3032,45 @@ const ACHIEVEMENTS = {
   'perfectly_balanced': { icon:'⚖️', title:'Perfectly Balanced', desc:'Nessun bottleneck rilevato', trigger: b => {
     const alert = getResocontoAlerts();
     return alert.filter(a => a.level === 'critical').length === 0;
-  }}
+  }},
+
+  // ══ STEP OPZIONALI 10-14 ════════════════════════════════
+  // Archiviazione (HDD/SSD secondari)
+  'data_hoarder':   { icon:'🗄️', title:'Data Hoarder',   desc:'Storage extra — più spazio, più potere', trigger: b => !!b.ventole },
+  // Monitor
+  'high_refresh':   { icon:'⚡', title:'High Refresh',    desc:'Monitor 144Hz+ — frame perfetti',         trigger: b => { const p = b.monitor && PRODS.find(x=>x.k===b.monitor); return p && /\b(144|165|180|240|360|480)\s*hz/i.test(p.d); } },
+  'oled_gang':      { icon:'🌈', title:'OLED Gang',       desc:'Monitor OLED — neri assoluti',            trigger: b => { const p = b.monitor && PRODS.find(x=>x.k===b.monitor); return p && /oled|qd-oled/i.test(p.d); } },
+  'ultrawide':      { icon:'🎬', title:'Ultrawide Master',desc:'21:9 o 32:9 — il cinema sulla scrivania', trigger: b => { const p = b.monitor && PRODS.find(x=>x.k===b.monitor); return p && /(21:9|32:9|ultrawide|uwqhd|dqhd)/i.test(p.d); } },
+  'finestra_mondo': { icon:'🖥️', title:'Finestra sul Mondo', desc:'Monitor installato',                  trigger: b => !!b.monitor },
+  // Mouse
+  'pixel_perfect':  { icon:'🎯', title:'Pixel Perfect',  desc:'Mouse da pro — aim impeccabile',  trigger: b => { const p = b.mouse && PRODS.find(x=>x.k===b.mouse); return p && /(superlight|x2|viper|deathadder|g pro|aerox|harpoon)/i.test(p.d); } },
+  'wireless_freedom':{icon:'📡', title:'Wireless Freedom',desc:'Mouse wireless — niente catene',  trigger: b => { const p = b.mouse && PRODS.find(x=>x.k===b.mouse); return p && /wireless|wifi|wl\b/i.test(p.d); } },
+  'click_master':   { icon:'🖱️', title:'Click Master',    desc:'Mouse pronto all\'azione',         trigger: b => !!b.mouse },
+  // Tastiera
+  'mechanical':     { icon:'⌨️', title:'Mechanical Soul', desc:'Switch meccanici — clack clack clack', trigger: b => { const p = b.keyboard && PRODS.find(x=>x.k===b.keyboard); return p && /mecca|mechanical|cherry|switch|red|blue|brown|black|gateron|kailh/i.test(p.d); } },
+  'tkl_minimalist': { icon:'📏', title:'TKL Minimalist',  desc:'Senza tastierino — più spazio per il mouse', trigger: b => { const p = b.keyboard && PRODS.find(x=>x.k===b.keyboard); return p && /tkl|tenkeyless|60%|65%|75%|80%/i.test(p.d); } },
+  'tasti_armati':   { icon:'🎹', title:'Tasti Armati',    desc:'Tastiera installata',              trigger: b => !!b.keyboard },
+  // Cuffie
+  'audiophile':     { icon:'🎧', title:'Audiophile',      desc:'Cuffie premium — ogni suono conta',  trigger: b => { const p = b.headset && PRODS.find(x=>x.k===b.headset); return p && /(arctis|cloud|gsp|kraken|virtuoso|nova|h9|maxwell)/i.test(p.d); } },
+  'surround_sound': { icon:'🔊', title:'Surround Sound',  desc:'7.1 — immerso nel gioco',            trigger: b => { const p = b.headset && PRODS.find(x=>x.k===b.headset); return p && /(7\.1|surround|dolby|spatial)/i.test(p.d); } },
+  'in_ascolto':     { icon:'👂', title:'In Ascolto',       desc:'Cuffie installate',                  trigger: b => !!b.headset },
+
+  // ══ BRAND APPRECIATION (divertenti) ══════════════════════
+  'noctua_disciple':{ icon:'🟫', title:'Noctua Disciple',  desc:'Marrone è il nuovo nero',           trigger: b => Object.values(b).filter(Boolean).some(k => { const p=PRODS.find(x=>x.k===k); return p && /noctua/i.test(p.b||''); }) },
+  'nzxt_aesthete':  { icon:'🎨', title:'NZXT Aesthete',    desc:'L\'estetica prima di tutto',         trigger: b => Object.values(b).filter(Boolean).some(k => { const p=PRODS.find(x=>x.k===k); return p && /nzxt/i.test(p.b||''); }) },
+  'rgb_fanatic':    { icon:'🌈', title:'RGB Fanatic',      desc:'Più LED, più FPS',                  trigger: b => Object.values(b).filter(Boolean).filter(k => { const p=PRODS.find(x=>x.k===k); return p && /rgb|argb/i.test(p.d); }).length >= 3 },
+  'corsair_loyal':  { icon:'⚔️', title:'Corsair Loyal',    desc:'Una famiglia di pirati',            trigger: b => Object.values(b).filter(Boolean).filter(k => { const p=PRODS.find(x=>x.k===k); return p && /corsair/i.test(p.b||''); }).length >= 3 },
+  'lian_li_collector':{icon:'💠',title:'Lian Li Collector',desc:'Solo il top del top',               trigger: b => Object.values(b).filter(Boolean).some(k => { const p=PRODS.find(x=>x.k===k); return p && /lian.?li/i.test(p.b||''); }) },
+
+  // ══ MILESTONE / META (divertenti) ════════════════════════
+  'first_blood':    { icon:'🩸', title:'First Blood',     desc:'Prima scelta della build — si parte!', trigger: b => Object.keys(b).filter(k => b[k] && k !== 'piattaforma').length >= 1 },
+  'metà_strada':    { icon:'⏳', title:'Metà Strada',      desc:'5 componenti scelti — non mollare',    trigger: b => Object.keys(b).filter(k => b[k]).length >= 5 },
+  'completionist':  { icon:'💯', title:'Completionist',   desc:'Tutti gli step opzionali completati',  trigger: b => !!b.ventole && !!b.monitor && !!b.mouse && !!b.keyboard && !!b.headset },
+  'dream_build':    { icon:'✨', title:'Dream Build',      desc:'Build da +€5.000 — la setup dei sogni', trigger: b => {
+    const tot = Object.values(b).filter(Boolean).reduce((s,k) => { const p=PRODS.find(x=>x.k===k); return s+(p?calcP(p.p):0); }, 0);
+    return tot > 5000;
+  }},
+  'allrounder':     { icon:'🎮', title:'Allrounder',      desc:'Tutto installato — pronto al battle', trigger: b => Object.keys(b).filter(k => b[k]).length >= 13 }
 };
 
 const unlockedAchievements = new Set();

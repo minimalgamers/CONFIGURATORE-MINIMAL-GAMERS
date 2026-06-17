@@ -3608,4 +3608,83 @@ function sparkEffect(e) {
     particles.forEach((p, i) => {
       p.x += p.vx + Math.sin(Date.now()*.001 + p.phase) * .3;
       p.y += p.vy;
-     
+      if (p.y < -10) { p.y = H + 10; p.x = Math.random() * W; }
+      if (p.x < -10) p.x = W + 10;
+      if (p.x > W + 10) p.x = -10;
+
+      // Glow
+      const grad = ctx.createRadialGradient(p.x, p.y, 0, p.x, p.y, p.r * 4);
+      grad.addColorStop(0, p.color + p.alpha + ')');
+      grad.addColorStop(1, p.color + '0)');
+      ctx.beginPath();
+      ctx.arc(p.x, p.y, p.r * 4, 0, Math.PI * 2);
+      ctx.fillStyle = grad;
+      ctx.fill();
+
+      // Nucleo
+      ctx.beginPath();
+      ctx.arc(p.x, p.y, p.r, 0, Math.PI * 2);
+      ctx.fillStyle = p.color + (p.alpha * 1.5).toFixed(2) + ')';
+      ctx.fill();
+
+      // Connessioni
+      for (let j = i + 1; j < Math.min(i + 6, particles.length); j++) {
+        const p2 = particles[j];
+        const dx = p.x - p2.x, dy = p.y - p2.y;
+        const dist = Math.sqrt(dx*dx + dy*dy);
+        if (dist < 100) {
+          ctx.beginPath();
+          ctx.moveTo(p.x, p.y);
+          ctx.lineTo(p2.x, p2.y);
+          ctx.strokeStyle = `rgba(45,212,191,${(.15 * (1 - dist/100)).toFixed(3)})`;
+          ctx.lineWidth = .5;
+          ctx.stroke();
+        }
+      }
+    });
+    requestAnimationFrame(draw);
+  }
+  draw();
+})();
+
+// ══ URL PARAMS ═══════════════════════════════════════════
+function loadFromUrl() {
+  const p = new URLSearchParams(location.search);
+  if (p.get('pf')) state.piattaforma = p.get('pf');
+  if (p.get('sk')) state.socket = p.get('sk');
+  Object.keys(state.build).forEach(k => { if(p.get(k)) state.build[k] = p.get(k); });
+}
+
+// ══ ALIAS COMPATIBILITÀ ═══════════════════════════════════
+function buildResoconto() {
+  if (typeof getResocontoAlerts === 'function') return getResocontoAlerts();
+  return [];
+}
+// ══ FETCH PRODOTTI ═══════════════════════════════════════
+async function fetchProdotti() {
+  // Mostra loading
+  const mc = document.getElementById('mainContent');
+  if (mc) mc.innerHTML = '<div style="text-align:center;padding:60px 0;color:var(--ink3)"><div style="font-size:32px;margin-bottom:12px">⚙️</div><div style="font-size:14px;font-weight:600;letter-spacing:.08em;text-transform:uppercase">Caricamento prodotti...</div></div>';
+
+  try {
+    const r = await fetch('prodotti.json?v=' + Date.now());
+    if (!r.ok) throw new Error('HTTP ' + r.status);
+    const data = await r.json();
+    PRODS = data;
+    console.log('✓ Prodotti caricati:', PRODS.length);
+  } catch(e) {
+    console.error('Errore fetch prodotti.json:', e.message);
+    // In locale/artifact senza server: mostra messaggio utile
+    if (mc) mc.innerHTML = '<div style="text-align:center;padding:60px 24px;color:var(--ink3);max-width:480px;margin:0 auto"><div style="font-size:32px;margin-bottom:16px">📦</div><div style="font-size:15px;font-weight:700;color:#fff;margin-bottom:8px">Prodotti non disponibili</div><div style="font-size:13px;line-height:1.6">Carica questo file su <strong style="color:var(--teal)">Vercel</strong> insieme al <code style="background:rgba(255,255,255,.08);padding:2px 6px;border-radius:4px">prodotti.json</code> aggiornato per vedere i prodotti del listino.</div><div style="margin-top:20px;font-size:12px;color:var(--ink4)">GitHub Actions aggiorna il listino ogni mattina alle 10:00.</div></div>';
+  }
+}
+
+// ══ INIT ════════════════════════════════════════════════
+(async () => {
+  loadFromUrl();
+  await fetchProdotti();
+  render();
+})();
+</script>
+</body>
+</html>

@@ -1,13 +1,5 @@
 [
   {
-    "mpn": "AX5U6400C3816G-DTLABRWH",
-    "brand": "ADATA",
-    "categoria": "RAM",
-    "desc": "ADATA 32GB XPG Lancer Blade RGB DDR5-6400 RAM, CL38, AMD EXPO, Intel XMP - 32 GB",
-    "img": "foto/adata_ax5u6400c3816g-dtlabrwh.png",
-    "reason": "dark_environment_complex_scene"
-  },
-  {
     "mpn": "100-000000478",
     "brand": "AMD",
     "categoria": "CPU",
@@ -56,27 +48,11 @@
     "reason": "dark_environment_complex_scene"
   },
   {
-    "mpn": "CSSD-F4000GBMP700PNH",
-    "brand": "Corsair",
-    "categoria": "SSD",
-    "desc": "Corsair MP700 Pro NVMe SSD, PCIe 5.0 M.2 Typ 2280 - 4 TB",
-    "img": "corsair_cssd-f4000gbmp700pnh.png",
-    "reason": "dark_environment_complex_scene"
-  },
-  {
     "mpn": "CT16G4SFRA32A",
     "brand": "Crucial",
     "categoria": "RAM",
     "desc": "Crucial DDR4 16GB 3200MHz CL22 SO-DIMM 1.2V Laptop RAM",
     "img": "foto/crucial_ct16g4sfra32a.png",
-    "reason": "saturated_promo_background"
-  },
-  {
-    "mpn": "CT16G56C46S5",
-    "brand": "Crucial",
-    "categoria": "RAM",
-    "desc": "Crucial SO-DIMM 16GB, DDR5-5600, CL46-45-45, 1RX8",
-    "img": "foto/crucial_ct16g56c46s5.png",
     "reason": "saturated_promo_background"
   },
   {
@@ -160,14 +136,6 @@
     "reason": "aspect_extreme"
   },
   {
-    "mpn": "4SC18AA#ABB",
-    "brand": "HP",
-    "categoria": "PSU",
-    "desc": "HP Netzteil NB 150W zbook Smart Slim 4.5mm AC Adapter",
-    "img": "foto/hp_4sc18aa_abb.png",
-    "reason": "human_skin_detected"
-  },
-  {
     "mpn": "Z20 MESH WHITE",
     "brand": "Jonsbo",
     "categoria": "Case",
@@ -216,26 +184,10 @@
     "reason": "dark_environment_complex_scene"
   },
   {
-    "mpn": "7E06-026R",
-    "brand": "MSI",
-    "categoria": "Scheda Madre",
-    "desc": "MSI Z790 GAMING PLUS WIFI motherboard Intel Z790 LGA 1700 ATX",
-    "img": "foto/msi_7e06-026r.png",
-    "reason": "dark_environment_complex_scene"
-  },
-  {
-    "mpn": "7E32-001R",
-    "brand": "MSI",
-    "categoria": "Scheda Madre",
-    "desc": "MSI MAG Z890 Tomahawk WiFi Mainboard, Sockel LGA 1851, Intel Z890, ATX, DDR5",
-    "img": "foto/msi_7e32-001r.png",
-    "reason": "dark_environment_complex_scene"
-  },
-  {
     "mpn": "7E36-001R",
     "brand": "MSI",
     "categoria": "Scheda Madre",
-    "desc": "MSI A620AM-B PRO EVO (AM5) (D)",
+    "desc": "MSI PRO A620AM-B EVO Mainboard, Sockel AM5, AMD A620, mATX, DDR5",
     "img": "foto/msi_7e36-001r.png",
     "reason": "dark_environment_complex_scene"
   },
@@ -344,14 +296,6 @@
     "reason": "no_solid_bg_likely_environment"
   },
   {
-    "mpn": "52122-11-40G",
-    "brand": "SAPPHIRE",
-    "categoria": "Scheda Madre",
-    "desc": "Sapphire Nitro+ X870EA PhantomLink Polar Edition Mainboard, AMD X870E, Sockel AM",
-    "img": "foto/sapphire_52122-11-40g.png",
-    "reason": "dark_environment_complex_scene"
-  },
-  {
     "mpn": "SP008GBLFU320X02",
     "brand": "Silicon Power",
     "categoria": "RAM",
@@ -412,14 +356,6 @@
     "brand": "Thermal Grizzly",
     "categoria": "GPU",
     "desc": "Thermal Grizzly WireView Pro II GPU Überwachungs-Gerät- weiß, Normal",
-    "img": null,
-    "reason": "no_photo_file_at_all"
-  },
-  {
-    "mpn": "NF-2 ARGB WHITE",
-    "brand": "Jonsbo",
-    "categoria": "RAM",
-    "desc": "Jonsbo NF-2 RAM-Kühler, ARGB - weiß",
     "img": null,
     "reason": "no_photo_file_at_all"
   },
@@ -492,14 +428,6 @@
     "brand": "kein Hersteller",
     "categoria": "PSU",
     "desc": "Phobya externes Netzteil 230V auf 4Pin Molex - 70 Watt",
-    "img": null,
-    "reason": "no_photo_file_at_all"
-  },
-  {
-    "mpn": "NF-2 ARGB BLACK",
-    "brand": "Jonsbo",
-    "categoria": "RAM",
-    "desc": "Jonsbo NF-2 RAM-Kühler, ARGB - schwarz",
     "img": null,
     "reason": "no_photo_file_at_all"
   },
@@ -2176,14 +2104,6 @@
     "reason": "no_photo_file_at_all"
   },
   {
-    "mpn": "SST-NT07-115X",
-    "brand": "Silverstone",
-    "categoria": "Dissipatore",
-    "desc": "SilverStone Nitrogon SST-NT07-115X Low Profile CPU-Cooler",
-    "img": null,
-    "reason": "no_photo_file_at_all"
-  },
-  {
     "mpn": "CSSD-F8000GBMP600PXT",
     "brand": "Corsair",
     "categoria": "SSD",
@@ -2196,14 +2116,6 @@
     "brand": "ASUS",
     "categoria": "Scheda Madre",
     "desc": "ASUS PRO B550M-C/CSM, AMD B550 Mainboard, Socket AM4, DDR4",
-    "img": null,
-    "reason": "no_photo_file_at_all"
-  },
-  {
-    "mpn": "SST-SX800-LTI V1.2",
-    "brand": "Silverstone",
-    "categoria": "PSU",
-    "desc": "SilverStone SST-SX800-LTI v1.2 80 PLUS Titanium, modular - 800 Watt",
     "img": null,
     "reason": "no_photo_file_at_all"
   },
@@ -2264,22 +2176,6 @@
     "reason": "no_photo_file_at_all"
   },
   {
-    "mpn": "A-NUC92-M1B",
-    "brand": "Akasa",
-    "categoria": "Case",
-    "desc": "Akasa Newton WS Intel NUC-Gehäuse, passive Kühlung- schwarz",
-    "img": null,
-    "reason": "no_photo_file_at_all"
-  },
-  {
-    "mpn": "SST-FAB1B-PRO",
-    "brand": "Silverstone",
-    "categoria": "Case",
-    "desc": "SilverStone Fara B1 Pro Midi-Tower, ARGB, Tempered Glass - schwarz",
-    "img": null,
-    "reason": "no_photo_file_at_all"
-  },
-  {
     "mpn": "306-7ZP7B11-CE0",
     "brand": "MSI",
     "categoria": "PSU",
@@ -2292,14 +2188,6 @@
     "brand": "Crucial",
     "categoria": "RAM",
     "desc": "Crucial Pro Overclocking Edition DDR5-6000 RAM, CL36, XMP 3.0, AMD EXPO- 32 GB D",
-    "img": null,
-    "reason": "no_photo_file_at_all"
-  },
-  {
-    "mpn": "SST-TX700-G",
-    "brand": "Silverstone",
-    "categoria": "PSU",
-    "desc": "SilverStone SST-TX700-G TFX Netzteil, 80 PLUS Gold - 700 Watt",
     "img": null,
     "reason": "no_photo_file_at_all"
   },
@@ -2332,8 +2220,8 @@
     "brand": "Silverstone",
     "categoria": "Case",
     "desc": "SilverStone SST-CS351B SAS-12G-/SATA-6G-NAS-Gehäuse mit 5 Einschüben",
-    "img": null,
-    "reason": "no_photo_file_at_all"
+    "img": "foto/silverstone_sst-cs351b.png",
+    "reason": "light_environment_not_pure_white"
   },
   {
     "mpn": "SST-RM52",
@@ -2348,14 +2236,6 @@
     "brand": "Team Group",
     "categoria": "SSD",
     "desc": "Team Group Z44A7 NVMe SSD, PCIe 4.0 M.2 Typ 2280 - 2 TB",
-    "img": null,
-    "reason": "no_photo_file_at_all"
-  },
-  {
-    "mpn": "SST-SG05BB-LITE USB 3.0",
-    "brand": "Silverstone",
-    "categoria": "Case",
-    "desc": "SilverStone SST-SG05BB-Lite Sugo USB 3.0 - schwarz",
     "img": null,
     "reason": "no_photo_file_at_all"
   },
@@ -2400,14 +2280,6 @@
     "reason": "no_photo_file_at_all"
   },
   {
-    "mpn": "SST-CS382",
-    "brand": "Silverstone",
-    "categoria": "Case",
-    "desc": "Silverstone SST-CS382 Server",
-    "img": null,
-    "reason": "no_photo_file_at_all"
-  },
-  {
     "mpn": "A-ITX39-M1B",
     "brand": "Akasa",
     "categoria": "Case",
@@ -2432,26 +2304,10 @@
     "reason": "no_photo_file_at_all"
   },
   {
-    "mpn": "N10 BLACK",
-    "brand": "Jonsbo",
-    "categoria": "Case",
-    "desc": "Jonsbo N10 PC Gehäuse, Mini-Tower, Mini-ITX - schwarz",
-    "img": null,
-    "reason": "no_photo_file_at_all"
-  },
-  {
     "mpn": "22001",
     "brand": "Stealkey Customs",
     "categoria": "Dissipatore",
     "desc": "Stealkey Customs CenPro CPU-Wasserkühler, AM5, D-RGB - Acryl",
-    "img": null,
-    "reason": "no_photo_file_at_all"
-  },
-  {
-    "mpn": "SST-FA313-B",
-    "brand": "Silverstone",
-    "categoria": "Case",
-    "desc": "Silverstone SST-FA313-B Micro-ATX Gehäuse",
     "img": null,
     "reason": "no_photo_file_at_all"
   },
@@ -2508,14 +2364,6 @@
     "brand": "MSI",
     "categoria": "Scheda Madre",
     "desc": "MSI Pro B650M-B, AMD B650 Mainboard - Sockel AM5, DDR5",
-    "img": null,
-    "reason": "no_photo_file_at_all"
-  },
-  {
-    "mpn": "SST-CS383",
-    "brand": "Silverstone",
-    "categoria": "Case",
-    "desc": "SilverStone CS383 NAS-Gehäuse, 8-Bay - schwarz",
     "img": null,
     "reason": "no_photo_file_at_all"
   },
@@ -2656,14 +2504,6 @@
     "reason": "no_photo_file_at_all"
   },
   {
-    "mpn": "V12 BLACK",
-    "brand": "Jonsbo",
-    "categoria": "Case",
-    "desc": "Jonsbo V12 PC-Gehäuse, Mini-Tower, Micro-ATX - schwarz",
-    "img": null,
-    "reason": "no_photo_file_at_all"
-  },
-  {
     "mpn": "SC-S3 INT-S",
     "brand": "Singularity Computers",
     "categoria": "Case",
@@ -2684,14 +2524,6 @@
     "brand": "be quiet!",
     "categoria": "PSU",
     "desc": "be quiet! Dark Power 13 Netzteil 80 PLUS Titanium, ATX 3.0, PCIe 5.0 - 750 Watt",
-    "img": null,
-    "reason": "no_photo_file_at_all"
-  },
-  {
-    "mpn": "SST-ALG1MW",
-    "brand": "Silverstone",
-    "categoria": "Case",
-    "desc": "SilverStone Alta G1M Mirco-ATX Gehäuse - weiß",
     "img": null,
     "reason": "no_photo_file_at_all"
   },
@@ -2776,14 +2608,6 @@
     "reason": "no_photo_file_at_all"
   },
   {
-    "mpn": "SST-ML06B",
-    "brand": "Silverstone",
-    "categoria": "Case",
-    "desc": "SilverStone SST-ML06B Milo HTPC Gehäuse - schwarz",
-    "img": null,
-    "reason": "no_photo_file_at_all"
-  },
-  {
     "mpn": "CT2K32G48C40U5",
     "brand": "Crucial",
     "categoria": "RAM",
@@ -2796,14 +2620,6 @@
     "brand": "Streacom",
     "categoria": "PSU",
     "desc": "Streacom ZeroFlex 240 Netzteil - 240 Watt",
-    "img": null,
-    "reason": "no_photo_file_at_all"
-  },
-  {
-    "mpn": "SST-ST40F-ES230",
-    "brand": "Silverstone",
-    "categoria": "PSU",
-    "desc": "SilverStone SST-ST40F-ES230 Strider Essential Series - 400 Watt",
     "img": null,
     "reason": "no_photo_file_at_all"
   },
@@ -2840,26 +2656,10 @@
     "reason": "no_photo_file_at_all"
   },
   {
-    "mpn": "SST-FX600-PT",
-    "brand": "Silverstone",
-    "categoria": "PSU",
-    "desc": "SilverStone SST-FX600-PT FX600 Platinum Netzteil - 600 Watt",
-    "img": null,
-    "reason": "no_photo_file_at_all"
-  },
-  {
     "mpn": "ZP2048GV3A002",
     "brand": "Seagate",
     "categoria": "SSD",
     "desc": "Seagate FireCuda 520N NVMe SSD, PCIe 4.0, M.2 Typ 2230 - 2 TB",
-    "img": null,
-    "reason": "no_photo_file_at_all"
-  },
-  {
-    "mpn": "SST-SG13WB",
-    "brand": "Silverstone",
-    "categoria": "Case",
-    "desc": "SilverStone SST-SG13WB Sugo USB3.0 - weiß",
     "img": null,
     "reason": "no_photo_file_at_all"
   },
@@ -2892,8 +2692,8 @@
     "brand": "Silverstone",
     "categoria": "Case",
     "desc": "SilverStone SST-RMS06-22 Rackmount Halterung",
-    "img": null,
-    "reason": "no_photo_file_at_all"
+    "img": "foto/silverstone_sst-rms06-22.png",
+    "reason": "light_environment_not_pure_white"
   },
   {
     "mpn": "F5-6000J3244G64GX2-TZ5NR",
@@ -2920,26 +2720,10 @@
     "reason": "no_photo_file_at_all"
   },
   {
-    "mpn": "90MB1JC0-M0EAY0",
-    "brand": "ASUS",
-    "categoria": "Scheda Madre",
-    "desc": "ASUS Pro WS Z890-ACE SE Mainboard, Sockel LGA 1851, Intel Z890, ATX, DDR5",
-    "img": null,
-    "reason": "no_photo_file_at_all"
-  },
-  {
     "mpn": "90DC0040-B49000",
     "brand": "ASUS",
     "categoria": "Case",
     "desc": "ASUS TUF GT301 Midi-Tower - schwarz",
-    "img": null,
-    "reason": "no_photo_file_at_all"
-  },
-  {
-    "mpn": "A-NVD01-M1B",
-    "brand": "Akasa",
-    "categoria": "Case",
-    "desc": "Akasa Machina N Fanless Gehäuse (für NVIDIA Jetson Xavier und Nano) - schwarz, a",
     "img": null,
     "reason": "no_photo_file_at_all"
   },
@@ -2956,14 +2740,6 @@
     "brand": "Seagate",
     "categoria": "SSD",
     "desc": "Seagate FireCuda 520N NVMe SSD, PCIe 4.0, M.2 Typ 2230 - 1 TB",
-    "img": null,
-    "reason": "no_photo_file_at_all"
-  },
-  {
-    "mpn": "SST-TX500-G",
-    "brand": "Silverstone",
-    "categoria": "PSU",
-    "desc": "SilverStone SST-TX500-G TFX Netzteil, 80 PLUS Gold - 500 Watt",
     "img": null,
     "reason": "no_photo_file_at_all"
   },
@@ -3016,14 +2792,6 @@
     "reason": "no_photo_file_at_all"
   },
   {
-    "mpn": "SST-XED120S-WS",
-    "brand": "Silverstone",
-    "categoria": "Dissipatore",
-    "desc": "SilverStone SST-XED120S-WS CPU-Kühler, 4U-Formfaktor - silber",
-    "img": null,
-    "reason": "no_photo_file_at_all"
-  },
-  {
     "mpn": "CC-9011263-WW",
     "brand": "Corsair",
     "categoria": "Case",
@@ -3035,9 +2803,9 @@
     "mpn": "CM8071504651106",
     "brand": "Intel",
     "categoria": "CPU",
-    "desc": "Intel Core i3-12100T 2,20 GHz (Alder Lake-S) Sockel 1700 - tray",
-    "img": null,
-    "reason": "no_photo_file_at_all"
+    "desc": "Intel Core i3-12100T 2.2GHz LGA1700 12M Cache Tray",
+    "img": "foto/intel_cm8071504651106.png",
+    "reason": "saturated_promo_background"
   },
   {
     "mpn": "84000000200",
@@ -3084,14 +2852,6 @@
     "brand": "Akasa",
     "categoria": "Case",
     "desc": "Akasa Euler M Fanless Mini-ITX Gehäuse, 80W Netzteil, OEM - schwarz",
-    "img": null,
-    "reason": "no_photo_file_at_all"
-  },
-  {
-    "mpn": "SST-ST45SF V 3.0",
-    "brand": "Silverstone",
-    "categoria": "PSU",
-    "desc": "SilverStone SST-ST45SF V3.0 80 PLUS Bronze SFX Netzteil - 450 Watt",
     "img": null,
     "reason": "no_photo_file_at_all"
   },
@@ -3144,14 +2904,6 @@
     "reason": "no_photo_file_at_all"
   },
   {
-    "mpn": "SST-RM41-506",
-    "brand": "Silverstone",
-    "categoria": "Case",
-    "desc": "SilverStone SST-RM41-506 Rackmount Server - 4U - schwarz",
-    "img": null,
-    "reason": "no_photo_file_at_all"
-  },
-  {
     "mpn": "STRONGHOLD BARRICADE",
     "brand": "Kolink",
     "categoria": "Case",
@@ -3172,22 +2924,6 @@
     "brand": "Crucial",
     "categoria": "SSD",
     "desc": "Crucial P3 NVMe SSD, PCIe 3.0 M.2 Typ 2280 - 2 TB",
-    "img": null,
-    "reason": "no_photo_file_at_all"
-  },
-  {
-    "mpn": "SST-SX750-G",
-    "brand": "Silverstone",
-    "categoria": "PSU",
-    "desc": "SilverStone SST-SX750-G 80 PLUS Gold, modular - 750 Watt",
-    "img": null,
-    "reason": "no_photo_file_at_all"
-  },
-  {
-    "mpn": "T9 BLACK PCIE 5.0",
-    "brand": "Jonsbo",
-    "categoria": "Case",
-    "desc": "Jonsbo T9 Black PC-Gehäuse, Mini-Gehäuse, ITX, PCIe 5.0 Riserkabel - schwarz",
     "img": null,
     "reason": "no_photo_file_at_all"
   },
@@ -3224,14 +2960,6 @@
     "reason": "no_photo_file_at_all"
   },
   {
-    "mpn": "SST-RM4A",
-    "brand": "Silverstone",
-    "categoria": "Case",
-    "desc": "SilverStone RM4A Server-Gehäuse, 4HE Rackmount, SSI-EEB, Mesh - dunkelgrau",
-    "img": null,
-    "reason": "no_photo_file_at_all"
-  },
-  {
     "mpn": "M321R8GA0BB0-CQK",
     "brand": "SAMSUNG",
     "categoria": "RAM",
@@ -3244,14 +2972,6 @@
     "brand": "MSI",
     "categoria": "Scheda Madre",
     "desc": "MSI MPG X670E Carbon WiFi, AMD X670E Mainboard - Sockel AM5",
-    "img": null,
-    "reason": "no_photo_file_at_all"
-  },
-  {
-    "mpn": "SST-SG11B",
-    "brand": "Silverstone",
-    "categoria": "Case",
-    "desc": "SilverStone SST-SG11B Sugo USB3.0 - schwarz",
     "img": null,
     "reason": "no_photo_file_at_all"
   },
@@ -3324,14 +3044,6 @@
     "brand": "NVIDIA",
     "categoria": "GPU",
     "desc": "NVIDIA RTX 2000 Ada Generation Grafikkarte, 16384 MB GDDR6",
-    "img": null,
-    "reason": "no_photo_file_at_all"
-  },
-  {
-    "mpn": "SST-RM23-502",
-    "brand": "Silverstone",
-    "categoria": "Case",
-    "desc": "SilverStone RM23-502 Rackmount Server Gehäuse, ATX, USB 3.0 - 2U - schwarz",
     "img": null,
     "reason": "no_photo_file_at_all"
   },
@@ -3432,14 +3144,6 @@
     "reason": "no_photo_file_at_all"
   },
   {
-    "mpn": "A-NUC43-M1B",
-    "brand": "Akasa",
-    "categoria": "Case",
-    "desc": "Akasa Plato X8 UCFF-Gehäuse (Intel NUC), OEM - schwarz",
-    "img": null,
-    "reason": "no_photo_file_at_all"
-  },
-  {
     "mpn": "M321RAGA0B20-CWK",
     "brand": "SAMSUNG",
     "categoria": "RAM",
@@ -3500,22 +3204,6 @@
     "brand": "Akasa",
     "categoria": "Case",
     "desc": "Akasa Cypher MX3 Thin Mini-ITX Gehäuse, OEM - schwarz",
-    "img": null,
-    "reason": "no_photo_file_at_all"
-  },
-  {
-    "mpn": "SST-VD120-SLIM",
-    "brand": "Silverstone",
-    "categoria": "Dissipatore",
-    "desc": "SilverStone VIDA 120 SLIM, AiO Wasserkühlung, schwarz - 120mm",
-    "img": null,
-    "reason": "no_photo_file_at_all"
-  },
-  {
-    "mpn": "SST-ST50F-ES230 V 2.0",
-    "brand": "Silverstone",
-    "categoria": "PSU",
-    "desc": "SilverStone SST-ST50F-ES230 v2.0 Strider Essential Series - 500 Watt",
     "img": null,
     "reason": "no_photo_file_at_all"
   },
@@ -5496,14 +5184,6 @@
     "reason": "light_environment_not_pure_white"
   },
   {
-    "mpn": "BGW70",
-    "brand": "be quiet!",
-    "categoria": "Case",
-    "desc": "be quiet! Light Base 900 DX Big-Tower, Tempered Glass, ARGB - weiß",
-    "img": "foto/be_quiet_bgw70.png",
-    "reason": "video_thumbnail"
-  },
-  {
     "mpn": "7E62-001R",
     "brand": "MSI",
     "categoria": "Scheda Madre",
@@ -5598,5 +5278,37 @@
     "desc": "GENESIS CASE MIDI TOWER IRID 505 ARGB (USB 3.0)",
     "img": "foto/genesis_npc-1518.png",
     "reason": "no_solid_bg_likely_environment"
+  },
+  {
+    "mpn": "CT32G56C46S5T",
+    "brand": "Crucial",
+    "categoria": "RAM",
+    "desc": "Crucial SO-DIMM DDR5-5600  32GB Tray",
+    "img": "foto/crucial_ct32g56c46s5t.png",
+    "reason": "saturated_promo_background"
+  },
+  {
+    "mpn": "BGW75",
+    "brand": "be quiet!",
+    "categoria": "Case",
+    "desc": "be quiet! Pure Base 501 Airflow Midi-Tower, ATX, Tempered Glass - weiß",
+    "img": "foto/be_quiet_bgw75.png",
+    "reason": "no_solid_bg_likely_environment"
+  },
+  {
+    "mpn": "90DC0093-B19000",
+    "brand": "ASUS",
+    "categoria": "Case",
+    "desc": "ASUS TUF Gaming GT502 Plus TG Midi-Tower - weiß",
+    "img": "foto/asus_90dc0093-b19000.png",
+    "reason": "very_light_low_variance_brand"
+  },
+  {
+    "mpn": "C-F500F-FM1E-G0W",
+    "brand": "TRYX",
+    "categoria": "Case",
+    "desc": "TRYX FLOVA F50 PC-Gehäuse, Midi-Tower, ATX, Tempered Glass - weiß",
+    "img": "foto/tryx_c-f500f-fm1e-g0w.png",
+    "reason": "very_light_low_variance_brand"
   }
 ]

@@ -1,21 +1,5 @@
 [
   {
-    "mpn": "100-000000478",
-    "brand": "AMD",
-    "categoria": "CPU",
-    "desc": "AMD EPYC 9454 Processor (48C/96T) 2.75GHz (3.8GHz Turbo) Socket SP5 TDP 290W",
-    "img": "foto/amd_100-000000478.png",
-    "reason": "saturated_promo_background"
-  },
-  {
-    "mpn": "100-000000480",
-    "brand": "AMD",
-    "categoria": "CPU",
-    "desc": "AMD EPYC 9254 processor 2.9 GHz 128 MB L3",
-    "img": "foto/amd_100-000000480.png",
-    "reason": "no_solid_bg_likely_environment"
-  },
-  {
     "mpn": "100-000000802",
     "brand": "AMD",
     "categoria": "CPU",
@@ -40,46 +24,6 @@
     "reason": "dark_environment_complex_scene"
   },
   {
-    "mpn": "100-000001406",
-    "brand": "AMD",
-    "categoria": "CPU",
-    "desc": "AMD Ryzen 5 9500F Processor - Tray",
-    "img": "foto/amd_100-000001406.png",
-    "reason": "dark_environment_complex_scene"
-  },
-  {
-    "mpn": "CT16G4SFRA32A",
-    "brand": "Crucial",
-    "categoria": "RAM",
-    "desc": "Crucial DDR4 16GB 3200MHz CL22 SO-DIMM 1.2V Laptop RAM",
-    "img": "foto/crucial_ct16g4sfra32a.png",
-    "reason": "saturated_promo_background"
-  },
-  {
-    "mpn": "CT2K48G56C46S5",
-    "brand": "Crucial",
-    "categoria": "RAM",
-    "desc": "Crucial SO-DIMM DDR5-5600 96GB Kit (2x 48GB)",
-    "img": "foto/crucial_ct2k48g56c46s5.png",
-    "reason": "saturated_promo_background"
-  },
-  {
-    "mpn": "CT8G4SFRA32A",
-    "brand": "Crucial",
-    "categoria": "RAM",
-    "desc": "S/O 8GB DDR4 PC 3200 Crucial CT8G4SFRA32A  1x8GB",
-    "img": "foto/crucial_ct8g4sfra32a.png",
-    "reason": "saturated_promo_background"
-  },
-  {
-    "mpn": "R-PN850M-FC0W-JGEU",
-    "brand": "DEEPCOOL",
-    "categoria": "PSU",
-    "desc": "Deepcool PN850M WH 850w Gold Modular power supply white",
-    "img": "foto/deepcool_r-pn850m-fc0w-jgeu.png",
-    "reason": "human_skin_detected"
-  },
-  {
     "mpn": "EY2A001",
     "brand": "ENDORFY",
     "categoria": "Case",
@@ -88,155 +32,11 @@
     "reason": "saturated_promo_background"
   },
   {
-    "mpn": "EY2A005",
-    "brand": "ENDORFY",
-    "categoria": "Case",
-    "desc": "COVERAGE ENDORFY SIGNUM 300 AIR",
-    "img": "foto/endorfy_ey2a005.png",
-    "reason": "saturated_promo_background"
-  },
-  {
-    "mpn": "NE75080S19T2-GB2031X",
-    "brand": "Gainward",
-    "categoria": "GPU",
-    "desc": "Gainward GeForce RTX 5080 Phoenix GS, 16384 MB GDDR7",
-    "img": "foto/gainward_ne75080s19t2-gb2031x.png",
-    "reason": "saturated_promo_background"
-  },
-  {
-    "mpn": "MO27Q2A ICE",
-    "brand": "Gigabyte",
-    "categoria": "Monitor",
-    "desc": "GIGABYTE MO27Q2A ICE 27” OLED 2K QHD Gaming Monitor - 2560 x 1440, 280Hz, 0.03ms",
-    "img": "foto/gigabyte_mo27q2a_ice.png",
-    "reason": "saturated_promo_background"
-  },
-  {
-    "mpn": "GR2666D464L19/16G",
-    "brand": "GoodRam",
-    "categoria": "RAM",
-    "desc": "Goodram GR2666D464L19/16G memory module 16 GB DDR4 2666 MHz",
-    "img": "foto/goodram_gr2666d464l19_16g.png",
-    "reason": "img_too_small"
-  },
-  {
-    "mpn": "GR3200D464L22/16G",
-    "brand": "GoodRam",
-    "categoria": "RAM",
-    "desc": "Goodram GR3200D464L22/16G memory module 16 GB 1 x 16 GB DDR4 3200 MHz",
-    "img": "foto/goodram_gr3200d464l22_16g.png",
-    "reason": "aspect_extreme"
-  },
-  {
-    "mpn": "Z20 MESH WHITE",
-    "brand": "Jonsbo",
-    "categoria": "Case",
-    "desc": "Jonsplus Z20 Mesh PC-Gehäuse, Mini Tower, Micro-ATX, mit Tragegriff - weiß",
-    "img": "foto/jonsbo_z20_mesh_white.png",
-    "reason": "no_solid_bg_likely_environment"
-  },
-  {
-    "mpn": "SFYRDK/4000G",
-    "brand": "Kingston",
-    "categoria": "SSD",
-    "desc": "Kingston Technology 4000G RENEGADE PCIe 4.0 NVMe SSD W/ HEATSINK",
-    "img": "foto/kingston_sfyrdk_4000g.png",
-    "reason": "video_thumbnail"
-  },
-  {
-    "mpn": "KING 45 PRO (W)",
-    "brand": "Montech",
-    "categoria": "Case",
-    "desc": "Montech KING 45 PRO PC-Gehäuse, Midi-Tower, ATX, Tempere Glass, RGB - weiß",
-    "img": "foto/montech_king_45_pro_w.png",
-    "reason": "dark_environment_complex_scene"
-  },
-  {
-    "mpn": "KING 65 PRO (W)",
-    "brand": "Montech",
-    "categoria": "Case",
-    "desc": "Montech KING 65 PRO PC-Gehäuse, Midi-Tower, ATX, ARGB, Tempered Glass -weiß",
-    "img": "foto/montech_king_65_pro_w.png",
-    "reason": "no_solid_bg_likely_environment"
-  },
-  {
-    "mpn": "7D96-003R",
-    "brand": "MSI",
-    "categoria": "Scheda Madre",
-    "desc": "MSI MAG B760 Tomahawk WiFi, Intel B760 Mainboard - Sockel 1700, DDR5",
-    "img": "foto/msi_7d96-003r.png",
-    "reason": "dark_environment_complex_scene"
-  },
-  {
-    "mpn": "7E36-001R",
-    "brand": "MSI",
-    "categoria": "Scheda Madre",
-    "desc": "MSI PRO A620AM-B EVO Mainboard, Sockel AM5, AMD A620, mATX, DDR5",
-    "img": "foto/msi_7e36-001r.png",
-    "reason": "dark_environment_complex_scene"
-  },
-  {
-    "mpn": "7E36-001R",
-    "brand": "MSI",
-    "categoria": "Scheda Madre",
-    "desc": "MSI PRO A620AM-B EVO Mainboard, Sockel AM5, AMD A620, mATX, DDR5",
-    "img": "msi_7e36-001r.png",
-    "reason": "dark_environment_complex_scene"
-  },
-  {
     "mpn": "7E41-001R",
     "brand": "MSI",
     "categoria": "Scheda Madre",
     "desc": "MSI PRO B860-P WiFi Mainboard, Sockel LGA 1851, Intel B860, ATX, DDR5",
     "img": "foto/msi_7e41-001r.png",
-    "reason": "dark_environment_complex_scene"
-  },
-  {
-    "mpn": "7E42-002R",
-    "brand": "MSI",
-    "categoria": "Scheda Madre",
-    "desc": "MSI PRO B860M-A WiFi Mainboard, Sockel LGA 1851, Intel B860, mATX, DDR5",
-    "img": "foto/msi_7e42-002r.png",
-    "reason": "dark_environment_complex_scene"
-  },
-  {
-    "mpn": "7E54-001R",
-    "brand": "MSI",
-    "categoria": "Scheda Madre",
-    "desc": "MSI PRO Z890-S WIFI, Intel Z890 Mainboard - Sockel 1851 - DDR5",
-    "img": "foto/msi_7e54-001r.png",
-    "reason": "dark_environment_complex_scene"
-  },
-  {
-    "mpn": "7E56-030R",
-    "brand": "MSI",
-    "categoria": "Scheda Madre",
-    "desc": "MSI MAG B850 GAMING PLUS MAX WIFI motherboard AMD B850 Socket AM5 ATX",
-    "img": "foto/msi_7e56-030r.png",
-    "reason": "dark_environment_complex_scene"
-  },
-  {
-    "mpn": "7E59-002R",
-    "brand": "MSI",
-    "categoria": "Scheda Madre",
-    "desc": "MSI MPG X870E Edge TI WiFi Mainboard, Sockel AM5, AMD X870E, ATX, DDR5",
-    "img": "foto/msi_7e59-002r.png",
-    "reason": "dark_environment_complex_scene"
-  },
-  {
-    "mpn": "B840M GAMING PLUS WIFI6E",
-    "brand": "MSI",
-    "categoria": "Scheda Madre",
-    "desc": "MSI B840M GAMING PLUS WIFI6E motherboard AMD B840 Socket AM5 micro ATX",
-    "img": "foto/msi_b840m_gaming_plus_wifi6e.png",
-    "reason": "dark_environment_complex_scene"
-  },
-  {
-    "mpn": "MAG B850M MORTAR WIFI",
-    "brand": "MSI",
-    "categoria": "Scheda Madre",
-    "desc": "MSI MAG B850M MORTAR WIFI motherboard AMD B850 Socket AM5 micro ATX",
-    "img": "foto/msi_mag_b850m_mortar_wifi.png",
     "reason": "dark_environment_complex_scene"
   },
   {
@@ -254,14 +54,6 @@
     "desc": "MSI X870E GAMING PLUS WIFI motherboard AMD X870E Socket AM5 ATX",
     "img": "foto/msi_x870e_gaming_plus_wifi.png",
     "reason": "dark_environment_complex_scene"
-  },
-  {
-    "mpn": "RF-Q12SF-W2",
-    "brand": "NZXT",
-    "categoria": "Dissipatore",
-    "desc": "NZXT RF-Q12SF-W2 computer cooling system Computer case Fan 12 cm White 1 pc(s)",
-    "img": "foto/nzxt_rf-q12sf-w2.png",
-    "reason": "very_light_low_variance_brand"
   },
   {
     "mpn": "PVP301TB28UDG",
@@ -286,46 +78,6 @@
     "desc": "Silicon Power SP008GBLFU320X02 memory module 8 GB 1 x 8 GB DDR4 3200 MHz",
     "img": "foto/silicon_power_sp008gblfu320x02.png",
     "reason": "aspect_extreme"
-  },
-  {
-    "mpn": "SP016GBLFU266X02",
-    "brand": "Silicon Power",
-    "categoria": "RAM",
-    "desc": "SILICON POWER DDR4 UDIMM RAM memory 2666 MHz CL19 16 GB (SP016GBLFU266X02) Black",
-    "img": "foto/silicon_power_sp016gblfu266x02.png",
-    "reason": "aspect_extreme"
-  },
-  {
-    "mpn": "TED416G3200C22-S01",
-    "brand": "TeamGroup",
-    "categoria": "RAM",
-    "desc": "S/O 16GB DDR4 PC 3200 Team Elite retail TED416G3200C22-S01",
-    "img": "foto/teamgroup_ted416g3200c22-s01.png",
-    "reason": "dark_environment_complex_scene"
-  },
-  {
-    "mpn": "GABU-474",
-    "brand": "ThunderX3",
-    "categoria": "Case",
-    "desc": "ThunderX3 LAB-X Gaming Tisch, Höhenverstellbar - schwarz",
-    "img": "foto/thunderx3_gabu-474.png",
-    "reason": "no_solid_bg_likely_environment"
-  },
-  {
-    "mpn": "23980",
-    "brand": "Trust",
-    "categoria": "Tastiera",
-    "desc": "Trust TK-150 keyboard Universal USB QWERTY Black",
-    "img": "foto/trust_23980.png",
-    "reason": "no_solid_bg_likely_environment"
-  },
-  {
-    "mpn": "P30 WHITE V2",
-    "brand": "Zalman",
-    "categoria": "Case",
-    "desc": "Zalman P30 V2 PC-Gehäuse, Mini-Tower, mATX, RGB, Tempered Glass - weiß",
-    "img": "foto/zalman_p30_white_v2.png",
-    "reason": "light_environment_not_pure_white"
   },
   {
     "mpn": "TG-WV-P28R",
@@ -580,14 +332,6 @@
     "brand": "WD",
     "categoria": "Extra",
     "desc": "Western Digital Blue WD40EZAX internal hard drive 3.5\" 4 TB Serial ATA III",
-    "img": null,
-    "reason": "no_photo_file_at_all"
-  },
-  {
-    "mpn": "WD20EFPX",
-    "brand": "WD",
-    "categoria": "Extra",
-    "desc": "Western Digital Red Plus internal hard drive 2 TB 5400 RPM 64 MB 3.5\" Serial ATA",
     "img": null,
     "reason": "no_photo_file_at_all"
   },
@@ -1392,14 +1136,6 @@
     "reason": "no_photo_file_at_all"
   },
   {
-    "mpn": "100-000000800",
-    "brand": "AMD",
-    "categoria": "CPU",
-    "desc": "AMD EPYC 9334 processor 2.7 GHz 128 MB L3",
-    "img": null,
-    "reason": "no_photo_file_at_all"
-  },
-  {
     "mpn": "100-000000794",
     "brand": "AMD",
     "categoria": "CPU",
@@ -1822,14 +1558,6 @@
     "desc": "Intel Core i5-14500T 1,7 GHz (Raptor Lake Refresh) Sockel 1700 - tray",
     "img": null,
     "reason": "no_photo_file_at_all"
-  },
-  {
-    "mpn": "CT48G56C46S5T",
-    "brand": "Crucial",
-    "categoria": "RAM",
-    "desc": "Crucial SO-DIMM DDR5-5600 48GB Tray",
-    "img": "foto/crucial_ct48g56c46s5t.png",
-    "reason": "saturated_promo_background"
   },
   {
     "mpn": null,
@@ -2544,14 +2272,6 @@
     "reason": "no_photo_file_at_all"
   },
   {
-    "mpn": "SST-RMS06-22",
-    "brand": "Silverstone",
-    "categoria": "Case",
-    "desc": "SilverStone SST-RMS06-22 Rackmount Halterung",
-    "img": "foto/silverstone_sst-rms06-22.png",
-    "reason": "light_environment_not_pure_white"
-  },
-  {
     "mpn": "F5-6000J3244G64GX2-TZ5NR",
     "brand": "G.Skill",
     "categoria": "RAM",
@@ -2654,14 +2374,6 @@
     "desc": "Corsair 2500D Airflow Micro-ATX Gehäuse, Tempered Glass - schwarz",
     "img": null,
     "reason": "no_photo_file_at_all"
-  },
-  {
-    "mpn": "CM8071504651106",
-    "brand": "Intel",
-    "categoria": "CPU",
-    "desc": "Intel Core i3-12100T 2.2GHz LGA1700 12M Cache Tray",
-    "img": "foto/intel_cm8071504651106.png",
-    "reason": "saturated_promo_background"
   },
   {
     "mpn": "84000000200",
@@ -3240,14 +2952,6 @@
     "reason": "no_photo_file_at_all"
   },
   {
-    "mpn": "P300P128GM28",
-    "brand": "Patriot",
-    "categoria": "SSD",
-    "desc": "Patriot P300 NVMe SSD, PCIe 3.0 M.2 Typ 2280 - 128 GB",
-    "img": "foto/patriot_p300p128gm28.png",
-    "reason": "no_solid_bg_likely_environment"
-  },
-  {
     "mpn": "PBE240GS25SSDR",
     "brand": "Patriot Memory",
     "categoria": "SSD",
@@ -3408,22 +3112,6 @@
     "reason": "no_photo_file_at_all"
   },
   {
-    "mpn": "AT-EXPANSE-SG-NF-10-000000-0002",
-    "brand": "MODECOM",
-    "categoria": "Case",
-    "desc": "MODECOM Case VOLCANO EXPANSE S MIDI Black",
-    "img": null,
-    "reason": "no_photo_file_at_all"
-  },
-  {
-    "mpn": "CC-9011278-WW",
-    "brand": "Corsair",
-    "categoria": "Case",
-    "desc": "Corsair 3500X ARGB Midi Tower Black",
-    "img": "foto/corsair_cc-9011278-ww.png",
-    "reason": "dark_environment_complex_scene"
-  },
-  {
     "mpn": "CC-9011270-WW",
     "brand": "Corsair",
     "categoria": "Case",
@@ -3448,14 +3136,6 @@
     "reason": "no_photo_file_at_all"
   },
   {
-    "mpn": "AT-PERUN-4F-ARGB-20-000000-0002",
-    "brand": "MODECOM",
-    "categoria": "Case",
-    "desc": "MODECOM Case VOLCANO PERUN APEX ARGB MIDI White",
-    "img": null,
-    "reason": "no_photo_file_at_all"
-  },
-  {
     "mpn": "AT-MISTRAL-MG-10-00ARGB-0002",
     "brand": "MODECOM",
     "categoria": "Case",
@@ -3468,14 +3148,6 @@
     "brand": "MODECOM",
     "categoria": "Case",
     "desc": "MODECOM SIROCO ARGB Flow MIDI USB 3.0 X 2 CYPE-C computer case",
-    "img": null,
-    "reason": "no_photo_file_at_all"
-  },
-  {
-    "mpn": "AT-SPACE-PG-10-000000-0002",
-    "brand": "MODECOM",
-    "categoria": "Case",
-    "desc": "MODECOM Volcano SPACE APEX ARGB  MIDI USB 3.0 X 2  CYPE-C",
     "img": null,
     "reason": "no_photo_file_at_all"
   },
@@ -3624,14 +3296,6 @@
     "reason": "no_photo_file_at_all"
   },
   {
-    "mpn": "AEROPGSGRAPHITE-G-BK",
-    "brand": "Aerocool",
-    "categoria": "Case",
-    "desc": "Housing Aerocool PGS Graphite-G-BK-v2 FRGB",
-    "img": null,
-    "reason": "no_photo_file_at_all"
-  },
-  {
     "mpn": "R-CC560-WHGAA4-G-2",
     "brand": "DEEPCOOL",
     "categoria": "Case",
@@ -3652,14 +3316,6 @@
     "brand": "DEEPCOOL",
     "categoria": "Case",
     "desc": "DeepCool MATREXX 40 3FS Micro Tower Black",
-    "img": null,
-    "reason": "no_photo_file_at_all"
-  },
-  {
-    "mpn": "SP032GBLFU320X02",
-    "brand": "Silicon Power",
-    "categoria": "RAM",
-    "desc": "SILICON POWER DDR4 UDIMM RAM memory 3200 MHz CL22 32 GB (SP032GBLFU320X02) Black",
     "img": null,
     "reason": "no_photo_file_at_all"
   },
@@ -4904,14 +4560,6 @@
     "reason": "dark_environment_complex_scene"
   },
   {
-    "mpn": "CT64G56C46S5",
-    "brand": "Crucial",
-    "categoria": "RAM",
-    "desc": "Crucial SO-DIMM DDR5-5600 64GB",
-    "img": "foto/crucial_ct64g56c46s5.png",
-    "reason": "saturated_promo_background"
-  },
-  {
     "mpn": "7E62-002R",
     "brand": "MSI",
     "categoria": "Scheda Madre",
@@ -4952,14 +4600,6 @@
     "reason": "dark_environment_complex_scene"
   },
   {
-    "mpn": "7E39-001R",
-    "brand": "MSI",
-    "categoria": "Scheda Madre",
-    "desc": "MSI MAG B860 Tomahawk WiFi Mainboard, Sockel LGA 1851, Intel B860, ATX, DDR5",
-    "img": "foto/msi_7e39-001r.png",
-    "reason": "dark_environment_complex_scene"
-  },
-  {
     "mpn": "7E57-001R",
     "brand": "MSI",
     "categoria": "Scheda Madre",
@@ -4976,14 +4616,6 @@
     "reason": "no_solid_bg_likely_environment"
   },
   {
-    "mpn": "CM8071504821112",
-    "brand": "Intel",
-    "categoria": "CPU",
-    "desc": "Intel Core i5 14400 4.7GHz 20MB 1700 Tray",
-    "img": "foto/intel_cm8071504821112.png",
-    "reason": "human_skin_detected"
-  },
-  {
     "mpn": "CT4000P310SSD5",
     "brand": "Crucial",
     "categoria": "SSD",
@@ -4992,52 +4624,12 @@
     "reason": "dark_environment_complex_scene"
   },
   {
-    "mpn": "FD-C-NOR1X-04",
-    "brand": "Fractal Design",
-    "categoria": "Case",
-    "desc": "Fractal Design North XL Chalk Gehäuse TG Clear - weiß",
-    "img": "foto/fractal_design_fd-c-nor1x-04.png",
-    "reason": "human_skin_detected"
-  },
-  {
-    "mpn": "RL-KR360-W2",
-    "brand": "NZXT",
-    "categoria": "Dissipatore",
-    "desc": "NZXT Kraken Plus 360 RGB AiO Wasserkühlung - 360mm, weiß",
-    "img": "foto/nzxt_rl-kr360-w2.png",
-    "reason": "dark_environment_complex_scene"
-  },
-  {
-    "mpn": "RX-96TSW16BQ",
-    "brand": "XFX",
-    "categoria": "GPU",
-    "desc": "XFX Swift Radeon RX 9060 XT OC Gaming Edition, 16384 MB GDDR6",
-    "img": "foto/xfx_rx-96tsw16bq.png",
-    "reason": "saturated_promo_background"
-  },
-  {
     "mpn": "ASU630SS-240GQ-R",
     "brand": "ADATA",
     "categoria": "SSD",
     "desc": "ADATA ULTIMATE SU630 2.5\" 240 GB Serial ATA QLC 3D NAND",
     "img": "foto/adata_asu630ss-240gq-r.png",
     "reason": "no_solid_bg_likely_environment"
-  },
-  {
-    "mpn": "NPC-1518",
-    "brand": "GENESIS",
-    "categoria": "Case",
-    "desc": "GENESIS CASE MIDI TOWER IRID 505 ARGB (USB 3.0)",
-    "img": "foto/genesis_npc-1518.png",
-    "reason": "no_solid_bg_likely_environment"
-  },
-  {
-    "mpn": "CT32G56C46S5T",
-    "brand": "Crucial",
-    "categoria": "RAM",
-    "desc": "Crucial SO-DIMM DDR5-5600  32GB Tray",
-    "img": "foto/crucial_ct32g56c46s5t.png",
-    "reason": "saturated_promo_background"
   },
   {
     "mpn": "BGW75",
@@ -5054,29 +4646,5 @@
     "desc": "ASUS TUF Gaming GT502 Plus TG Midi-Tower - weiß",
     "img": "foto/asus_90dc0093-b19000.png",
     "reason": "very_light_low_variance_brand"
-  },
-  {
-    "mpn": "C-F500F-FM1E-G0W",
-    "brand": "TRYX",
-    "categoria": "Case",
-    "desc": "TRYX FLOVA F50 PC-Gehäuse, Midi-Tower, ATX, Tempered Glass - weiß",
-    "img": "foto/tryx_c-f500f-fm1e-g0w.png",
-    "reason": "very_light_low_variance_brand"
-  },
-  {
-    "mpn": "CB8GS3200",
-    "brand": "Crucial",
-    "categoria": "RAM",
-    "desc": "Crucial SO-DIMM DDR4-3200  8GB",
-    "img": "foto/crucial_cb8gs3200.png",
-    "reason": "saturated_promo_background"
-  },
-  {
-    "mpn": "V532-006R",
-    "brand": "MSI",
-    "categoria": "GPU",
-    "desc": "MSI GeForce RTX 5070 12G INSPIRE 3X OC NVIDIA 12 GB GDDR7",
-    "img": "foto/msi_v532-006r.png",
-    "reason": "human_skin_detected"
   }
 ]

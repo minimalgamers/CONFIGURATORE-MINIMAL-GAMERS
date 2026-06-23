@@ -726,6 +726,32 @@ html,body{background:var(--bg);color:var(--ink);font-family:var(--font);min-heig
   padding:3px 8px;border:1px solid rgba(45,212,191,.2);
   border-radius:20px;background:rgba(45,212,191,.05);
 }
+.modal-buy-shopify{
+  width:100%;
+  padding:16px;
+  background:linear-gradient(135deg,#ff0099,#8b00ff);
+  color:#fff;
+  font-family:var(--font);
+  font-size:16px;
+  font-weight:800;
+  border:none;
+  border-radius:var(--r-sm);
+  cursor:pointer;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  gap:10px;
+  transition:transform .15s, box-shadow .15s;
+  box-shadow:0 4px 14px rgba(255,0,153,.3);
+}
+.modal-buy-shopify:hover:not(:disabled){
+  transform:translateY(-2px);
+  box-shadow:0 6px 20px rgba(139,0,255,.4);
+}
+.modal-buy-shopify:disabled{
+  opacity:.7;
+  cursor:wait;
+}
 .modal-submit{
   width:100%;padding:14px;
   background:linear-gradient(135deg,#25D366,#128C7E);
@@ -1102,6 +1128,11 @@ html,body{background:var(--bg);color:var(--ink);font-family:var(--font);min-heig
     </div>
     <div class="modal-body">
       <p class="modal-subtitle">Inserisci i tuoi dati — ti mandiamo il riepilogo su WhatsApp e creiamo la tua build su Shopify per completare l'acquisto.</p>
+      <div class="form-group" id="grp-nome-pc">
+        <label class="form-label">🎮 Dai un nome al tuo PC *</label>
+        <input class="form-input" type="text" id="ord-pcname" placeholder="Es: Dragon Slayer, Thunderbolt, Phoenix..." maxlength="40">
+        <small style="color:var(--muted);font-size:11px;display:block;margin-top:4px">Questo nome apparirà sulla tua scheda prodotto personalizzata.</small>
+      </div>
       <div class="form-group">
         <label class="form-label">Nome e cognome *</label>
         <input class="form-input" type="text" id="ord-name" placeholder="Mario Rossi">
@@ -1127,6 +1158,11 @@ html,body{background:var(--bg);color:var(--ink);font-family:var(--font);min-heig
         <span class="modal-pay-pill">Klarna 12 rate</span>
         <span class="modal-pay-pill">PayPal 24 rate</span>
       </div>
+      <button class="modal-buy-shopify" onclick="compraSuShopify()" id="btnBuyShopify">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2"><circle cx="9" cy="21" r="1"/><circle cx="20" cy="21" r="1"/><path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"/></svg>
+        <span id="buyShopifyText">Compra ora →</span>
+      </button>
+      <div style="text-align:center;margin:10px 0;color:var(--muted);font-size:12px">— oppure —</div>
       <button class="modal-submit" onclick="submitOrder()">
         <svg width="16" height="16" viewBox="0 0 24 24" fill="#fff"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413z"/><path d="M12 0C5.373 0 0 5.373 0 12c0 2.104.549 4.076 1.502 5.789L.057 23.761a.5.5 0 0 0 .608.65l6.101-1.596A11.945 11.945 0 0 0 12 24c6.627 0 12-5.373 12-12S18.627 0 12 0zm0 22a9.932 9.932 0 0 1-5.042-1.369l-.361-.214-3.741.979.998-3.648-.235-.374A9.953 9.953 0 0 1 2 12C2 6.477 6.477 2 12 2s10 4.477 10 10-4.477 10-10 10z"/></svg>
         Invia su WhatsApp →
@@ -3451,6 +3487,75 @@ function updateAllExtras() {
 
 
 // ══ CHECKOUT ═════════════════════════════════════════════
+// ══ COMPRA SU SHOPIFY ════════════════════════════════════════
+const BACKEND_URL = 'https://configuratore-minimal-gamers.vercel.app/api/crea-pc';
+
+const PAROLE_VIETATE = ['cazzo','merda','stronzo','figa','culo','puttana','troia','vaffanculo','minchia','coglione','bastardo','porco','fuck','shit','bitch','asshole','dick','pussy','cunt','whore','bastard','nigger','faggot','cock','mierda','puta','cono','joder','polla','cabron','pendejo','verga','merde','putain','connard','salope','bite','encule','scheisse','arsch','fotze','schlampe','hure','fick','wichser'];
+
+function nomeMaleducato(nome){
+  const n = nome.toLowerCase().replace(/[^a-za-u ]/gi,'');
+  return PAROLE_VIETATE.some(p => n.includes(p));
+}
+
+function calcolaPrezzoTotale(){
+  let totalForn = 0;
+  Object.entries(state.build).forEach(([sid,key]) => {
+    if (!key) return;
+    const p = PRODS.find(x=>x.k===key);
+    if (p) totalForn += p.p;
+  });
+  const totalComp = totalForn * IVA;
+  const impl = calcImpl(totalComp);
+  return totalComp + impl;
+}
+
+function costruisciBuildPerShopify(){
+  const MAP = {cpu:'cpu',gpu:'gpu',ram:'ram',ssd:'ssd',mobo:'mobo',case:'case',cooler:'cooler',psu:'psu',ventole:'ventole',monitor:'monitor',mouse:'mouse',keyboard:'keyboard',headset:'headset'};
+  const build = {};
+  Object.entries(state.build).forEach(([sid,key]) => {
+    if (!key) return;
+    const p = PRODS.find(x=>x.k===key);
+    if (!p) return;
+    const campo = MAP[sid] || sid;
+    build[campo] = p.d;
+  });
+  return build;
+}
+
+async function compraSuShopify(){
+  const nomePc = (document.getElementById('ord-pcname')?.value || '').trim();
+  if (!nomePc){ showToast('Inserisci un nome per il tuo PC'); return; }
+  if (nomePc.length < 2){ showToast('Il nome e troppo corto'); return; }
+  if (nomeMaleducato(nomePc)){ showToast('Per favore scegli un nome appropriato'); return; }
+
+  const btn = document.getElementById('btnBuyShopify');
+  const txt = document.getElementById('buyShopifyText');
+  btn.disabled = true;
+  txt.textContent = 'Creazione in corso...';
+
+  try {
+    const build = costruisciBuildPerShopify();
+    const prezzo = calcolaPrezzoTotale();
+    const res = await fetch(BACKEND_URL, {
+      method: 'POST',
+      headers: {'Content-Type':'application/json'},
+      body: JSON.stringify({ nomePc, prezzo, build })
+    });
+    const data = await res.json();
+    if (data.success && data.url){
+      txt.textContent = 'Fatto! Reindirizzamento...';
+      window.location.href = data.url;
+    } else {
+      throw new Error(data.dettaglio || data.error || 'Errore sconosciuto');
+    }
+  } catch(err){
+    console.error('Errore compraSuShopify:', err);
+    showToast('Ops, qualcosa e andato storto. Riprova o usa WhatsApp.');
+    btn.disabled = false;
+    txt.textContent = 'Compra ora ->';
+  }
+}
+
 function openCheckout() {
   document.getElementById('modalOverlay').classList.add('open');
 }

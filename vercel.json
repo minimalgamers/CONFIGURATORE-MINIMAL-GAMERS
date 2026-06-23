@@ -1,20 +1,7 @@
 {
-  "version": 2,
-  "builds": [
-    { "src": "home.html", "use": "@vercel/static" },
-    { "src": "configuratore.html", "use": "@vercel/static" },
-    { "src": "index.html", "use": "@vercel/static" },
-    { "src": "prodotti.json", "use": "@vercel/static" },
-    { "src": "logo.png", "use": "@vercel/static" },
-    { "src": "foto/**", "use": "@vercel/static" },
-    { "src": "api/*.js", "use": "@vercel/node" }
-  ],
-  "routes": [
-    { "src": "/api/(.*)", "dest": "/api/$1" },
-    { "src": "/", "dest": "/home.html" },
-    { "src": "/configuratore", "dest": "/configuratore.html" },
-    { "src": "/configuratore.html", "dest": "/configuratore.html" },
-    { "src": "/(.*)", "dest": "/$1" }
+  "rewrites": [
+    { "source": "/", "destination": "/home.html" },
+    { "source": "/configuratore", "destination": "/configuratore.html" }
   ],
   "headers": [
     {

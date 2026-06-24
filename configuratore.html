@@ -1233,8 +1233,12 @@ html,body{background:var(--bg);color:var(--ink);font-family:var(--font);min-heig
         <small style="color:var(--muted);font-size:11px;display:block;margin-top:4px">Questo nome apparirà sulla tua scheda prodotto personalizzata.</small>
       </div>
       <div class="form-group">
-        <label class="form-label">Nome e cognome *</label>
-        <input class="form-input" type="text" id="ord-name" placeholder="Mario Rossi">
+        <label class="form-label">Nome *</label>
+        <input class="form-input" type="text" id="ord-name" placeholder="Mario">
+      </div>
+      <div class="form-group">
+        <label class="form-label">Cognome *</label>
+        <input class="form-input" type="text" id="ord-cognome" placeholder="Rossi">
       </div>
       <div class="form-group">
         <label class="form-label">Email *</label>
@@ -1245,8 +1249,22 @@ html,body{background:var(--bg);color:var(--ink);font-family:var(--font);min-heig
         <input class="form-input" type="tel" id="ord-phone" placeholder="+39 333 123 4567">
       </div>
       <div class="form-group">
+        <label class="form-label">Indirizzo (via e numero)</label>
+        <input class="form-input" type="text" id="ord-indirizzo" placeholder="Via Roma 12">
+      </div>
+      <div class="form-group">
+        <label class="form-label">Città</label>
+        <input class="form-input" type="text" id="ord-citta" placeholder="Napoli">
+      </div>
+      <div class="form-group">
         <label class="form-label">Note (opzionale)</label>
         <textarea class="form-input" id="ord-note" placeholder="Preferenze colore, periodo consegna..." style="height:72px;resize:none"></textarea>
+      </div>
+      <div class="form-group" style="margin-bottom:16px">
+        <label style="display:flex;align-items:flex-start;gap:8px;cursor:pointer;font-size:11px;color:var(--ink3);line-height:1.5">
+          <input type="checkbox" id="ord-consenso" style="margin-top:2px;flex-shrink:0;width:16px;height:16px;cursor:pointer">
+          <span>Acconsento al trattamento dei miei dati personali per essere ricontattato riguardo a questa configurazione, secondo la <a href="/privacy.html" target="_blank" style="color:var(--punch)">Privacy Policy</a>. *</span>
+        </label>
       </div>
       <div class="modal-sp-note">
         <svg width="14" height="14" viewBox="0 0 24 24" fill="#25D366"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413z"/><path d="M12 0C5.373 0 0 5.373 0 12c0 2.104.549 4.076 1.502 5.789L.057 23.761a.5.5 0 0 0 .608.65l6.101-1.596A11.945 11.945 0 0 0 12 24c6.627 0 12-5.373 12-12S18.627 0 12 0zm0 22a9.932 9.932 0 0 1-5.042-1.369l-.361-.214-3.741.979.998-3.648-.235-.374A9.953 9.953 0 0 1 2 12C2 6.477 6.477 2 12 2s10 4.477 10 10-4.477 10-10 10z"/></svg>
@@ -3729,6 +3747,23 @@ async function compraSuShopify(){
   if (nomeMaleducato(nomePc)){ evidenziaCampoNome('Per favore scegli un nome appropriato 😊'); return; }
   pulisciErroreNome();
 
+  // Raccogli dati cliente
+  const cNome = (document.getElementById('ord-name')?.value || '').trim();
+  const cCognome = (document.getElementById('ord-cognome')?.value || '').trim();
+  const cEmail = (document.getElementById('ord-email')?.value || '').trim();
+  const cPhone = (document.getElementById('ord-phone')?.value || '').trim();
+  const cIndirizzo = (document.getElementById('ord-indirizzo')?.value || '').trim();
+  const cCitta = (document.getElementById('ord-citta')?.value || '').trim();
+  const cConsenso = document.getElementById('ord-consenso')?.checked || false;
+
+  // Validazione campi obbligatori
+  if (!cNome){ showToast('⚠️ Inserisci il tuo nome'); document.getElementById('ord-name')?.focus(); return; }
+  if (!cCognome){ showToast('⚠️ Inserisci il tuo cognome'); document.getElementById('ord-cognome')?.focus(); return; }
+  if (!cEmail){ showToast('⚠️ Inserisci la tua email'); document.getElementById('ord-email')?.focus(); return; }
+  if (!/^[^@\s]+@[^@\s]+\.[^@\s]+$/.test(cEmail)){ showToast('⚠️ Email non valida'); document.getElementById('ord-email')?.focus(); return; }
+  if (!cPhone){ showToast('⚠️ Inserisci il tuo telefono'); document.getElementById('ord-phone')?.focus(); return; }
+  if (!cConsenso){ showToast('⚠️ Devi accettare il trattamento dei dati per continuare'); document.getElementById('ord-consenso')?.focus(); return; }
+
   const btn = document.getElementById('btnBuyShopify');
   const txt = document.getElementById('buyShopifyText');
   btn.disabled = true;
@@ -3742,7 +3777,16 @@ async function compraSuShopify(){
     const res = await fetch(BACKEND_URL, {
       method: 'POST',
       headers: {'Content-Type':'application/json'},
-      body: JSON.stringify({ nomePc, prezzo, build, scontoMinuti, fotoCase })
+      body: JSON.stringify({
+        nomePc, prezzo, build, scontoMinuti, fotoCase,
+        cliente_nome: cNome,
+        cliente_cognome: cCognome,
+        cliente_email: cEmail,
+        cliente_telefono: cPhone,
+        cliente_indirizzo: cIndirizzo,
+        cliente_citta: cCitta,
+        cliente_consenso: cConsenso,
+      })
     });
     const data = await res.json();
     if (data.success && data.url){
@@ -3827,11 +3871,13 @@ function buildMsg(name, email, phone, note) {
   return lines;
 }
 function submitOrder() {
-  const name  = document.getElementById('ord-name')?.value || '';
+  const nome  = document.getElementById('ord-name')?.value || '';
+  const cognome = document.getElementById('ord-cognome')?.value || '';
+  const name = (nome + ' ' + cognome).trim();
   const email = document.getElementById('ord-email')?.value || '';
   const phone = document.getElementById('ord-phone')?.value || '';
   const note  = document.getElementById('ord-note')?.value  || '';
-  if (!name || !email || !phone) { showToast('Compila tutti i campi obbligatori'); return; }
+  if (!name || !email || !phone) { showToast('Compila nome, cognome, email e telefono'); return; }
   const msg = buildMsg(name, email, phone, note);
   const url = `https://wa.me/393477133866?text=${encodeURIComponent(msg)}`;
   window.open(url, '_blank');

@@ -289,6 +289,13 @@ module.exports = async (req, res) => {
     const handle = product.handle;
     const url = product.onlineStoreUrl || `https://www.minimalgamers.it/products/${handle}`;
 
+    // URL che applica AUTOMATICAMENTE il codice sconto e porta al prodotto.
+    // Formato Shopify: /discount/CODICE?redirect=/products/handle
+    // Quando il cliente ci clicca, lo sconto è già applicato al carrello/checkout.
+    const urlConSconto = scontoCreato
+      ? `https://www.minimalgamers.it/discount/${codiceSconto}?redirect=/products/${handle}`
+      : url;
+
     // Prezzo scontato (per il banner): 1,5% in meno
     const prezzoScontato = scontoCreato ? +(prezzoNum * 0.985).toFixed(2) : prezzoNum;
 
@@ -314,19 +321,5 @@ module.exports = async (req, res) => {
 
     res.status(200).json({
       success: true,
-      url: url,
-      productId: productId,
-      titolo: titoloPC,
-      // Dati sconto per il banner del configuratore
-      sconto: scontoCreato,
-      codiceSconto: scontoCreato ? codiceSconto : null,
-      prezzoPieno: prezzoNum,
-      prezzoScontato: prezzoScontato,
-      scadenzaSconto: scontoCreato ? scadenzaSconto : null,
-    });
-
-  } catch (err) {
-    console.error('Errore crea-pc:', err);
-    res.status(500).json({ error: 'Errore creazione prodotto', dettaglio: String(err.message || err) });
-  }
-};
+      url: url,                    // URL semplice del prodotto
+      urlConSconto: urlConSconto,  // URL che applica lo sconto in automatico

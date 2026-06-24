@@ -1,4 +1,7 @@
 {
+  "crons": [
+    { "path": "/api/pulizia", "schedule": "0 2 * * *" }
+  ],
   "rewrites": [
     { "source": "/", "destination": "/home.html" },
     { "source": "/configuratore", "destination": "/configuratore.html" }

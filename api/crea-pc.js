@@ -16,7 +16,6 @@
 //   SHOPIFY_SHOP           = minimalgamers
 // ════════════════════════════════════════════════════════════════════
 
-// generaDescrizioneHtml è definita più sotto in questo stesso file (incorporata)
 
 const API_VERSION = '2026-04';
 
@@ -96,9 +95,6 @@ async function shopifyGraphQL(shop, token, query, variables){
   return data.data;
 }
 
-// ─── Handler principale ───
-
-// ═══ GENERATORE DESCRIZIONE (incorporato) ═══
 // ════════════════════════════════════════════════════════════════════
 // GENERATORE DESCRIZIONE HTML PRODOTTO — Minimal Gamers (versione JS)
 // Porting fedele del generatore Python. Tema light + gradient magenta/viola,
@@ -443,6 +439,7 @@ function generaDescrizioneHtml(build, nomePc){
 </script>`;
 }
 
+// ─── Handler principale ───
 module.exports = async (req, res) => {
   // CORS (il configuratore è sullo stesso dominio, ma teniamo permissivo per sicurezza)
   res.setHeader('Access-Control-Allow-Origin', '*');

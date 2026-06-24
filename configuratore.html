@@ -726,6 +726,33 @@ html,body{background:var(--bg);color:var(--ink);font-family:var(--font);min-heig
   padding:3px 8px;border:1px solid rgba(45,212,191,.2);
   border-radius:20px;background:rgba(45,212,191,.05);
 }
+.mg-urgency{
+  background:#16161f;
+  border:1px solid rgba(255,0,153,.3);
+  border-radius:14px;
+  padding:18px;
+  margin-bottom:18px;
+  box-shadow:0 8px 30px rgba(0,0,0,.5);
+}
+.mg-urg-top{display:flex;align-items:center;justify-content:space-between;margin-bottom:14px}
+.mg-urg-flag{display:inline-flex;align-items:center;gap:6px;background:linear-gradient(135deg,#ff0099,#8b00ff);padding:6px 12px;border-radius:20px;font-size:11px;font-weight:800;color:#fff}
+.mg-urg-bolt{font-size:13px}
+.mg-urg-timer{font-size:13px;color:#ff0099;font-weight:800;font-family:monospace;background:rgba(255,0,153,.1);padding:5px 10px;border-radius:8px}
+.mg-urg-title{font-size:18px;font-weight:900;margin-bottom:6px;color:#f0f0f5}
+.mg-urg-hl{background:linear-gradient(135deg,#ff0099,#8b00ff);-webkit-background-clip:text;background-clip:text;-webkit-text-fill-color:transparent}
+.mg-urg-sub{font-size:12px;color:#9090a0;margin-bottom:16px;line-height:1.5}
+.mg-urg-pricerow{display:flex;align-items:flex-end;gap:14px;padding:14px;background:rgba(255,0,153,.06);border-radius:10px;margin-bottom:0}
+.mg-urg-pcol{display:flex;flex-direction:column;gap:2px}
+.mg-urg-plbl{font-size:10px;color:#9090a0;text-transform:uppercase;letter-spacing:.5px}
+.mg-urg-old{font-size:18px;text-decoration:line-through;color:#9090a0}
+.mg-urg-new{font-size:28px;font-weight:900;color:#f0f0f5;line-height:1}
+.mg-urg-save{margin-left:auto;align-self:center;background:#4ade80;color:#063;font-size:13px;font-weight:800;padding:6px 12px;border-radius:8px}
+.mg-urg-code-box{display:flex;align-items:center;gap:12px;border:2px dashed rgba(255,0,153,.4);border-radius:10px;padding:12px 14px;margin-top:14px}
+.mg-urg-code-info{flex:1}
+.mg-urg-code-lbl{font-size:11px;color:#9090a0;margin-bottom:2px}
+.mg-urg-code-val{font-size:18px;font-weight:900;letter-spacing:1px;font-family:monospace;color:#ff0099}
+.mg-urg-copy{background:linear-gradient(135deg,#ff0099,#8b00ff);border:none;color:#fff;font-weight:700;padding:8px 16px;border-radius:8px;cursor:pointer;font-size:13px}
+.mg-urg-copy:hover{opacity:.9}
 .modal-buy-shopify{
   width:100%;
   padding:16px;
@@ -1128,6 +1155,32 @@ html,body{background:var(--bg);color:var(--ink);font-family:var(--font);min-heig
     </div>
     <div class="modal-body">
       <p class="modal-subtitle">Inserisci i tuoi dati — ti mandiamo il riepilogo su WhatsApp e creiamo la tua build su Shopify per completare l'acquisto.</p>
+      <div class="mg-urgency" id="mgUrgency">
+        <div class="mg-urg-top">
+          <div class="mg-urg-flag"><span class="mg-urg-bolt">⚡</span> OFFERTA LAMPO</div>
+          <div class="mg-urg-timer">⏱️ <span id="mgUrgTimer">24:00:00</span></div>
+        </div>
+        <div class="mg-urg-title">Blocca il <span class="mg-urg-hl">prezzo esclusivo</span> ora</div>
+        <div class="mg-urg-sub">Completa l'acquisto subito e ricevi uno sconto riservato. Affrettati: alla scadenza il prezzo torna pieno!</div>
+        <div class="mg-urg-pricerow">
+          <div class="mg-urg-pcol">
+            <span class="mg-urg-plbl">Prezzo pieno</span>
+            <span class="mg-urg-old" id="mgUrgOld">€ 0,00</span>
+          </div>
+          <div class="mg-urg-pcol">
+            <span class="mg-urg-plbl">Solo ora</span>
+            <span class="mg-urg-new" id="mgUrgNew">€ 0,00</span>
+          </div>
+          <span class="mg-urg-save" id="mgUrgSave">-€ 0,00</span>
+        </div>
+        <div class="mg-urg-code-box" id="mgUrgCodeBox" style="display:none">
+          <div class="mg-urg-code-info">
+            <div class="mg-urg-code-lbl">Codice da inserire al checkout</div>
+            <div class="mg-urg-code-val" id="mgUrgCodeVal">—</div>
+          </div>
+          <button type="button" class="mg-urg-copy" onclick="copiaCodiceSconto()">Copia</button>
+        </div>
+      </div>
       <div class="form-group" id="grp-nome-pc">
         <label class="form-label">🎮 Dai un nome al tuo PC *</label>
         <input class="form-input" type="text" id="ord-pcname" placeholder="Es: Dragon Slayer, Thunderbolt, Phoenix..." maxlength="40">
@@ -3486,7 +3539,67 @@ function updateAllExtras() {
 }
 
 
-// ══ CHECKOUT ═════════════════════════════════════════════
+// ── Formattazione prezzo (€ 1.234,56) ──
+function fmtEuro(x){
+  return '€ ' + x.toFixed(2).replace(/\d(?=(\d{3})+\.)/g,'$&').replace('.',',').replace(/(\d)(?=(\d{3})+,)/g,'$1.');
+}
+
+// ── TIMER URGENZA 24h PERSISTENTE ──────────────────────────
+const URGENCY_HOURS = 24;
+let _urgInterval = null;
+
+function getScadenzaUrgenza(){
+  // Recupera o crea la scadenza salvata (persistente fra ricariche)
+  let scad = localStorage.getItem('mg_urgency_deadline');
+  const now = Date.now();
+  if(!scad || parseInt(scad,10) < now){
+    scad = now + URGENCY_HOURS*3600*1000;
+    localStorage.setItem('mg_urgency_deadline', String(scad));
+  }
+  return parseInt(scad,10);
+}
+
+function minutiRimasti(){
+  const scad = getScadenzaUrgenza();
+  return Math.max(1, Math.round((scad - Date.now())/60000));
+}
+
+function avviaTimerUrgenza(){
+  const el = document.getElementById('mgUrgTimer');
+  if(!el) return;
+  const scad = getScadenzaUrgenza();
+  function tick(){
+    let s = Math.floor((scad - Date.now())/1000);
+    if(s < 0) s = 0;
+    const h = String(Math.floor(s/3600)).padStart(2,'0');
+    const m = String(Math.floor((s%3600)/60)).padStart(2,'0');
+    const sec = String(s%60).padStart(2,'0');
+    el.textContent = h+':'+m+':'+sec;
+  }
+  tick();
+  if(_urgInterval) clearInterval(_urgInterval);
+  _urgInterval = setInterval(tick, 1000);
+}
+
+function popolaPrezziBanner(){
+  const prezzo = calcolaPrezzoTotale();
+  const scontato = +(prezzo*0.985).toFixed(2);
+  const risparmio = +(prezzo - scontato).toFixed(2);
+  const oldEl = document.getElementById('mgUrgOld');
+  const newEl = document.getElementById('mgUrgNew');
+  const saveEl = document.getElementById('mgUrgSave');
+  if(oldEl) oldEl.textContent = fmtEuro(prezzo);
+  if(newEl) newEl.textContent = fmtEuro(scontato);
+  if(saveEl) saveEl.textContent = '-' + fmtEuro(risparmio);
+}
+
+function copiaCodiceSconto(){
+  const code = document.getElementById('mgUrgCodeVal')?.textContent || '';
+  if(code && code !== '—'){
+    navigator.clipboard.writeText(code).then(()=> showToast('Codice copiato! Incollalo al checkout'));
+  }
+}
+
 // ══ COMPRA SU SHOPIFY ════════════════════════════════════════
 const BACKEND_URL = 'https://configuratore-minimal-gamers.vercel.app/api/crea-pc';
 
@@ -3536,15 +3649,30 @@ async function compraSuShopify(){
   try {
     const build = costruisciBuildPerShopify();
     const prezzo = calcolaPrezzoTotale();
+    const scontoMinuti = minutiRimasti(); // tempo rimasto dal timer
     const res = await fetch(BACKEND_URL, {
       method: 'POST',
       headers: {'Content-Type':'application/json'},
-      body: JSON.stringify({ nomePc, prezzo, build })
+      body: JSON.stringify({ nomePc, prezzo, build, scontoMinuti })
     });
     const data = await res.json();
     if (data.success && data.url){
-      txt.textContent = 'Fatto! Reindirizzamento...';
-      window.location.href = data.url;
+      // Se è stato creato un codice sconto, mostralo prima di reindirizzare
+      if(data.sconto && data.codiceSconto){
+        const box = document.getElementById('mgUrgCodeBox');
+        const val = document.getElementById('mgUrgCodeVal');
+        if(box && val){
+          val.textContent = data.codiceSconto;
+          box.style.display = 'flex';
+        }
+        txt.textContent = 'Fatto! Copia il codice e vai al checkout';
+        // Breve pausa per far vedere il codice, poi reindirizza
+        showToast('PC creato! Il tuo codice sconto: ' + data.codiceSconto);
+        setTimeout(()=>{ window.location.href = data.url; }, 3500);
+      } else {
+        txt.textContent = 'Fatto! Reindirizzamento...';
+        window.location.href = data.url;
+      }
     } else {
       throw new Error(data.dettaglio || data.error || 'Errore sconosciuto');
     }
@@ -3558,6 +3686,11 @@ async function compraSuShopify(){
 
 function openCheckout() {
   document.getElementById('modalOverlay').classList.add('open');
+  // Avvia banner urgenza: popola prezzi + timer persistente
+  try {
+    popolaPrezziBanner();
+    avviaTimerUrgenza();
+  } catch(e){ console.error('Banner urgenza:', e); }
 }
 function closeCheckout() {
   document.getElementById('modalOverlay').classList.remove('open');

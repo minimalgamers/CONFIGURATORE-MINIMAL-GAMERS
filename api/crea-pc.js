@@ -50,6 +50,35 @@ async function getAccessToken(shop, clientId, clientSecret){
   return data.access_token;
 }
 
+// ─── Salva un lead nel database Supabase (non bloccante) ───
+async function salvaLeadSupabase(lead){
+  const SUPABASE_URL = process.env.SUPABASE_URL;
+  const SUPABASE_SECRET = process.env.SUPABASE_SECRET;
+  // Se Supabase non è configurato, salta silenziosamente
+  if(!SUPABASE_URL || !SUPABASE_SECRET) return false;
+  try {
+    const res = await fetch(`${SUPABASE_URL}/rest/v1/lead_configuratore`, {
+      method: 'POST',
+      headers: {
+        'apikey': SUPABASE_SECRET,
+        'Authorization': `Bearer ${SUPABASE_SECRET}`,
+        'Content-Type': 'application/json',
+        'Prefer': 'return=minimal',
+      },
+      body: JSON.stringify(lead),
+    });
+    if(!res.ok){
+      const txt = await res.text();
+      console.error('Supabase save error', res.status, txt);
+      return false;
+    }
+    return true;
+  } catch(e){
+    console.error('Supabase exception (non bloccante):', String(e.message || e));
+    return false;
+  }
+}
+
 // ─── Chiamata GraphQL Admin generica ───
 async function shopifyGraphQL(shop, token, query, variables){
   const res = await fetch(`https://${shop}.myshopify.com/admin/api/${API_VERSION}/graphql.json`, {
@@ -81,6 +110,16 @@ module.exports = async (req, res) => {
     // ── 1. Leggi input ──
     const body = typeof req.body === 'string' ? JSON.parse(req.body) : (req.body || {});
     const { build, nomePc, prezzo } = body;
+    // Dati cliente (opzionali) per il lead
+    const cliente = {
+      nome: body.cliente_nome || null,
+      cognome: body.cliente_cognome || null,
+      email: body.cliente_email || null,
+      telefono: body.cliente_telefono || null,
+      indirizzo: body.cliente_indirizzo || null,
+      citta: body.cliente_citta || null,
+      consenso: body.cliente_consenso === true,
+    };
 
     if(!build || typeof build !== 'object'){
       res.status(400).json({ error: 'Manca il campo "build"' }); return;
@@ -252,6 +291,26 @@ module.exports = async (req, res) => {
 
     // Prezzo scontato (per il banner): 1,5% in meno
     const prezzoScontato = scontoCreato ? +(prezzoNum * 0.985).toFixed(2) : prezzoNum;
+
+    // ── 10. Salva il lead su Supabase (non bloccante) ──
+    // Se fallisce, il prodotto è già creato: non interrompiamo il flusso cliente.
+    await salvaLeadSupabase({
+      nome: cliente.nome,
+      cognome: cliente.cognome,
+      email: cliente.email,
+      telefono: cliente.telefono,
+      indirizzo: cliente.indirizzo,
+      citta: cliente.citta,
+      nome_pc: titoloPC,
+      build_dettaglio: build,
+      prezzo: prezzoNum,
+      prezzo_scontato: prezzoScontato,
+      codice_sconto: scontoCreato ? codiceSconto : null,
+      shopify_product_id: productId,
+      shopify_url: url,
+      ha_comprato: false,
+      consenso_privacy: cliente.consenso,
+    });
 
     res.status(200).json({
       success: true,

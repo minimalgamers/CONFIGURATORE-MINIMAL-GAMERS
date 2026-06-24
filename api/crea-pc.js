@@ -128,8 +128,8 @@ module.exports = async (req, res) => {
     // UNLISTED: nascosto da ricerca, collezioni, catalogo e canali di vendita,
     // ma accessibile via link diretto. Disponibile da API 2025-10 in poi.
     const createMutation = `
-      mutation productCreate($input: ProductInput!) {
-        productCreate(input: $input) {
+      mutation productCreate($input: ProductInput!, $media: [CreateMediaInput!]) {
+        productCreate(input: $input, media: $media) {
           product {
             id
             handle
@@ -149,6 +149,15 @@ module.exports = async (req, res) => {
         tags: ['custom-build', 'configuratore', `pair-${pairCode}`, `creato-${creatoTimestamp}`],
       },
     };
+    // Se è stata passata la foto del case, la aggiungiamo come media del prodotto
+    const fotoCase = req.body.fotoCase;
+    if (fotoCase && typeof fotoCase === 'string' && /^https:\/\//.test(fotoCase)) {
+      createVars.media = [{
+        originalSource: fotoCase,
+        mediaContentType: 'IMAGE',
+        alt: titoloPC,
+      }];
+    }
     const createData = await shopifyGraphQL(SHOP, token, createMutation, createVars);
     const createErrors = createData.productCreate.userErrors;
     if(createErrors && createErrors.length){

@@ -689,11 +689,19 @@ html,body{background:var(--bg);color:var(--ink);font-family:var(--font);min-heig
 .modal{
   background:rgba(12,5,14,.97);
   border:1px solid rgba(45,212,191,.2);border-radius:16px;
-  width:100%;max-width:480px;overflow:hidden;
+  width:100%;max-width:480px;
+  max-height:90vh;overflow-y:auto;overflow-x:hidden;
+  scrollbar-width:thin;scrollbar-color:rgba(255,0,153,.3) transparent;
+  display:flex;flex-direction:column;
 }
+.modal::-webkit-scrollbar{width:8px}
+.modal::-webkit-scrollbar-thumb{background:rgba(255,0,153,.3);border-radius:4px}
+.modal::-webkit-scrollbar-track{background:transparent}
 .modal-header{
   display:flex;align-items:center;justify-content:space-between;
   padding:18px 20px 14px;border-bottom:1px solid rgba(255,255,255,.06);
+  position:sticky;top:0;z-index:5;
+  background:rgba(12,5,14,.98);backdrop-filter:blur(8px);
 }
 .modal-title{font-size:18px;font-weight:800;letter-spacing:-.01em}
 .modal-close{
@@ -1221,7 +1229,7 @@ html,body{background:var(--bg);color:var(--ink);font-family:var(--font);min-heig
         </div>
         <div class="mg-urg-code-box" id="mgUrgCodeBox" style="display:none">
           <div class="mg-urg-code-info">
-            <div class="mg-urg-code-lbl">Codice da inserire al checkout</div>
+            <div class="mg-urg-code-lbl">Il tuo codice sconto (già applicato al checkout)</div>
             <div class="mg-urg-code-val" id="mgUrgCodeVal">—</div>
           </div>
           <button type="button" class="mg-urg-copy" onclick="copiaCodiceSconto()">Copia</button>
@@ -3790,7 +3798,9 @@ async function compraSuShopify(){
     });
     const data = await res.json();
     if (data.success && data.url){
-      // Se è stato creato un codice sconto, mostralo prima di reindirizzare
+      // URL di destinazione: se c'è lo sconto, usa quello che lo applica in automatico
+      const urlFinale = data.urlConSconto || data.url;
+      // Se è stato creato un codice sconto, mostralo brevemente (info), poi reindirizza
       if(data.sconto && data.codiceSconto){
         const box = document.getElementById('mgUrgCodeBox');
         const val = document.getElementById('mgUrgCodeVal');
@@ -3798,13 +3808,13 @@ async function compraSuShopify(){
           val.textContent = data.codiceSconto;
           box.style.display = 'flex';
         }
-        txt.textContent = 'Fatto! Copia il codice e vai al checkout';
-        // Breve pausa per far vedere il codice, poi reindirizza
-        showToast('PC creato! Il tuo codice sconto: ' + data.codiceSconto);
-        setTimeout(()=>{ window.location.href = data.url; }, 3500);
+        txt.textContent = 'Fatto! Sconto applicato, reindirizzamento...';
+        showToast('🎉 Sconto già applicato! Ti portiamo al checkout');
+        // Breve pausa per far vedere la conferma, poi reindirizza con sconto automatico
+        setTimeout(()=>{ window.location.href = urlFinale; }, 2500);
       } else {
         txt.textContent = 'Fatto! Reindirizzamento...';
-        window.location.href = data.url;
+        window.location.href = urlFinale;
       }
     } else {
       throw new Error(data.dettaglio || data.error || 'Errore sconosciuto');

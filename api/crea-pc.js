@@ -104,12 +104,29 @@ module.exports = async (req, res) => {
     // ── 3. Token ──
     const token = await getAccessToken(SHOP, CLIENT_ID, CLIENT_SECRET);
 
-    // ── 4. Genera descrizione HTML ──
+    // ── 4. Genera descrizione HTML + codice-coppia ──
     const nome = String(nomePc).trim();
     const descrizioneHtml = generaDescrizioneHtml(build, nome);
     const titoloPC = `PC GAMING ${nome.toUpperCase()}`;
 
-    // ── 5. Crea prodotto (ACTIVE) ──
+    // Codice-coppia univoco (collega prodotto e sconto). Es: "A7F3"
+    const pairCode = Math.random().toString(36).substring(2, 6).toUpperCase();
+    // Codice sconto che il cliente digita al checkout. Es: "PC15-A7F3"
+    const codiceSconto = `PC15-${pairCode}`;
+    // Timestamp di creazione (per la pulizia a 24h)
+    const creatoTimestamp = Date.now();
+
+    // Minuti di validità dello sconto (dal timer del configuratore).
+    // Default 24h (1440 min) se non specificato; max 24h, min 5 min.
+    let scontoMinuti = parseInt(req.body.scontoMinuti, 10);
+    if (!Number.isFinite(scontoMinuti) || scontoMinuti <= 0) scontoMinuti = 1440;
+    if (scontoMinuti > 1440) scontoMinuti = 1440;
+    if (scontoMinuti < 5) scontoMinuti = 5;
+    const scadenzaSconto = new Date(creatoTimestamp + scontoMinuti * 60000).toISOString();
+
+    // ── 5. Crea prodotto con status UNLISTED (non in elenco) ──
+    // UNLISTED: nascosto da ricerca, collezioni, catalogo e canali di vendita,
+    // ma accessibile via link diretto. Disponibile da API 2025-10 in poi.
     const createMutation = `
       mutation productCreate($input: ProductInput!) {
         productCreate(input: $input) {
@@ -126,10 +143,10 @@ module.exports = async (req, res) => {
       input: {
         title: titoloPC,
         descriptionHtml: descrizioneHtml,
-        status: 'ACTIVE',
+        status: 'UNLISTED',
         productType: 'PC Gaming Custom',
         vendor: 'Minimal Gamers',
-        tags: ['custom-build', 'configuratore', `build-${Date.now()}`],
+        tags: ['custom-build', 'configuratore', `pair-${pairCode}`, `creato-${creatoTimestamp}`],
       },
     };
     const createData = await shopifyGraphQL(SHOP, token, createMutation, createVars);
@@ -177,16 +194,67 @@ module.exports = async (req, res) => {
       });
     }
 
-    // ── 8. Costruisci URL prodotto ──
+    // ── 8. Crea il CODICE SCONTO (1,5%) valido solo per questo prodotto ──
+    // Il codice scade dopo scontoMinuti (allineato al timer del configuratore).
+    // È limitato al prodotto appena creato, così non è spendibile altrove.
+    let scontoCreato = false;
+    try {
+      const discountMutation = `
+        mutation discountCodeBasicCreate($basicCodeDiscount: DiscountCodeBasicInput!) {
+          discountCodeBasicCreate(basicCodeDiscount: $basicCodeDiscount) {
+            codeDiscountNode { id }
+            userErrors { field message code }
+          }
+        }`;
+      const discountVars = {
+        basicCodeDiscount: {
+          title: `Sconto build ${pairCode} (creato-${creatoTimestamp})`,
+          code: codiceSconto,
+          startsAt: new Date(creatoTimestamp).toISOString(),
+          endsAt: scadenzaSconto,
+          customerSelection: { all: true },
+          appliesOncePerCustomer: true,
+          customerGets: {
+            value: { percentage: 0.015 },
+            items: {
+              products: {
+                productsToAdd: [productId],
+              },
+            },
+          },
+        },
+      };
+      const discountData = await shopifyGraphQL(SHOP, token, discountMutation, discountVars);
+      const dErr = discountData.discountCodeBasicCreate.userErrors;
+      if (dErr && dErr.length) {
+        console.error('Errore codice sconto (non bloccante):', JSON.stringify(dErr));
+      } else {
+        scontoCreato = true;
+      }
+    } catch (eSconto) {
+      // Se lo sconto fallisce, il prodotto resta comunque acquistabile a prezzo pieno
+      console.error('Eccezione codice sconto (non bloccante):', String(eSconto.message || eSconto));
+    }
+
+    // ── 9. Costruisci URL prodotto ──
     // onlineStoreUrl può essere null appena creato; costruiamo da handle come fallback
     const handle = product.handle;
     const url = product.onlineStoreUrl || `https://www.minimalgamers.it/products/${handle}`;
+
+    // Prezzo scontato (per il banner): 1,5% in meno
+    const prezzoScontato = scontoCreato ? +(prezzoNum * 0.985).toFixed(2) : prezzoNum;
 
     res.status(200).json({
       success: true,
       url: url,
       productId: productId,
       titolo: titoloPC,
+      // Dati sconto per il banner del configuratore
+      sconto: scontoCreato,
+      codiceSconto: scontoCreato ? codiceSconto : null,
+      prezzoPieno: prezzoNum,
+      prezzoScontato: prezzoScontato,
+      scadenzaSconto: scontoCreato ? scadenzaSconto : null,
     });
 
   } catch (err) {

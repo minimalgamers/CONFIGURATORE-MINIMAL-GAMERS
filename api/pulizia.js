@@ -88,8 +88,11 @@ module.exports = async (req, res) => {
       res.status(403).json({ error: 'Secret non valido' }); return;
     }
 
-    // DRY RUN di default. Cancella davvero solo con ?confirm=ELIMINA
-    const isLive = query.confirm === 'ELIMINA';
+    // DRY RUN di default. Cancella davvero in due casi:
+    //  1. chiamata manuale con ?confirm=ELIMINA
+    //  2. chiamata automatica dal cron di Vercel (header x-vercel-cron presente)
+    const isCron = !!(req.headers && (req.headers['x-vercel-cron'] || req.headers['X-Vercel-Cron']));
+    const isLive = query.confirm === 'ELIMINA' || isCron;
 
     const token = await getAccessToken(SHOP, CLIENT_ID, CLIENT_SECRET);
     const sogliaMs = Date.now() - ORE_VALIDITA * 3600 * 1000;
@@ -245,7 +248,7 @@ module.exports = async (req, res) => {
 
     // ── 5. Risposta ──
     res.status(200).json({
-      modalita: isLive ? 'LIVE (cancellazione eseguita)' : 'ANTEPRIMA (nessuna cancellazione - aggiungi ?confirm=ELIMINA per eseguire)',
+      modalita: isLive ? (isCron ? 'CRON AUTOMATICO (cancellazione eseguita)' : 'LIVE (cancellazione eseguita)') : 'ANTEPRIMA (nessuna cancellazione - aggiungi ?confirm=ELIMINA per eseguire)',
       sogliaOre: ORE_VALIDITA,
       prodotti: {
         daCancellare: daCancellareFiltrati.length,
